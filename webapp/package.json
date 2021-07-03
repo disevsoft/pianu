@@ -11,12 +11,15 @@
     "core-js": "^3.6.5",
     "element-plus": "^1.0.2-beta.54",
     "register-service-worker": "^1.7.1",
+    "splitpanes": "^3.0.4",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.0-0",
+    "vue-uuid": "^2.0.2",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/splitpanes": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",

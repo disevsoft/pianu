@@ -1,11 +1,27 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import MainForm from "../views/MainForm.vue";
+import StartForm from "../views/StartForm.vue";
+import MainConfigForm from "../views/MainConfigForm.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "App",
-    component: MainForm,
+    path: '/',
+    name: 'Welcome',
+    component: StartForm
+  },
+  {
+    path: '/config',
+    name: 'Configurator',
+    component: MainConfigForm
+  },
+  {
+    path: '/App',
+    name: 'App',
+    component: MainForm
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: "/"
   },
   {
     path: "/about",

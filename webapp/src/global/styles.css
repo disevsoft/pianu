@@ -1,4 +1,5 @@
 @import url("//unpkg.com/element-plus/lib/theme-chalk/index.css");
+@import url('https://unpkg.com/splitpanes/dist/splitpanes.css');
 .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
@@ -20,6 +21,9 @@
     line-height: 160px;
   }
 
+  .el-container{
+    height: 100%;
+  }
   body > .el-container {
     margin-bottom: 40px;
   }

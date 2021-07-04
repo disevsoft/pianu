@@ -49,8 +49,12 @@ export default defineComponent({
     Splitpanes,
     Pane,
   },
+  data(){return{
+    nodes:[],
+    }
+  },
   setup() {
-    const nodes = ref([]);
+    //const nodes = [];
     const defaultTreeProps = {
       children: "children",
       label: "name",
@@ -83,7 +87,7 @@ export default defineComponent({
       return iconName;      
     };
     
-    return { loadNodes, nodes, defaultTreeProps, getTreeNodeClassName, isSelectedNode,  };
+    return { loadNodes, defaultTreeProps, getTreeNodeClassName, isSelectedNode,  };
   },
 });
 </script>

@@ -17,14 +17,14 @@
             <span class="custom-tree-node">
             <i :class="getTreeNodeClassName(data)" style="padding-right: 5px"> </i>
             <span>{{ node.label }}</span>
-            <span v-if="isSelectedNode(node)">
-              <span style="padding: 20px">
-                <i v-show="data.canAdd"  class="el-icon-plus" margin-left="15px" title="Add child node" @click="onAddNode(node)"> </i>
-                <i v-show="data.canEdit" class="el-icon-edit-outline"  margin-left="5px" title="Edit node" @click="onEditNode(node)"> </i>
-                <i v-show="data.canEdit" class="el-icon-delete" margin-left="5px" title="Delete node" @click="onDeleteNode(node)"> </i>
+              <span v-if="isSelectedNode(node)">
+                <span style="padding: 20px">
+                  <i v-show="data.canAdd"  class="el-icon-plus" margin-left="15px" title="Add child node" @click="onAddNode(node)"> </i>
+                  <i v-show="data.canEdit" class="el-icon-edit-outline"  margin-left="5px" title="Edit node" @click="onEditNode(node)"> </i>
+                  <i v-show="data.canEdit" class="el-icon-delete" margin-left="5px" title="Delete node" @click="onDeleteNode(node)"> </i>
+                </span>
               </span>
-            </span>
-          </span>
+             </span>
             </template>
           </el-tree>
         </el-main>

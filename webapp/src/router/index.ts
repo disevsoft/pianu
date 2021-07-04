@@ -5,23 +5,23 @@ import MainConfigForm from "../views/MainConfigForm.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'Welcome',
-    component: StartForm
+    path: "/",
+    name: "Welcome",
+    component: StartForm,
   },
   {
-    path: '/config',
-    name: 'Configurator',
-    component: MainConfigForm
+    path: "/config",
+    name: "Configurator",
+    component: MainConfigForm,
   },
   {
-    path: '/App',
-    name: 'App',
-    component: MainForm
+    path: "/App",
+    name: "App",
+    component: MainForm,
   },
   {
-    path: '/:pathMatch(.*)*',
-    redirect: "/"
+    path: "/:pathMatch(.*)*",
+    redirect: "/",
   },
   {
     path: "/about",

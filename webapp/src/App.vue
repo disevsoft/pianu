@@ -6,13 +6,10 @@
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height:100vh
-  
+  height: 100vh;
 }
-body{
+body {
   height: 100%;
-   margin: 0;
-   
+  margin: 0;
 }
-  
 </style>

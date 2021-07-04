@@ -40,11 +40,11 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, reactive } from "vue";
+import { ref, reactive, defineProps, onMounted, watch } from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 import TreeService from '../services/configurator/metaDataTree.service';
 import NodeData from '../services/configurator/metaDataTree.service';
-export default defineComponent({
+export default {
   components: {
     Splitpanes,
     Pane,
@@ -53,13 +53,14 @@ export default defineComponent({
     nodes:[],
     }
   },
+  
   setup() {
-    //const nodes = [];
+    const metaDataTree=ref(null);
+
     const defaultTreeProps = {
       children: "children",
       label: "name",
     };
-
     const loadNodes = async (node: any, resolve: any) => {
        if (node.level === 0) {
           const data = TreeService.TreeHelper.getMdTreeRoot();
@@ -70,7 +71,8 @@ export default defineComponent({
        }
     };
 
-    const isSelectedNode = (node:any)=>{    
+    const isSelectedNode = (node:any)=>{   
+      //console.log(metaDataTree.value);
       return  false;//metaDataTree.value && metaDataTree.value.getCurrentKey() == node.data.elementId;
     };
     
@@ -87,9 +89,10 @@ export default defineComponent({
       return iconName;      
     };
     
-    return { loadNodes, defaultTreeProps, getTreeNodeClassName, isSelectedNode,  };
+    return { loadNodes, defaultTreeProps, getTreeNodeClassName, isSelectedNode};
   },
-});
+  
+};
 </script>
 
 <style scoped>

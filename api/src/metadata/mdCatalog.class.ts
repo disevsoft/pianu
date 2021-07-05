@@ -2,7 +2,7 @@ import BaseMeta from './basemeta.class'
 import {md_catalogs} from '../database/config/models/md_catalogs'
 import MdTypeField from './mdTypeField.class'
 
-export default class Catalog extends BaseMeta{
+export default class MdCatalog extends BaseMeta{
     constructor(id:string){
         super(id);
 
@@ -13,20 +13,20 @@ export default class Catalog extends BaseMeta{
         this.mdFields.set('isHierarchical', new MdTypeField("Boolean", false, false, false, "is_hierarchical"));
     }
 
-    private static _catalogs: Map<String, Catalog> =new Map();
+    private static _catalogs: Map<String, MdCatalog> =new Map();
     static getAllCatalogs() 
     {
-        if(Catalog._catalogs.size===0){
-            Catalog.fetchCatalogs();
+        if(MdCatalog._catalogs.size===0){
+            MdCatalog.fetchCatalogs();
         }
-        return Catalog._catalogs;
+        return MdCatalog._catalogs;
     }
 
     private static async fetchCatalogs()
     {
         const catalogsModels = await md_catalogs.findAll();
         catalogsModels.forEach((element:any) => {
-            let catalog = new Catalog(element.id);
+            let catalog = new MdCatalog(element.id);
             for (let mdField of catalog.mdFields.values()) {
                 if(mdField.fieldMap){
                     mdField.value = element[mdField.fieldMap]
@@ -34,7 +34,7 @@ export default class Catalog extends BaseMeta{
               }
               catalog.name = catalog.mdFields.get('name')?.value;
               catalog.sinonym = catalog.mdFields.get('sinonym')?.value
-              Catalog._catalogs.set(catalog.mdFields.get('name')?.value, catalog);   
+              MdCatalog._catalogs.set(catalog.mdFields.get('name')?.value, catalog);   
         });
     }   
 }

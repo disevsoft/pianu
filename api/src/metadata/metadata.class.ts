@@ -1,9 +1,15 @@
-import Catalog from './catalog.class';
+import MdCatalog from './mdCatalog.class';
+import MdType from './mdType.class';
+
 export class Metadata{
 
-    static get Catalogs()
+    public static get Catalogs()
     {   
-        return Catalog.getAllCatalogs();
+        return MdCatalog.getAllCatalogs();
     }
 
+    public static getMdObject(mdTypeId:string, mdObjectId:string){
+        const objectType = MdType.getMdType(mdTypeId);
+
+    } 
 }

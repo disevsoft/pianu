@@ -1,25 +1,16 @@
 import { Router } from 'express';
 const metadataRouter = Router();
-import {Metadata} from '../metadata/metadata.class'
-import {getMdObjectsList} from '../controllers/metadata.controller'
-// metadataRouter.get('/', ( request, response )=>{
-//    return response.json("OK");    
-// })
+import {processRequest} from '../controllers/metadata.controller'
+
 
 metadataRouter.get( "/", async ( req, res ) => {
-   const t = await Metadata.Catalogs;
-   res.send('OK');  
+   res.status(500).send('unprocessed request');
 } );
 
 metadataRouter.post( "/", async ( req, res ) => {
-   let body = req.body;
-   const t = await Metadata.Catalogs;
-   res.send(JSON.stringify([...t]));  
-} );
+   await processRequest(req, res); 
+});
 
-function requesProcessor(req:any, res:any) {
-   getMdObjectsList(req, res);  
-}
 
 
 export default metadataRouter;

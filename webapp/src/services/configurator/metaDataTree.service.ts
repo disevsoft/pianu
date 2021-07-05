@@ -16,7 +16,7 @@ class TreeHelper{
     public static async getTreeNodes(targetNode: NodeData){
         const queryParam = {
             command: 'getMdObjectsList',
-            filters:{
+            options:{
                 mtTypeId:targetNode.mdTypeId
             }
         };

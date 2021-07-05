@@ -14,7 +14,17 @@ class TreeHelper{
     }
 
     public static async getTreeNodes(targetNode: NodeData){
-        const response = await fetch("/api/m");
+        const queryParam = {
+            command: 'getMdObjectsList',
+            filters:{
+                mtTypeId:targetNode.mdTypeId
+            }
+        };
+        const response = await fetch('/api/md', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(queryParam)
+          }); 
         const data = await response.json();
         const nodes = TreeHelper.prepareMapData(data, NodeType.MdObject); 
         return nodes; 
@@ -28,6 +38,9 @@ class TreeHelper{
         });
         return nodes; 
     }
+    // static getMdObjectData(mdTypeId:string, mdObjectId:string){
+
+    // }
 }
 class NodeData{
     name = '';

@@ -5,7 +5,8 @@
         <el-header> </el-header>
         <el-main>
           <el-tree
-            ref="metaDataTree"
+            @current-change="onCurrentNodeChange"
+            ref="metaDataTreeRef"
             :data="nodes"
             node-key="elementId"
             :load="loadNodes"
@@ -17,7 +18,7 @@
             <span class="custom-tree-node">
             <i :class="getTreeNodeClassName(data)" style="padding-right: 5px"> </i>
             <span>{{ node.label }}</span>
-              <span v-if="isSelectedNode(node)">
+              <span v-if="isSelectedNode(data)">
                 <span style="padding: 20px">
                   <i v-show="data.canAdd"  class="el-icon-plus" margin-left="15px" title="Add child node" @click="onAddNode(node)"> </i>
                   <i v-show="data.canEdit" class="el-icon-edit-outline"  margin-left="5px" title="Edit node" @click="onEditNode(node)"> </i>
@@ -33,33 +34,94 @@
     <Pane>
       <el-container>
         <el-header> </el-header>
-        <el-main> </el-main>
+        <el-main> 
+           <el-tabs ref="tabPanel" v-model="editableTabsValue" type="border-card" class="full-height" closable @tab-remove="removeTab" id="formTabs">
+        <el-tab-pane
+          v-for="(item) in tabs"
+          :key="item.elementId"
+          :label="item.title"
+          :name="item.name" lazy
+          :ref="'pane-' + item.elementId">
+          <component :is="currentTabComponent" v-bind="getTabProps(item)" @afterSave="onAfterSave(item)" :ref="item.elementId" ></component>
+        </el-tab-pane>
+        </el-tabs>
+        </el-main>
       </el-container>
     </Pane>
   </Splitpanes>
 </template>
 
 <script lang="ts">
-import { ref, reactive, defineProps, onMounted, watch } from "vue";
+import { ref, reactive, defineProps, onMounted, watch, defineComponent, computed} from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 import TreeService from '../services/configurator/metaDataTree.service';
 import NodeData from '../services/configurator/metaDataTree.service';
-export default {
+import {ElTree} from 'element-plus';
+import { uuid } from 'vue-uuid';
+import СfgPropertyEditor from '../components/configurator/СfgPropertyEditor.vue'
+
+class TabData{
+  title= '';
+  name= '';   
+}
+
+export default defineComponent( {
   components: {
     Splitpanes,
     Pane,
   },
   data(){return{
     nodes:[],
+
     }
   },
   
   setup() {
-    const metaDataTree=ref(null);
+    const selectedNodeId = ref('');
+    const tabs =ref([{}]);
+    tabs.value=[];
+    const editableTabsValue = ref('');
 
     const defaultTreeProps = {
       children: "children",
       label: "name",
+    };
+
+    const currentTabComponent = computed(()=>{
+      return СfgPropertyEditor;
+    });
+
+    const getTabProps=(tabItem:any)=>{     
+      const mdObjectDescr={
+         md_type_id:tabItem.data.mdTypeId,
+         id:tabItem.data.id,
+         parentId:tabItem.data.parentId
+      }
+      return {mdObjectDescr: mdObjectDescr, elementId:tabItem.elementId};
+    };
+
+    const onCurrentNodeChange = (n:any)=>{
+      selectedNodeId.value=n.elementId;
+    };
+
+    const removeTab = (targetName:any)=>{
+      console.log(targetName);     
+    };
+
+    const onAddNode =(node:any) => {      
+      const elementId = uuid.v4();
+      // const tabData = new TabData()
+      //tabData.title= node.data.name
+        const tabData = {
+             title: node.data.name,
+             name: elementId,
+             data: node.data,
+        //     // dataId: '',
+        //     // elementId: elementId,
+        //     // node:node,
+           };   
+          tabs.value.push(tabData);
+          editableTabsValue.value=tabData.name;
     };
     const loadNodes = async (node: any, resolve: any) => {
        if (node.level === 0) {
@@ -71,9 +133,8 @@ export default {
        }
     };
 
-    const isSelectedNode = (node:any)=>{   
-      //console.log(metaDataTree.value);
-      return  false;//metaDataTree.value && metaDataTree.value.getCurrentKey() == node.data.elementId;
+    const isSelectedNode = (node:any)=>{  
+      return  selectedNodeId.value === node.elementId;
     };
     
     const getTreeNodeClassName = (nodeData:any)=>{
@@ -89,10 +150,12 @@ export default {
       return iconName;      
     };
     
-    return { loadNodes, defaultTreeProps, getTreeNodeClassName, isSelectedNode};
+    return { loadNodes, defaultTreeProps, getTreeNodeClassName, 
+      isSelectedNode, onCurrentNodeChange, editableTabsValue, 
+      removeTab, currentTabComponent, onAddNode, tabs, getTabProps};
   },
   
-};
+});
 </script>
 
 <style scoped>

@@ -23,9 +23,8 @@ export async function getMdObjectData(options: any, res: any){
     if(!mdTypeId){
         res.status(500).send('type not defined');       
     }
-    const mdObject = Metadata.getMdObject(mdTypeId, mdObjectId);
-    
-    res.send(mdObject?.mdFields);  
+    const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId);
+    res.json(mdObject?.mdFields);  
     return true;
 } 
 

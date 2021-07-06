@@ -1,6 +1,5 @@
-@import url("//unpkg.com/element-plus/lib/theme-chalk/index.css");
+@import url("//unpkg.com/element-plus/lib/theme-chalk/index.css"); 
 @import url('https://unpkg.com/splitpanes/dist/splitpanes.css');
-
  .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
@@ -29,6 +28,9 @@
     background: #f5f4f4 !important;
     
   }
+  /* .full-height{
+    height: 100%;  
+  } */
   /* .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
     line-height: 260px;

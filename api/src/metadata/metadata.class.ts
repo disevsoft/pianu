@@ -13,14 +13,14 @@ export class Metadata{
         return MdCatalog.getAllCatalogs();
     }
 
-    public static getMdObject(mdTypeId:string, mdObjectId:string){
+    public static async getMdObject(mdTypeId:string, mdObjectId:string){
 
          
-        const objectType = MdType.getMdType(mdTypeId);
+        const objectType = await MdType.getMdType(mdTypeId);
         if(objectType?.className)
         {
             if(objectType?.className === 'MdCatalog'){
-                return new MdCatalog(mdObjectId);
+                return await MdCatalog.getInstance(mdObjectId);
             }
         }
         return undefined; 

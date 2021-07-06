@@ -4,20 +4,22 @@ import MdTypeField from './mdTypeField.class'
 
 export default class MdCatalog extends BaseMeta{
     constructor(id:string){
+        
         super(id);
 
         this.typeId= '834cd9ad-9720-4fc5-aa09-cef6f7a895a0';
         this.modelName= 'md_catalogs';
         this.typeName = 'Catalog'
-        this.mdFields.set('listName', new MdTypeField("char(150)", "", "", false, "list_name"));
-        this.mdFields.set('isHierarchical', new MdTypeField("Boolean", false, false, false, "is_hierarchical"));
+        
+        this.mdFields.push(new MdTypeField('listName', "char(150)", "", "", false, "list_name"));
+        this.mdFields.push(new MdTypeField('isHierarchical',"Boolean", false, false, false, "is_hierarchical"));
     }
 
     private static _catalogs: Map<String, MdCatalog> =new Map();
-    static getAllCatalogs() 
+    static async getAllCatalogs() 
     {
         if(MdCatalog._catalogs.size===0){
-            MdCatalog.fetchCatalogs();
+            await MdCatalog.fetchCatalogs();
         }
         return MdCatalog._catalogs;
     }
@@ -25,16 +27,47 @@ export default class MdCatalog extends BaseMeta{
     private static async fetchCatalogs()
     {
         const catalogsModels = await md_catalogs.findAll();
-        catalogsModels.forEach((element:any) => {
-            let catalog = new MdCatalog(element.id);
-            for (let mdField of catalog.mdFields.values()) {
-                if(mdField.fieldMap){
-                    mdField.value = element[mdField.fieldMap]
-                }
-              }
-              catalog.name = catalog.mdFields.get('name')?.value;
-              catalog.sinonym = catalog.mdFields.get('sinonym')?.value
-              MdCatalog._catalogs.set(catalog.mdFields.get('name')?.value, catalog);   
+        catalogsModels.forEach(async (element:any) => {
+            await MdCatalog.loadCatalogFromModelData(element);
         });
+    };
+    public static async getInstance(id:string)
+    {
+        if(!id){//its new
+            return new MdCatalog(id);
+        };
+        let catalog:MdCatalog| null=null; 
+        MdCatalog._catalogs.forEach(async (val, key) => {
+            if(val.id === id){
+                return val;
+            }
+        });
+        if(!catalog){
+            return await MdCatalog.loadCatalog(id);       
+        }
+
+    } 
+    
+    private static async loadCatalogFromModelData(modelData:any)
+    {
+        let catalog = new MdCatalog(modelData['id']);
+        for (let mdField of catalog.mdFields) {
+            if(mdField.fieldMap){
+                mdField.value = modelData[mdField.fieldMap];
+                (<any>catalog)[mdField.name] =  mdField.value;  
+            }
+          }
+          MdCatalog._catalogs.set(catalog.name, catalog);  
+          return catalog;
+    } 
+
+    private static async loadCatalog(id:string) 
+    {
+        if(!id){
+            console.log('empty');           
+        }
+        const mdCatalogModel:any = await md_catalogs.findOne({ where: { id: id } });
+        if(!mdCatalogModel){return;}
+        return await MdCatalog.loadCatalogFromModelData(mdCatalogModel);
     }   
 }

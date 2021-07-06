@@ -7,14 +7,14 @@
         :cell-style="{padding: '0px', height: '20px'}">
         <el-table-column prop="key" label="Property" width="140" fixed="left">
           <template #default="scope">
-            <span >{{ scope.row.key }}</span>
+            <span >{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="props.value" label="Value" width="200">
-          <input />
-          <!-- <template  #default="scope" >
-            <CfgInput v-model="scope.row.props.value" :controlProperties="scope.row.props"> </CfgInput>
-          </template> -->
+        <el-table-column prop="value" label="Value" width="200">
+          <template  #default="scope" >
+            <input v-model="scope.row.value"/>
+            <!-- <CfgInput v-model="scope.row.props.value" :controlProperties="scope.row.props"> </CfgInput> -->
+          </template>
         </el-table-column>
       </el-table>
   </el-main>
@@ -47,7 +47,8 @@ export default defineComponent({
       const getData=async()=>{
           const data = await TreeService.TreeHelper.getMdObjectData(props.mdObjectDescr); 
           console.log(data);
-          
+          mdObjectData.value = data;
+          dataLoadingComplete.value = true;
         };
       const cellClassName=(row:any, column:any, rowIndex:any, columnIndex:any)=>{
           if(columnIndex==0){

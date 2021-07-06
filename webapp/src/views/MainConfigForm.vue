@@ -35,7 +35,7 @@
       <el-container>
         <el-header> </el-header>
         <el-main> 
-           <el-tabs ref="tabPanel" v-model="editableTabsValue" type="border-card" class="full-height" closable @tab-remove="removeTab" id="formTabs">
+           <el-tabs ref="tabPanel" v-model="editableTabsValue" type="border-card" closable @tab-remove="removeTab" id="formTabs">
         <el-tab-pane
           v-for="(item) in tabs"
           :key="item.elementId"
@@ -59,11 +59,6 @@ import NodeData from '../services/configurator/metaDataTree.service';
 import {ElTree} from 'element-plus';
 import { uuid } from 'vue-uuid';
 import СfgPropertyEditor from '../components/configurator/СfgPropertyEditor.vue'
-
-class TabData{
-  title= '';
-  name= '';   
-}
 
 export default defineComponent( {
   components: {
@@ -92,12 +87,12 @@ export default defineComponent( {
     });
 
     const getTabProps=(tabItem:any)=>{      
-      
       const mdObjectDescr={
          mdTypeId:tabItem.data.mdTypeId,
          id:tabItem.data.id,
          parentId:tabItem.data.parentId
       }
+      
       return {mdObjectDescr: mdObjectDescr, elementId:tabItem.elementId};
     };
 
@@ -108,18 +103,34 @@ export default defineComponent( {
     const removeTab = (targetName:any)=>{
       console.log(targetName);     
     };
+    const onEditNode= (node:any)=> {  
+       if (findeAndActivateTab(node)){return}
+       const elementId = uuid.v4();
+       const tabData = {
+            title: node.data.name,
+            name: elementId,
+            data: node.data,
+          };   
+        tabs.value.push(tabData);
+        editableTabsValue.value=tabData.name;
+    };
+
+    const findeAndActivateTab=(node:any)=>{
+      let result = false;
+      let tab:any = tabs.value.find((el:any) => el?.data.id === node.data.id);
+      if(tab!=undefined){
+        editableTabsValue.value = tab.name;
+        result= true;
+      }
+      return result;
+    };
 
     const onAddNode =(node:any) => {      
       const elementId = uuid.v4();
-      // const tabData = new TabData()
-      //tabData.title= node.data.name
         const tabData = {
              title: node.data.name,
              name: elementId,
              data: node.data,
-        //     // dataId: '',
-        //     // elementId: elementId,
-        //     // node:node,
            };   
           tabs.value.push(tabData);
           editableTabsValue.value=tabData.name;
@@ -153,12 +164,27 @@ export default defineComponent( {
     
     return { loadNodes, defaultTreeProps, getTreeNodeClassName, 
       isSelectedNode, onCurrentNodeChange, editableTabsValue, 
-      removeTab, currentTabComponent, onAddNode, tabs, getTabProps};
+      removeTab, currentTabComponent, onAddNode, tabs, getTabProps,
+      onEditNode};
   },
   
 });
 </script>
 
 <style scoped>
-/* @import '../global/styles.css' */
+/* .full-height{
+    height: 100% !important;  
+  } */
+  .el-tabs{
+   height: 100% !important;  
+  }
+  .el-tabs__content{
+   height: 100% !important;   
+  }
+  .el-tab-pane{
+    height: 100% !important;   
+  }
+  .el-table--fit{
+    height: 100% !important;   
+  }
 </style>

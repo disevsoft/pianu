@@ -26,9 +26,10 @@ export default class MdType{
         ['is_database_type', 'isDataBaseType'],
         ['database_type','dataBaseType']
     ]);
-    public static getMdType(mdTypeId:string){
+    public static async getMdType(mdTypeId:string){
+
         if(!MdType._mdTypes.get(mdTypeId)){
-            MdType.loadType(mdTypeId);
+            await MdType.loadType(mdTypeId);
         }
         return MdType._mdTypes.get(mdTypeId);
     } 

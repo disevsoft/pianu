@@ -17,21 +17,25 @@ async function getMdObjectsList(options: any, res: any){
     return true;
 };
 
-async function getMdObjectData(options: any, res: any){
+export async function getMdObjectData(options: any, res: any){
     const mdTypeId = options.mdTypeId;
     const mdObjectId = options.mdObjectId;
     if(!mdTypeId){
         res.status(500).send('type not defined');       
     }
-
-
+    const mdObject = Metadata.getMdObject(mdTypeId, mdObjectId);
+    
+    res.send(mdObject?.mdFields);  
+    return true;
 } 
 
 
 
 const processors: { [K: string]: Function } = {
     getMdObjectsList: getMdObjectsList,
+    getMdObject:getMdObjectData
 };
+
 function processRequest(name: string, params: any, res:any) {
     if (!processors[name]) {
         res.status(500).send('unprocessed request');

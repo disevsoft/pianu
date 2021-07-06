@@ -11,7 +11,7 @@ class TreeHelper{
             nodes.push(new NodeData(element.nodeType, element.mdTypeId, element.id, element.name, element.parentId, element.canAdd, element.canEdit, element.canDelete));
         })
         return nodes;       
-    }
+    };
 
     public static async getTreeNodes(targetNode: NodeData){
         const queryParam = {
@@ -28,7 +28,25 @@ class TreeHelper{
         const data = await response.json();
         const nodes = TreeHelper.prepareMapData(data, NodeType.MdObject); 
         return nodes; 
-    }
+    };
+
+    public static async getMdObjectData(targetNode: any){
+        const queryParam = {
+            command: 'getMdObject',
+            options:{
+                mdTypeId:targetNode.mdTypeId,
+                mdObjectId:targetNode.id
+            }
+        };
+        
+        const response = await fetch('/api/md', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(queryParam)
+          }); 
+        const data = await response.json();
+        return data; 
+    };
 
     static prepareMapData(nodeData:any, nodeType:NodeType){
         const nodes:Array<NodeData> = [];
@@ -38,9 +56,8 @@ class TreeHelper{
         });
         return nodes; 
     }
-    // static getMdObjectData(mdTypeId:string, mdObjectId:string){
+    
 
-    // }
 }
 class NodeData{
     name = '';

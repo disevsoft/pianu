@@ -1,4 +1,5 @@
-import {md_types} from '../database/config/models/md_types'
+import {md_types} from '../database/config/models/md_types';
+
 export default class MdType{
     id: string;
     name:string = '';
@@ -9,7 +10,7 @@ export default class MdType{
     className:string = '';
     isDataBaseType:boolean = false;
     databasType:string = '';
-    private static _mdTypes:Map<String, MdType>;
+    private static _mdTypes:Map<String, MdType> = new Map();
 
     private constructor(id:string){
         this.id = id;
@@ -30,11 +31,15 @@ export default class MdType{
             MdType.loadType(mdTypeId);
         }
         return MdType._mdTypes.get(mdTypeId);
-    }
+    } 
 
-    private static async loadType(mdTypeId:string)
+    private static async loadType(mdTypeId:string) 
     {
-        const mdTypeModel = await md_types.findOne({ where: { name: "Johnny" } });
+        if(!md_types){
+            console.log('empty');
+            
+        }
+        const mdTypeModel = await md_types.findOne({ where: { id: mdTypeId } });
         if(!mdTypeModel){return;}
 
         let mdType = new MdType(mdTypeId);

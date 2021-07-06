@@ -91,9 +91,10 @@ export default defineComponent( {
       return СfgPropertyEditor;
     });
 
-    const getTabProps=(tabItem:any)=>{     
+    const getTabProps=(tabItem:any)=>{      
+      
       const mdObjectDescr={
-         md_type_id:tabItem.data.mdTypeId,
+         mdTypeId:tabItem.data.mdTypeId,
          id:tabItem.data.id,
          parentId:tabItem.data.parentId
       }

@@ -34,17 +34,34 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-
+import TreeService from '../../services/configurator/metaDataTree.service';
 export default defineComponent({
-    setup () {
+    props:{
+      mdObjectDescr:Object,
+      elementId:String 
+      },
+    setup (props) {
       const dataLoadingComplete = ref(false);         
       const mdObjectData = ref([{key: "id", props: {}}]);
       mdObjectData.value = [];
+      const getData=async()=>{
+          const data = await TreeService.TreeHelper.getMdObjectData(props.mdObjectDescr); 
+          console.log(data);
+          
+        };
+      const cellClassName=(row:any, column:any, rowIndex:any, columnIndex:any)=>{
+          if(columnIndex==0){
+            return 'input-readonly-background-color';
+          }
+      };
 
-
-
-      return {dataLoadingComplete, mdObjectData}
-    }
+      return {dataLoadingComplete, mdObjectData, getData, cellClassName}
+    },
+    mounted () {
+      console.log('mntd');
+      
+      this.getData() // 1
+  }
 })
 </script>
 

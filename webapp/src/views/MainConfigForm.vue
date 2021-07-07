@@ -1,4 +1,5 @@
 <template>
+<div id="mainSurface" class="fullSize">
   <Splitpanes class="default-theme" vertical>
     <Pane :size="30">
       <el-container>
@@ -49,6 +50,7 @@
       </el-container>
     </Pane>
   </Splitpanes>
+</div>
 </template>
 
 <script lang="ts">
@@ -172,13 +174,20 @@ export default defineComponent( {
 </script>
 
 <style scoped>
+.fullSize {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
 /* .full-height{
     height: 100% !important;  
   } */
-  .el-tabs{
+  /* .el-tabs{
    height: 100% !important;  
-  }
-  .el-tabs__content{
+  } */
+  /* .el-tabs__content{
    height: 100% !important;   
   }
   .el-tab-pane{
@@ -186,5 +195,7 @@ export default defineComponent( {
   }
   .el-table--fit{
     height: 100% !important;   
-  }
+  } */
+
+ 
 </style>

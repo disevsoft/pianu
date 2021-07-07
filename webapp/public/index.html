@@ -7,7 +7,7 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
-  <body>
+  <body class="main-form">
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
@@ -15,3 +15,27 @@
     <!-- built files will be auto injected -->
   </body>
 </html>
+
+<style scoped>
+  .main-form {
+    overflow: hidden;
+}
+body {
+    color: #4b4b4b;
+    background-color: #fff;
+    font-family: 'Almarai', Arial, sans-serif;
+    font-size: 10pt;
+    cursor: default;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+</style>

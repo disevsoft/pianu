@@ -22,13 +22,9 @@
             "webRoot": "${workspaceFolder}/src",
             "breakOnLoad": true,
             "sourceMapPathOverrides": {
-                "webpack:///src/*": "${webRoot}/*",
-                "webpack:///./src/*": "${webRoot}/*",
-                "webpack:///./*": "${webRoot}/*",
-                "webpack:///*": "*",
-                "webpack:///./~/*": "${webRoot}/node_modules/*",
-                "webpack:///./src/services/*": "${webRoot}/services/*",
-            }
+                "webpack:///src/*.vue": "${webRoot}/*.vue",
+                "webpack:///./src/*.ts": "${webRoot}/*.ts",
+             }
           },
     ]
 }

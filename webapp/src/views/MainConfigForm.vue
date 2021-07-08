@@ -1,193 +1,264 @@
 <template>
-<div id="mainSurface" class="fullSize">
-  <Splitpanes class="default-theme" vertical>
-    <Pane :size="30">
-      <el-container>
-        <el-header> </el-header>
-        <el-main>
-          <el-tree
-            @current-change="onCurrentNodeChange"
-            ref="metaDataTreeRef"
-            :data="nodes"
-            node-key="elementId"
-            :load="loadNodes"
-            :expand-on-click-node="false"
-            lazy
-            :props="defaultTreeProps"
-          >
-            <template #default="{ node, data }">
-            <span class="custom-tree-node">
-            <i :class="getTreeNodeClassName(data)" style="padding-right: 5px"> </i>
-            <span>{{ node.label }}</span>
-              <span v-if="isSelectedNode(data)">
-                <span style="padding: 20px">
-                  <i v-show="data.canAdd"  class="el-icon-plus" margin-left="15px" title="Add child node" @click="onAddNode(node)"> </i>
-                  <i v-show="data.canEdit" class="el-icon-edit-outline"  margin-left="5px" title="Edit node" @click="onEditNode(node)"> </i>
-                  <i v-show="data.canEdit" class="el-icon-delete" margin-left="5px" title="Delete node" @click="onDeleteNode(node)"> </i>
+  <div id="mainSurface" class="fullSize">
+    <Splitpanes class="default-theme" vertical>
+      <Pane :size="30">
+        <el-container>
+          <el-header> </el-header>
+          <el-main>
+            <el-tree
+              @current-change="onCurrentNodeChange"
+              ref="metaDataTreeRef"
+              :data="nodes"
+              node-key="elementId"
+              :load="loadNodes"
+              :expand-on-click-node="false"
+              lazy
+              :props="defaultTreeProps"
+            >
+              <template #default="{ node, data }">
+                <span class="custom-tree-node">
+                  <i
+                    :class="getTreeNodeClassName(data)"
+                    style="padding-right: 5px"
+                  >
+                  </i>
+                  <span>{{ node.label }}</span>
+                  <span v-if="isSelectedNode(data)">
+                    <span style="padding: 20px">
+                      <i
+                        v-show="data.canAdd"
+                        class="el-icon-plus"
+                        style="float: right"
+                        margin-left="15px"
+                        title="Add child node"
+                        @click="onAddNode(node)"
+                      >
+                      </i>
+                      <i
+                        v-show="data.canEdit"
+                        class="el-icon-edit-outline"
+                        style="float: right"
+                        margin-left="5px"
+                        title="Edit node"
+                        @click="onEditNode(node)"
+                      >
+                      </i>
+                      <i
+                        v-show="data.canEdit"
+                        class="el-icon-delete"
+                        style="float: right"
+                        margin-left="5px"
+                        title="Delete node"
+                        @click="onDeleteNode(node)"
+                      >
+                      </i>
+                    </span>
+                  </span>
                 </span>
-              </span>
-             </span>
-            </template>
-          </el-tree>
-        </el-main>
-      </el-container>
-    </Pane>
-    <Pane>
-      <el-container>
-        <el-header> </el-header>
-        <el-main> 
-           <el-tabs ref="tabPanel" v-model="editableTabsValue" type="border-card" closable @tab-remove="removeTab" id="formTabs">
-        <el-tab-pane
-          v-for="(item) in tabs"
-          :key="item.elementId"
-          :label="item.title"
-          :name="item.name" lazy
-          :ref="'pane-' + item.elementId">
-          <component :is="currentTabComponent" v-bind="getTabProps(item)" @afterSave="onAfterSave(item)" :ref="item.elementId" ></component>
-        </el-tab-pane>
-        </el-tabs>
-        </el-main>
-      </el-container>
-    </Pane>
-  </Splitpanes>
-</div>
+              </template>
+            </el-tree>
+          </el-main>
+        </el-container>
+      </Pane>
+      <Pane>
+        <el-container>
+          <el-header> </el-header>
+          <el-main>
+            <el-tabs
+              ref="tabPanel"
+              v-model="editableTabsValue"
+              type="border-card"
+              closable
+              @tab-remove="removeTab"
+              id="formTabs"
+            >
+              <el-tab-pane
+                v-for="item in tabs"
+                :key="item.elementId"
+                :label="item.title"
+                :name="item.name"
+                lazy
+                :ref="'pane-' + item.elementId"
+              >
+                <component
+                  :is="currentTabComponent"
+                  v-bind="getTabProps(item)"
+                  @afterSave="onAfterSave(item)"
+                  :ref="item.elementId"
+                ></component>
+              </el-tab-pane>
+            </el-tabs>
+          </el-main>
+        </el-container>
+      </Pane>
+    </Splitpanes>
+  </div>
 </template>
 
 <script lang="ts">
-import { ref, reactive, defineProps, onMounted, watch, defineComponent, computed} from "vue";
+import {
+  ref,
+  reactive,
+  defineProps,
+  onMounted,
+  watch,
+  defineComponent,
+  computed,
+} from "vue";
 import { Splitpanes, Pane } from "splitpanes";
-import TreeService from '../services/configurator/metaDataTree.service';
-import NodeData from '../services/configurator/metaDataTree.service';
-import {ElTree} from 'element-plus';
-import { uuid } from 'vue-uuid';
-import СfgPropertyEditor from '../components/configurator/СfgPropertyEditor.vue'
+import TreeService from "../services/configurator/metaDataTree.service";
+import NodeData from "../services/configurator/metaDataTree.service";
+import { ElTree } from "element-plus";
+import { uuid } from "vue-uuid";
+import СfgPropertyEditor from "../components/configurator/СfgPropertyEditor.vue";
 
-export default defineComponent( {
+export default defineComponent({
   components: {
     Splitpanes,
     Pane,
   },
-  data(){return{
-    nodes:[],
-
-    }
+  data() {
+    return {
+      nodes: [],
+    };
   },
-  
+
   setup() {
-    const selectedNodeId = ref('');
-    const tabs =ref([{}]);
-    tabs.value=[];
-    const editableTabsValue = ref('');
+    const selectedNodeId = ref("");
+    const tabs = ref([{}]);
+    tabs.value = [];
+    const editableTabsValue = ref("");
 
     const defaultTreeProps = {
       children: "children",
       label: "name",
     };
 
-    const currentTabComponent = computed(()=>{
+    const currentTabComponent = computed(() => {
       return СfgPropertyEditor;
     });
 
-    const getTabProps=(tabItem:any)=>{      
-      const mdObjectDescr={
-         mdTypeId:tabItem.data.mdTypeId,
-         id:tabItem.data.id,
-         parentId:tabItem.data.parentId
+    const getTabProps = (tabItem: any) => {
+      const mdObjectDescr = {
+        mdTypeId: tabItem.data.mdTypeId,
+        id: tabItem.data.id,
+        parentId: tabItem.data.parentId,
+      };
+
+      return { mdObjectDescr: mdObjectDescr, elementId: tabItem.elementId };
+    };
+
+    const onCurrentNodeChange = (n: any) => {
+      selectedNodeId.value = n.elementId;
+    };
+
+    const removeTab = (targetName: any) => {
+      console.log(targetName);
+    };
+    const onEditNode = (node: any) => {
+      if (findeAndActivateTab(node)) {
+        return;
       }
-      
-      return {mdObjectDescr: mdObjectDescr, elementId:tabItem.elementId};
+      const elementId = uuid.v4();
+      const tabData = {
+        title: node.data.name,
+        name: elementId,
+        data: node.data,
+      };
+      tabs.value.push(tabData);
+      editableTabsValue.value = tabData.name;
     };
 
-    const onCurrentNodeChange = (n:any)=>{
-      selectedNodeId.value=n.elementId;
-    };
-
-    const removeTab = (targetName:any)=>{
-      console.log(targetName);     
-    };
-    const onEditNode= (node:any)=> {  
-       if (findeAndActivateTab(node)){return}
-       const elementId = uuid.v4();
-       const tabData = {
-            title: node.data.name,
-            name: elementId,
-            data: node.data,
-          };   
-        tabs.value.push(tabData);
-        editableTabsValue.value=tabData.name;
-    };
-
-    const findeAndActivateTab=(node:any)=>{
+    const findeAndActivateTab = (node: any) => {
       let result = false;
-      let tab:any = tabs.value.find((el:any) => el?.data.id === node.data.id);
-      if(tab!=undefined){
+      let tab: any = tabs.value.find((el: any) => el?.data.id === node.data.id);
+      if (tab != undefined) {
         editableTabsValue.value = tab.name;
-        result= true;
+        result = true;
       }
       return result;
     };
 
-    const onAddNode =(node:any) => {      
+    const onAddNode = (node: any) => {
       const elementId = uuid.v4();
-        const tabData = {
-             title: node.data.name,
-             name: elementId,
-             data: node.data,
-           };   
-          tabs.value.push(tabData);
-          editableTabsValue.value=tabData.name;
+      const tabData = {
+        title: node.data.name,
+        name: elementId,
+        data: node.data,
+      };
+      tabs.value.push(tabData);
+      editableTabsValue.value = tabData.name;
     };
     const loadNodes = async (node: any, resolve: any) => {
-       if (node.level === 0) {
-          const data = TreeService.TreeHelper.getMdTreeRoot();
-          return resolve(data);
-         } else{
-           const data = await TreeService.TreeHelper.getTreeNodes(node.data);
-           return resolve(data);
-       }
+      if (node.level === 0) {
+        const data = TreeService.TreeHelper.getMdTreeRoot();
+        return resolve(data);
+      } else {
+        const data = await TreeService.TreeHelper.getTreeNodes(node.data);
+        return resolve(data);
+      }
     };
 
-    const isSelectedNode = (node:any)=>{  
-      return  selectedNodeId.value === node.elementId;
+    const isSelectedNode = (node: any) => {
+      return selectedNodeId.value === node.elementId;
     };
-    
-    const getTreeNodeClassName = (nodeData:any)=>{
+
+    const getTreeNodeClassName = (nodeData: any) => {
       let iconName = "";
-      if(nodeData.mdTypeId === "834cd9ad-9720-4fc5-aa09-cef6f7a895a0")  {iconName = "el-icon-notebook-2"}
-      if(nodeData.mdTypeId === "cc94220b-20f8-4a63-9f29-d02fe64ba918")  {iconName = "el-icon-document"}
+      if (nodeData.mdTypeId === "834cd9ad-9720-4fc5-aa09-cef6f7a895a0") {
+        iconName = "el-icon-notebook-2";
+      }
+      if (nodeData.mdTypeId === "cc94220b-20f8-4a63-9f29-d02fe64ba918") {
+        iconName = "el-icon-document";
+      }
       //table
-      if(nodeData.mdTypeId === "0cf72dda-2547-4333-aec0-c852d2f3f235")  {iconName = "el-icon-s-grid"}
+      if (nodeData.mdTypeId === "0cf72dda-2547-4333-aec0-c852d2f3f235") {
+        iconName = "el-icon-s-grid";
+      }
       //field
-      if(nodeData.mdTypeId === "8c474f75-b63a-4f3a-b624-f9a58cb7eeae")  {iconName = "el-icon-minus"}
+      if (nodeData.mdTypeId === "8c474f75-b63a-4f3a-b624-f9a58cb7eeae") {
+        iconName = "el-icon-minus";
+      }
       //WebForm
-      if(nodeData.mdTypeId === "370c9fb7-c2c8-4360-9863-6dc456460080")  {iconName = "el-icon-s-platform"}
-      return iconName;      
+      if (nodeData.mdTypeId === "370c9fb7-c2c8-4360-9863-6dc456460080") {
+        iconName = "el-icon-s-platform";
+      }
+      return iconName;
     };
-    
-    return { loadNodes, defaultTreeProps, getTreeNodeClassName, 
-      isSelectedNode, onCurrentNodeChange, editableTabsValue, 
-      removeTab, currentTabComponent, onAddNode, tabs, getTabProps,
-      onEditNode};
+
+    return {
+      loadNodes,
+      defaultTreeProps,
+      getTreeNodeClassName,
+      isSelectedNode,
+      onCurrentNodeChange,
+      editableTabsValue,
+      removeTab,
+      currentTabComponent,
+      onAddNode,
+      tabs,
+      getTabProps,
+      onEditNode,
+    };
   },
-  
 });
 </script>
 
 <style scoped>
 .fullSize {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 /* .full-height{
     height: 100% !important;  
   } */
-  /* .el-tabs{
+/* .el-tabs{
    height: 100% !important;  
   } */
-  /* .el-tabs__content{
+/* .el-tabs__content{
    height: 100% !important;   
   }
   .el-tab-pane{
@@ -196,6 +267,4 @@ export default defineComponent( {
   .el-table--fit{
     height: 100% !important;   
   } */
-
- 
 </style>

@@ -13,6 +13,7 @@ export default class MdCatalog extends BaseMeta{
         
         this.mdFields.push(new MdTypeField('listName', "char(150)", "", "", false, "list_name"));
         this.mdFields.push(new MdTypeField('isHierarchical',"Boolean", false, false, false, "is_hierarchical"));
+        this.mdFields.push(new MdTypeField('typeId', "char(150)", this.typeId, "", true,''));
     }
 
     private static _catalogs: Map<String, MdCatalog> =new Map();

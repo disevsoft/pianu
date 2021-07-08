@@ -1,3 +1,4 @@
+import BaseMeta from '../metadata/basemeta.class';
 import {Metadata} from '../metadata/metadata.class'
 
 export async function processCommand(req:any, res:any)
@@ -24,6 +25,18 @@ export async function getMdObjectData(options: any, res: any){
         res.status(500).send('type not defined');       
     }
     const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId);
+
+    res.json(mdObject?.mdFields);  
+    return true;
+} 
+
+export async function saveMdObject(options: any, res: any){
+    const fieldValues = options.mdObject;
+    
+    if(!fieldValues){
+        res.status(500).send('expected data object ');       
+    }
+    const mdObject = await Metadata.saveMdObject(fieldValues);
     res.json(mdObject?.mdFields);  
     return true;
 } 
@@ -32,7 +45,8 @@ export async function getMdObjectData(options: any, res: any){
 
 const processors: { [K: string]: Function } = {
     getMdObjectsList: getMdObjectsList,
-    getMdObject:getMdObjectData
+    getMdObject:getMdObjectData,
+    saveMdObject:saveMdObject
 };
 
 function processRequest(name: string, params: any, res:any) {

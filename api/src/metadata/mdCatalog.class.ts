@@ -71,4 +71,8 @@ export default class MdCatalog extends BaseMeta{
         if(!mdCatalogModel){return;}
         return await MdCatalog.loadCatalogFromModelData(mdCatalogModel);
     }   
+
+    public Save(){
+        
+    }
 }

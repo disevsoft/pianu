@@ -1,6 +1,6 @@
 import BaseMeta from '../metadata/basemeta.class';
 import {Metadata} from '../metadata/metadata.class'
-
+import ResponseArgs from '../helpers/responseArgs'
 export async function processCommand(req:any, res:any)
  {
     let body = req.body;
@@ -9,35 +9,49 @@ export async function processCommand(req:any, res:any)
     if (!commandName){
         res.status(500).send('there is no command to process');
     }
-    processRequest(commandName, options, res)
+    const resArgs = new ResponseArgs(res);
+    await processRequest(commandName, options, resArgs);
+    resArgs.send();
  }
 
-async function getMdObjectsList(options: any, res: any){
-    const t = await Metadata.Catalogs;
-    res.send(JSON.stringify([...t]));  
-    return true;
-};
+ function processRequest(name: string, params: any, resArgs:ResponseArgs) {
+    if (!processors[name]) {
+        resArgs.res.status(500).send('unprocessed request');
+        return;
+    }
+      return processors[name](params, resArgs);
+}
 
-export async function getMdObjectData(options: any, res: any){
+
+async function getMdObjectsList(options: any, resArgs:ResponseArgs){
+    const t = await Metadata.Catalogs;
+    resArgs.resData = JSON.stringify([...t]); 
+    resArgs.sendJson=false;
+    return true;
+}; 
+
+export async function getMdObjectData(options: any, resArgs:ResponseArgs){
     const mdTypeId = options.mdTypeId;
     const mdObjectId = options.mdObjectId;
     if(!mdTypeId){
-        res.status(500).send('type not defined');       
+        resArgs.messageId = 1;
+        resArgs.status = 500;
     }
-    const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId);
-
-    res.json(mdObject?.mdFields);  
+    else
+    {
+        await Metadata.getMdObjectFields(mdTypeId, mdObjectId, resArgs);
+    }
     return true;
 } 
 
-export async function saveMdObject(options: any, res: any){
+export async function saveMdObject(options: any, resArgs:ResponseArgs){
     const fieldValues = options.mdObject;
     
     if(!fieldValues){
-        res.status(500).send('expected data object ');       
+        resArgs.res.status(500).send('expected data object ');       
     }
-    const mdObject = await Metadata.saveMdObject(fieldValues);
-    res.json(mdObject?.mdFields);  
+    const mdObject = await Metadata.saveMdObject(fieldValues, resArgs);
+    resArgs.res.json(mdObject?.mdFields);  
     return true;
 } 
 
@@ -49,11 +63,4 @@ const processors: { [K: string]: Function } = {
     saveMdObject:saveMdObject
 };
 
-function processRequest(name: string, params: any, res:any) {
-    if (!processors[name]) {
-        res.status(500).send('unprocessed request');
-        return;
-    }
-      return processors[name](params, res);
-}
 

@@ -32,6 +32,8 @@ class TreeHelper {
     };
     const data = await TreeHelper.postMd(queryParam);
     const nodes = TreeHelper.prepareMapData(data, NodeType.MdObject);
+    console.log(data);
+    
     return nodes;
   }
 
@@ -55,7 +57,10 @@ class TreeHelper {
         mdObject: mdObjectData,
       },
     };
-    return await TreeHelper.postMd(queryParam);
+    const data = await TreeHelper.postMd(queryParam);
+    console.log(data);
+    
+    return data;
   }
 
   private static async postMd(queryParam: any) {
@@ -71,9 +76,9 @@ class TreeHelper {
   static prepareMapData(nodeData: any, nodeType: NodeType) {
     const nodes: Array<NodeData> = [];
     nodeData.forEach((elData: any) => {
-      const element = elData[1];
+      const element = elData;
       nodes.push(
-        new NodeData(
+        new NodeData( 
           nodeType,
           element.typeId,
           element.mdId,

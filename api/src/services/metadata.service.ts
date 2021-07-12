@@ -25,8 +25,7 @@ export async function processCommand(req:any, res:any)
 
 async function getMdObjectsList(options: any, resArgs:ResponseArgs){
     const t = await Metadata.Catalogs;
-    resArgs.resData = JSON.stringify([...t]); 
-    resArgs.sendJson=false;
+    resArgs.resData = t; 
     return true;
 }; 
 

@@ -19,12 +19,12 @@ export default class BaseMeta{
         this.mdFields.push(new MdTypeField('parentId', "char(150)", "", "", true, ""));
         this.id = id;
     }
-
+    public static mdObjects: Array<BaseMeta> =[];
     public set id(value : string) {
         this.mdId = value;
         var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='id'));
-        if(idFieldIndex >= 0){
-            this.mdFields[idFieldIndex].value = this.id;
+        if(idFieldIndex >= 0){ 
+            this.mdFields[idFieldIndex].value = this.mdId;
         }
     };
     public get id() { 

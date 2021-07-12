@@ -20,7 +20,8 @@ export class Metadata{
         if(objectType?.className)
         {
             if(objectType?.className === 'MdCatalog'){ 
-                return await MdCatalog.getInstance(mdObjectId);
+                const data = await MdCatalog.getInstance(mdObjectId);
+                return data; 
             }
         }
         resArgs.messageId = 1;

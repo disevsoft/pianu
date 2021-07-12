@@ -48,7 +48,7 @@ export default class BaseMeta{
                     md_object_id: this.id, 
                     md_owner_id: this.parentId}, { transaction: t })    
             }
-           await t.commit();
+           await t.commit(); 
         }else{
             let updatedFields = await this.getModelFields();
             const dataObject = await model.update(updatedFields,  

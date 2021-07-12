@@ -128,7 +128,7 @@ export default defineComponent({
     const tabs = ref([{}]);
     tabs.value = [];
     const editableTabsValue = ref("");
-
+    const metaDataTreeRef = ref(ElTree);
     const defaultTreeProps = {
       children: "children",
       label: "name",
@@ -178,7 +178,8 @@ export default defineComponent({
         title: node.data.name,
         name: elementId,
         data: node.data,
-        elementId:elementId
+        elementId:elementId,
+        node:node
       };
       tabs.value.push(tabData);
       editableTabsValue.value = tabData.name;
@@ -200,11 +201,13 @@ export default defineComponent({
         title: node.data.name,
         name: elementId,
         data: node.data,
-        elementId:elementId
+        elementId:elementId, 
+        node:node
       };
       tabs.value.push(tabData);
       editableTabsValue.value = tabData.name;
     };
+
     const loadNodes = async (node: any, resolve: any) => {
       if (node.level === 0) {
         const data = TreeService.TreeHelper.getMdTreeRoot();
@@ -214,9 +217,53 @@ export default defineComponent({
         return resolve(data);
       }
     };
+
     const dataChanged = async (dataChangedArgs:any) => {
-      console.log(dataChangedArgs);
+     
+      let parentNode:any|undefined = undefined;
+      let tabData:any = tabs.value.find((elem:any)=>elem.elementId === dataChangedArgs.targetElementId)     
+      if(!tabData){
+        return;
+      }
+      if(tabData.node.data.nodeType==="md_root_type" || tabData.node.data.nodeType==="section"){
+        parentNode = tabData.node;
+        }
+      else{ 
+        parentNode = tabData.node.parent;
+      }
       
+      if(parentNode){
+        const data = await TreeService.TreeHelper.getTreeNodes(parentNode.data);
+        metaDataTreeRef.value.updateKeyChildren(parentNode.data.elementId, data);
+        updateNodes(parentNode);
+      }
+    };
+
+    const updateNodes= async (parentNode:any)=> {  
+      parentNode.childNodes.forEach((nodeElement:any) => {
+        let tabData:any = tabs.value.find((elem:any)=>elem.data.id === nodeElement.data.id);
+        if (tabData){
+          tabData.title= nodeElement.data.name,
+          tabData.data =  nodeElement.data,
+          tabData.node =nodeElement;  
+        }
+        //console.log(tabData);
+        
+        // for (var ref in this.$refs) {
+        //     if(this.$refs[ref] && this.$refs[ref].dataId === nodeElement.data.id){elementData=this.$refs[ref]; break;}
+        //   }
+        // if(elementData)
+        // {
+        //     elementData.mdObjectDescr.id = nodeElement.data.id;
+        //     let tabData = this.tabs.find(tab=>tab.elementId===elementData.elementId);      
+        //     if(tabData){
+        //       tabData.dataId = nodeElement.data.id;
+        //       tabData.data =nodeElement.data; 
+        //       tabData.title = nodeElement.data.name; 
+        //       tabData.node = nodeElement; 
+        //     }       
+        // }
+      });
     };
     const isSelectedNode = (node: any) => {
       return selectedNodeId.value === node.elementId;
@@ -258,7 +305,8 @@ export default defineComponent({
       tabs,
       getTabProps,
       onEditNode,
-      dataChanged
+      dataChanged,
+      metaDataTreeRef
     };
   },
    mounted() {

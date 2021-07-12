@@ -56,7 +56,6 @@ export default defineComponent({
       const data = await TreeService.TreeHelper.getMdObjectData(
         props.mdObjectDescr
       );
-      console.log(data);
       mdObjectData.value = data;
       dataLoadingComplete.value = true;
     };
@@ -65,15 +64,13 @@ export default defineComponent({
       dataLoadingComplete.value = false;
       TreeService.TreeHelper.saveMdObjectData(mdObjectData.value).then(
         (response) => {
-          console.log(response);
-
           mdObjectData.value = response;
-          // this.updateData();
-          // this.$emit('afterSave');
         }
       );
       dataLoadingComplete.value = true;
-      const eventArgs = {data:mdObjectData.value, targetElementId:props.elementId};
+       let elementData:any = mdObjectData.value.find(el => el.key === "id"); 
+      var dataId = elementData.props.value; 
+      const eventArgs = {data:mdObjectData.value, targetElementId:props.elementId, id:dataId};
       EventBus.emit('dataChanged', eventArgs);
     };
 

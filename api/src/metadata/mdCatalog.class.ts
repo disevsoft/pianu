@@ -29,11 +29,11 @@ export default class MdCatalog extends BaseMeta{
     {
         const catalogsModels = await md_catalogs.findAll();
         catalogsModels.forEach(async (element:any) => {
-            await MdCatalog.loadCatalogFromModelData(element);
+            await MdCatalog.getInstance(element.id);
         });
     };
     public static async getInstance(id:string)
-    {
+    { 
         if(!id){//its new
             return new MdCatalog(id);
         };

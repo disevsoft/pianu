@@ -19,7 +19,7 @@ export class Metadata{
         const objectType = await MdType.getMdType(mdTypeId);
         if(objectType?.className)
         {
-            if(objectType?.className === 'MdCatalog'){
+            if(objectType?.className === 'MdCatalog'){ 
                 return await MdCatalog.getInstance(mdObjectId);
             }
         }

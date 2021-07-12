@@ -31,9 +31,7 @@ class TreeHelper {
       },
     };
     const data = await TreeHelper.postMd(queryParam);
-    console.log(data);
     const nodes = TreeHelper.prepareMapData(data, NodeType.MdObject);
-
     return nodes;
   }
 
@@ -57,7 +55,6 @@ class TreeHelper {
         mdObject: mdObjectData,
       },
     };
-    console.log(queryParam);
     return await TreeHelper.postMd(queryParam);
   }
 

@@ -31,7 +31,7 @@ export default class BaseMeta{
         return this.mdId;  
     };
 
-    async save() {
+    async save() { 
         const model = await require('../database/config/models/'+this.modelName)[this.modelName];
         if(!this.id){ 
             const t = await db.sequelize.transaction();

@@ -45,6 +45,8 @@ class TreeHelper {
         mdObjectId: targetNode.id,
       },
     };
+    console.log(queryParam);
+    
     return await TreeHelper.postMd(queryParam);
   }
 

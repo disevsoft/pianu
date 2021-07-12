@@ -153,13 +153,26 @@ export default defineComponent({
       selectedNodeId.value = n.elementId;
     };
 
-    const removeTab = (targetName: any) => {
-      console.log(targetName);
+    const removeTab=(targetName:any)=>{
+       let _tabs = tabs.value;;
+        let activeName = editableTabsValue.value;
+        if (activeName === targetName) {
+          _tabs.forEach((tab:any, index) => {
+            if (tab.name === targetName) {
+              let nextTab:any = _tabs[index + 1] || _tabs[index - 1];
+              if (nextTab) {
+                activeName = nextTab.name;
+              }
+            }
+          });
+        }
+        editableTabsValue.value = activeName;
+        tabs.value = _tabs.filter((tab:any) => tab.name !== targetName);
     };
     const onEditNode = (node: any) => {
-      // if (findeAndActivateTab(node)) {
-      //   return;
-      // }
+      if (findeAndActivateTab(node)) {
+        return;
+      }
       const elementId = uuid.v4();
       const tabData = {
         title: node.data.name,
@@ -174,7 +187,7 @@ export default defineComponent({
     const findeAndActivateTab = (node: any) => {
       let result = false;
       let tab: any = tabs.value.find((el: any) => el?.data.id === node.data.id);
-      if (tab != undefined) {
+      if (tab) {
         editableTabsValue.value = tab.name;
         result = true;
       }

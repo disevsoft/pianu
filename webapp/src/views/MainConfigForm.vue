@@ -111,7 +111,7 @@ import NodeData from "../services/configurator/metaDataTree.service";
 import { ElTree } from "element-plus";
 import { uuid } from "vue-uuid";
 import СfgPropertyEditor from "../components/configurator/СfgPropertyEditor.vue";
-
+import EventBus from '../components/configurator/CfgEventBus';
 export default defineComponent({
   components: {
     Splitpanes,
@@ -139,6 +139,7 @@ export default defineComponent({
     });
 
     const getTabProps = (tabItem: any) => {
+      
       const mdObjectDescr = {
         mdTypeId: tabItem.data.mdTypeId,
         id: tabItem.data.id,
@@ -156,14 +157,15 @@ export default defineComponent({
       console.log(targetName);
     };
     const onEditNode = (node: any) => {
-      if (findeAndActivateTab(node)) {
-        return;
-      }
+      // if (findeAndActivateTab(node)) {
+      //   return;
+      // }
       const elementId = uuid.v4();
       const tabData = {
         title: node.data.name,
         name: elementId,
         data: node.data,
+        elementId:elementId
       };
       tabs.value.push(tabData);
       editableTabsValue.value = tabData.name;
@@ -185,6 +187,7 @@ export default defineComponent({
         title: node.data.name,
         name: elementId,
         data: node.data,
+        elementId:elementId
       };
       tabs.value.push(tabData);
       editableTabsValue.value = tabData.name;
@@ -198,7 +201,10 @@ export default defineComponent({
         return resolve(data);
       }
     };
-
+    const dataChanged = async (dataChangedArgs:any) => {
+      console.log(dataChangedArgs);
+      
+    };
     const isSelectedNode = (node: any) => {
       return selectedNodeId.value === node.elementId;
     };
@@ -239,7 +245,12 @@ export default defineComponent({
       tabs,
       getTabProps,
       onEditNode,
+      dataChanged
     };
+  },
+   mounted() {
+
+    EventBus.on('dataChanged', this.dataChanged); // 1
   },
 });
 </script>

@@ -49,10 +49,13 @@ export async function saveMdObject(options: any, resArgs:ResponseArgs){
     
     if(!fieldValues){
         resArgs.res.status(500).send('expected data object ');       
+        return true;
     }
     const mdObject = await Metadata.saveMdObject(fieldValues, resArgs);
-    resArgs.res.json(mdObject?.mdFields);  
-    return true;
+    mdObject.save();
+    resArgs.resData = mdObject?.mdFields;
+    //resArgs.res.json(mdObject?.mdFields);  
+    
 } 
 
 

@@ -37,7 +37,7 @@ class TreeHelper {
     return nodes;
   }
 
-  public static async getMdObjectData(targetNode: any) {
+  public static async getMdObjectData(targetNode: any) {   
     const queryParam = {
       command: "getMdObject",
       options: {
@@ -77,7 +77,7 @@ class TreeHelper {
         new NodeData(
           nodeType,
           element.typeId,
-          element.id,
+          element.mdId,
           element.name,
           element.parentId,
           TreeHelper.nodeSupportAdd(nodeType),

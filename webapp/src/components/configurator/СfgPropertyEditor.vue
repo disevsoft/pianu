@@ -41,6 +41,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import TreeService from "../../services/configurator/metaDataTree.service";
+import EventBus from './CfgEventBus';
 export default defineComponent({
   props: {
     mdObjectDescr: Object,
@@ -50,6 +51,7 @@ export default defineComponent({
     const dataLoadingComplete = ref(false);
     const mdObjectData = ref([{ key: "id", props: {} }]);
     mdObjectData.value = [];
+    
     const getData = async () => {
       const data = await TreeService.TreeHelper.getMdObjectData(
         props.mdObjectDescr
@@ -60,15 +62,19 @@ export default defineComponent({
     };
 
     const onSave = (targetName: any) => {
+      dataLoadingComplete.value = false;
       TreeService.TreeHelper.saveMdObjectData(mdObjectData.value).then(
         (response) => {
           console.log(response);
 
-          //mdObjectData.value = response;
+          mdObjectData.value = response;
           // this.updateData();
           // this.$emit('afterSave');
         }
       );
+      dataLoadingComplete.value = true;
+      const eventArgs = {data:mdObjectData.value, targetElementId:props.elementId};
+      EventBus.emit('dataChanged', eventArgs);
     };
 
     const cellClassName = (
@@ -91,8 +97,6 @@ export default defineComponent({
     };
   },
   mounted() {
-    console.log("mntd");
-
     this.getData(); // 1
   },
 });

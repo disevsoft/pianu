@@ -1,7 +1,7 @@
-import { cfgdb } from '../sequilize.metadata'
+import  db  from '../sequilize.metadata'
 import  {Model} from "sequelize";
 import * as Sequelize from 'sequelize'
-const sequelize = cfgdb.sequelize;
+const sequelize = db.sequelize;
 
 interface mdTypeInstance extends Model { 
     id: number;

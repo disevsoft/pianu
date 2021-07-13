@@ -1,6 +1,7 @@
 import BaseMeta from '../metadata/basemeta.class';
 import {Metadata} from '../metadata/metadata.class'
 import ResponseArgs from '../helpers/responseArgs'
+import * as mdHelper from '../helpers/mdObjectHelper'
 export async function processCommand(req:any, res:any)
  {
     let body = req.body;
@@ -24,7 +25,9 @@ export async function processCommand(req:any, res:any)
 
 
 async function getMdObjectsList(options: any, resArgs:ResponseArgs){
-    const t = await Metadata.Catalogs;
+    const mdTypeId = options.mdTypeId;
+    const parentId = options.parentId;
+    const t = await mdHelper.getObjectsList(mdTypeId, parentId);
     resArgs.resData = t; 
     return true;
 }; 
@@ -50,10 +53,9 @@ export async function saveMdObject(options: any, resArgs:ResponseArgs){
         resArgs.res.status(500).send('expected data object ');       
         return true;
     }
-    const mdObject = await Metadata.saveMdObject(fieldValues, resArgs);
+    const mdObject = await Metadata.fillMdObject(fieldValues, resArgs);
     mdObject.save();
     resArgs.resData = mdObject?.mdFields;
-    //resArgs.res.json(mdObject?.mdFields);  
     
 } 
 

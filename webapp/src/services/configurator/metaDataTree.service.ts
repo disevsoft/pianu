@@ -20,14 +20,17 @@ class TreeHelper {
         )
       );
     });
+
     return nodes;
   }
 
-  public static async getTreeNodes(targetNode: NodeData) {
+  public static async getTreeNodes(targetNode: any) {
+    console.log(targetNode.data);
+    
     const queryParam = {
       command: "getMdObjectsList",
       options: {
-        mtTypeId: targetNode.mdTypeId,
+        mdTypeId: targetNode.mdTypeId,
       },
     };
     const data = await TreeHelper.postMd(queryParam);

@@ -3,6 +3,7 @@ import db from '../database/config/sequilize.metadata'
 import {md_objects_types} from '../database/config/models/md_objects_types'
 import {md_map} from '../database/config/models/md_map'
 const { v4: uuidv4 } = require('uuid');
+
 export default class BaseMeta{
     private mdId: string = '';
     mdFields:Array<MdTypeField> = [];
@@ -20,6 +21,7 @@ export default class BaseMeta{
         this.id = id;
     }
     public static mdObjects: Array<BaseMeta> =[];
+   
     public set id(value : string) {
         this.mdId = value;
         var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='id'));
@@ -27,19 +29,21 @@ export default class BaseMeta{
             this.mdFields[idFieldIndex].value = this.mdId;
         }
     };
+
     public get id() { 
         return this.mdId;  
     };
 
-    async save() { 
+    async save() {  
         const model = await require('../database/config/models/'+this.modelName)[this.modelName];
         if(!this.id){ 
             const t = await db.sequelize.transaction();
-            this.id = uuidv4();
+            this.id = uuidv4(); 
             let updatedFields = await this.getModelFields();
 
             await model.create(updatedFields,  
-            { transaction: t }); 
+                {where:{'id': this.id},
+            }, { transaction: t }); 
             await md_objects_types.create({
                 md_object_id: this.id, 
                 md_type_id: this.typeId}, { transaction: t })
@@ -48,26 +52,23 @@ export default class BaseMeta{
                     md_object_id: this.id, 
                     md_owner_id: this.parentId}, { transaction: t })    
             }
-           await t.commit(); 
+           await t.commit();  
         }else{
             let updatedFields = await this.getModelFields();
             const dataObject = await model.update(updatedFields,  
               {where:{id: this.id}, 
-              //returning: true,
+              //returning: true, 
               });
         } 
     }
 
-
     async getModelFields(){
         const updatedFields:any = {};
-        for (let field of this.mdFields){
+        for (let field of this.mdFields){ 
             if(field.fieldMap){
-                updatedFields[field.fieldMap]=field.value;
+                updatedFields[field.fieldMap]=field.value; 
              } 
         }
         return updatedFields;
-      }
-    //get mdFields(){return this._mdfields;}
-    //set fields(value){this._fields=value}
+      }   
 }

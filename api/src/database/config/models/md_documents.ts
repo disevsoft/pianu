@@ -4,7 +4,7 @@ import * as Sequelize from 'sequelize'
 const sequelize = db.sequelize;
 
 interface mdDocumentInstance extends Model { 
-    id: number;
+    id: string;
     name: string;
   }
   export const md_catalogs = sequelize.define<mdDocumentInstance>('md_documents', {

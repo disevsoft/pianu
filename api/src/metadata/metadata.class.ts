@@ -2,16 +2,11 @@ import MdCatalog from './mdCatalog.class';
 import DaseMeta from './basemeta.class'
 import { any, ne } from 'sequelize/types/lib/operators';
 import ResponseArgs from '../helpers/responseArgs'
-
+import * as mdHelper from '../helpers/mdObjectHelper'
 import MdType from './mdType.class';
 import BaseMeta from './basemeta.class';
 
 export class Metadata{
-
-    public static get Catalogs()
-    {   
-        return MdCatalog.getAllCatalogs();
-    }
 
     public static async getMdObject(mdTypeId:string, mdObjectId:string,  resArgs:ResponseArgs){
 
@@ -19,10 +14,8 @@ export class Metadata{
         const objectType = await MdType.getMdType(mdTypeId);
         if(objectType?.className)
         {
-            if(objectType?.className === 'MdCatalog'){ 
-                const data = await MdCatalog.getInstance(mdObjectId);
+                const data = await mdHelper.getInstance(objectType?.className, mdObjectId);
                 return data; 
-            }
         }
         resArgs.messageId = 1;
         resArgs.cancel = true;
@@ -34,7 +27,7 @@ export class Metadata{
         resArgs.resData = mdObject?.mdFields;
     }
 
-    public static async saveMdObject(fieldsArray: Array<any>, resArgs:ResponseArgs){
+    public static async fillMdObject(fieldsArray: Array<any>, resArgs:ResponseArgs){
 
         const typeId = await Metadata.getTypeIdFromFields(fieldsArray);
         if(!typeId){throw 'error'}; 

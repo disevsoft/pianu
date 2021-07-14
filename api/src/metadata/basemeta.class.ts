@@ -38,15 +38,13 @@ export default class BaseMeta{
         const model = await require('../database/config/models/'+this.modelName)[this.modelName];
         if(!model){return;}
 
-        if(!this.id){ 
-            const t = await db.sequelize.transaction();
-            this.id = uuidv4(); 
+        if(!this.id){  
+            const t = await db.sequelize.transaction();  
+            this.id = await uuidv4(); 
             let updatedFields = await this.getModelFields();
 
-            const newData = await model.create(updatedFields,
+            await model.create(updatedFields,
                 { transaction: t }); 
-            console.log(newData);
-            
             await md_objects_types.create({
                 md_object_id: this.id, 
                 md_type_id: this.typeId}, { transaction: t, returning: false })
@@ -58,7 +56,7 @@ export default class BaseMeta{
            await t.commit();  
         }else{
             let updatedFields = await this.getModelFields();
-            const dataObject = await model.update(updatedFields,  
+            await model.update(updatedFields,  
               {where:{id: this.id}, 
               //returning: true, 
               });

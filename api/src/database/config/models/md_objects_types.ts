@@ -4,8 +4,8 @@ import * as Sequelize from 'sequelize'
 const sequelize = db.sequelize;
 
 interface mdObjectTypesInstance extends Model { 
-    id: number;
-    name: string;
+    md_object_id: string;
+    md_type_id: string;
   }
 
   export const md_objects_types = sequelize.define<mdObjectTypesInstance>('md_objects_types', {

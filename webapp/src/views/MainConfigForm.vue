@@ -213,7 +213,10 @@ export default defineComponent({
         const data = TreeService.TreeHelper.getMdTreeRoot();
         return resolve(data);
       } else {
+        console.log(node.data);
         const data = await TreeService.TreeHelper.getTreeNodes(node.data);
+      
+        
         return resolve(data);
       }
     };
@@ -247,22 +250,6 @@ export default defineComponent({
           tabData.data =  nodeElement.data,
           tabData.node =nodeElement;  
         }
-        //console.log(tabData);
-        
-        // for (var ref in this.$refs) {
-        //     if(this.$refs[ref] && this.$refs[ref].dataId === nodeElement.data.id){elementData=this.$refs[ref]; break;}
-        //   }
-        // if(elementData)
-        // {
-        //     elementData.mdObjectDescr.id = nodeElement.data.id;
-        //     let tabData = this.tabs.find(tab=>tab.elementId===elementData.elementId);      
-        //     if(tabData){
-        //       tabData.dataId = nodeElement.data.id;
-        //       tabData.data =nodeElement.data; 
-        //       tabData.title = nodeElement.data.name; 
-        //       tabData.node = nodeElement; 
-        //     }       
-        // }
       });
     };
     const isSelectedNode = (node: any) => {

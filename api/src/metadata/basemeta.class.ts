@@ -36,17 +36,20 @@ export default class BaseMeta{
 
     async save() {  
         const model = await require('../database/config/models/'+this.modelName)[this.modelName];
+        if(!model){return;}
+
         if(!this.id){ 
             const t = await db.sequelize.transaction();
             this.id = uuidv4(); 
             let updatedFields = await this.getModelFields();
 
-            await model.create(updatedFields,  
-                {where:{'id': this.id},
-            }, { transaction: t }); 
+            const newData = await model.create(updatedFields,
+                { transaction: t }); 
+            console.log(newData);
+            
             await md_objects_types.create({
                 md_object_id: this.id, 
-                md_type_id: this.typeId}, { transaction: t })
+                md_type_id: this.typeId}, { transaction: t, returning: false })
             if(this.parentId){
                 await md_map.create({
                     md_object_id: this.id, 

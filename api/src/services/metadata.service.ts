@@ -27,7 +27,7 @@ export async function processCommand(req:any, res:any)
 async function getMdObjectsList(options: any, resArgs:ResponseArgs){
     const mdTypeId = options.mdTypeId;
     const parentId = options.parentId;
-    const t = await mdHelper.getObjectsList(mdTypeId, parentId);
+    const t = await mdHelper.getObjectsList(mdTypeId, parentId); 
     resArgs.resData = t; 
     return true;
 }; 
@@ -55,7 +55,7 @@ export async function saveMdObject(options: any, resArgs:ResponseArgs){
     }
     const mdObject = await Metadata.fillMdObject(fieldValues, resArgs);
     mdObject.save();
-    resArgs.resData = mdObject?.mdFields;
+    resArgs.resData = mdObject?.mdFields; 
     
 } 
 

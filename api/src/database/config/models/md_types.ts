@@ -4,7 +4,7 @@ import * as Sequelize from 'sequelize'
 const sequelize = db.sequelize;
 
 interface mdTypeInstance extends Model { 
-    id: number;
+    id: string;
     name: string;
   }
 

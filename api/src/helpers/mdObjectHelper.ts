@@ -23,7 +23,7 @@ export async function getModelData(modelName:string, mdObjectId:string){
     return mdModelData;
 } 
 
-export class DynamicClass { 
+export class DynamicClass {  
 
     constructor(className: string, opts: any) {
         const Store = require('../metadata/mdStore').Store;
@@ -50,7 +50,9 @@ export async function getInstance(className:string, id:string){
 } 
 
 export async function getObjectsList(mdTypeId:string, parentId:string){
-    const mdType:any = await MdType.getMdType(mdTypeId); 
+    if(!mdTypeId) {return undefined};
+
+    const mdType:any = await MdType.getMdType(mdTypeId);   
     await fetchAllData(mdType);
     return BaseMeta.mdObjects; 
 }
@@ -59,7 +61,7 @@ export async function fetchAllData(mdType:MdType) {
     const mdModel =  await require('../database/config/models/'+mdType.tableName)[mdType.tableName];
     if (!mdModel){
         console.log('model not found ' + mdType.tableName);
-        return;
+        return; 
     }
     const modelData = await mdModel.findAll();
     modelData.forEach(async (element:any) => {

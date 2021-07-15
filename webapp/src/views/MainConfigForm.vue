@@ -112,6 +112,7 @@ import { ElTree } from "element-plus";
 import { uuid } from "vue-uuid";
 import СfgPropertyEditor from "../components/configurator/СfgPropertyEditor.vue";
 import EventBus from '../components/configurator/CfgEventBus';
+import {NodeType} from '../configs/configurator/mdTree.config';
 export default defineComponent({
   components: {
     Splitpanes,
@@ -213,36 +214,32 @@ export default defineComponent({
         const data = TreeService.TreeHelper.getMdTreeRoot();
         return resolve(data);
       } else {
-        console.log(node.data);
-        const data = await TreeService.TreeHelper.getTreeNodes(node.data);
-      
-        
+        const data = await TreeService.TreeHelper.getTreeNodes(node.data);      
         return resolve(data);
       }
     };
 
-    const dataChanged = async (dataChangedArgs:any) => {
-     
+    const dataChanged = async (dataChangedArgs:any) => {   
       let parentNode:any|undefined = undefined;
       let tabData:any = tabs.value.find((elem:any)=>elem.elementId === dataChangedArgs.targetElementId)     
       if(!tabData){
         return;
       }
-      if(tabData.node.data.nodeType==="md_root_type" || tabData.node.data.nodeType==="section"){
+      tabData.data.id = dataChangedArgs.dataId;
+      if(tabData.node.data.nodeType=== NodeType.MdRootType  || tabData.node.data.nodeType===NodeType.MdObjectFolder){
         parentNode = tabData.node;
         }
       else{ 
         parentNode = tabData.node.parent;
       }
-      
-      if(parentNode){
+      if(parentNode){   
         const data = await TreeService.TreeHelper.getTreeNodes(parentNode.data);
         metaDataTreeRef.value.updateKeyChildren(parentNode.data.elementId, data);
         updateNodes(parentNode);
       }
     };
 
-    const updateNodes= async (parentNode:any)=> {  
+    const updateNodes= async (parentNode:any)=> {    
       parentNode.childNodes.forEach((nodeElement:any) => {
         let tabData:any = tabs.value.find((elem:any)=>elem.data.id === nodeElement.data.id);
         if (tabData){

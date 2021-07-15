@@ -8,29 +8,27 @@ class TreeHelper {
     const confNodes = config;
     const nodes: Array<NodeData> = [];
     confNodes.forEach((element: any) => {
-      nodes.push(
-        new NodeData(
-          element.nodeType,
-          element.mdTypeId,
-          element.id,
-          element.name,
-          element.parentId,
-          element.canAdd,
-          element.canEdit
-        )
-      );
+      const node =  new NodeData(
+        element.nodeType,
+        element.mdTypeId,
+        element.id,
+        element.name,
+        element.parentId,
+        element.canAdd,
+        element.canEdit
+      )
+      nodes.push(node);
     });
-
     return nodes;
   }
 
-  public static async getTreeNodes(targetNode: any) {
-    console.log(targetNode.data);
+  public static async getTreeNodes(nodeData: any) {
+    console.log(nodeData);
     
     const queryParam = {
       command: "getMdObjectsList",
       options: {
-        mdTypeId: targetNode.mdTypeId,
+        mdTypeId: nodeData.mdTypeId,
       },
     };
     const data = await TreeHelper.postMd(queryParam);
@@ -47,9 +45,7 @@ class TreeHelper {
         mdTypeId: targetNode.mdTypeId,
         mdObjectId: targetNode.id,
       },
-    };
-    console.log(queryParam);
-    
+    };    
     return await TreeHelper.postMd(queryParam);
   }
 
@@ -145,6 +141,7 @@ class NodeData {
     canAdd: boolean,
     canEdit: boolean
   ) {
+    this.nodeType = nodeType;
     this.name = name;
     this.id = id;
     this.parentId = parentId;
@@ -154,4 +151,4 @@ class NodeData {
     this.mdTypeId = mdTypeId;
   }
 }
-export default { NodeData, TreeHelper };
+export default { NodeData, TreeHelper }; 

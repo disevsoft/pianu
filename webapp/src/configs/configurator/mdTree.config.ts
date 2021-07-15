@@ -1,5 +1,5 @@
 export enum NodeType {
-  MdRootType = 1,
+  MdRootType =0,
   MdObject,
   MdObjectFolder,
   Folder,

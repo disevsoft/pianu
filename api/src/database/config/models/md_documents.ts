@@ -7,7 +7,7 @@ interface mdDocumentInstance extends Model {
     id: string;
     name: string;
   }
-  export const md_catalogs = sequelize.define<mdDocumentInstance>('md_documents', {
+  export const md_documents = sequelize.define<mdDocumentInstance>('md_documents', {
         id:{
             type: Sequelize.UUID,
             primaryKey: true,

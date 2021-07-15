@@ -6,7 +6,7 @@ export default class MdDocument extends BaseMeta{
         
         super(id);
 
-        this.typeId= '834cd9ad-9720-4fc5-aa09-cef6f7a895a0';
+        this.typeId= 'cc94220b-20f8-4a63-9f29-d02fe64ba918';
         this.modelName= 'md_documents';
         this.typeName = 'Document'
         

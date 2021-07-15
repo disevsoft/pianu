@@ -3,12 +3,11 @@ import MdType from '../metadata/mdType.class'
 
 export async function loadFromModelData(mdObject:any, modelData:any){
     for (let mdField of mdObject.mdFields) {
-    if(mdField.fieldMap){
-        mdField.value = modelData[mdField.fieldMap];
-        (<any>mdObject)[mdField.name] =  mdField.value;  
-    }
-    }
-    BaseMeta.mdObjects.push(mdObject);  
+        if(mdField.fieldMap){
+            mdField.value = modelData[mdField.fieldMap];
+            (<any>mdObject)[mdField.name] =  mdField.value;  
+            }
+        }
     return mdObject;
 };
 
@@ -17,11 +16,22 @@ export async function getModelData(modelName:string, mdObjectId:string){
         console.log('empty');           
         return undefined;
     }
-    const mdModel =  await require('../database/config/models/'+modelName)[modelName];
+    console.log('4get model data start');
+    console.log('5getMdModel');         
+    const mdModel = await getMdModel(modelName);  
+    console.log('6get model data progress');
     const mdModelData:any = await mdModel.findOne({ where: { id: mdObjectId } });
-    
-    return mdModelData;
+     console.log('7get model data end'); 
+    return await mdModelData;  
 } 
+
+export async function getMdModel(modelName:string){    
+    console.log('5getMdModel');         
+    const mdModel =  await require('../database/config/models/'+modelName)[modelName];
+    console.log('51 modelModule[modelName]', mdModel);  
+    return await mdModel; 
+}
+
 
 export class DynamicClass {  
 
@@ -35,26 +45,35 @@ export class DynamicClass {
 }
 
 export async function getInstance(className:string, id:string){    
-    let catalog:any =  new DynamicClass(className, id); 
+    const newObject:any =  new DynamicClass(className, id); 
     if(!id){//its new
-        return catalog;  
+        return newObject;  
     };
-    let mdObject:BaseMeta| undefined=BaseMeta.mdObjects.find((element:any)=>element.id === id); 
+    let mdObject:BaseMeta|undefined=BaseMeta.mdObjects.find((element:any)=>element.id === id); 
+    console.log('3getInstance start');
     if(!mdObject){
-        const mdModelData = await getModelData(catalog.modelName, id);
-        if(!mdModelData){return;}
-        
-        loadFromModelData(catalog, mdModelData);
+        const mdModelData = await getModelData(newObject?.modelName, id);
+        console.log('8getInstance progress');
+        if(!mdModelData){console.log('no model data ' + newObject?.modelName); return;}      
+        await loadFromModelData(newObject, mdModelData);
+        BaseMeta.mdObjects.push(newObject);
+        mdObject = newObject;
     } 
+    console.log('9getInstance end');
     return mdObject;
 } 
 
 export async function getObjectsList(mdTypeId:string, parentId:string){
+    const t= BaseMeta.mdObjects;
+    console.log('1start',t);
+    
     if(!mdTypeId) {return undefined};
-
     const mdType:any = await MdType.getMdType(mdTypeId);   
-    await fetchAllData(mdType);
-    return BaseMeta.mdObjects; 
+    await fetchAllData(mdType); 
+    const filteredObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId ===mdTypeId);
+    console.log('end',BaseMeta.mdObjects);
+    
+    return filteredObjects; 
 }
 
 export async function fetchAllData(mdType:MdType) {
@@ -64,7 +83,9 @@ export async function fetchAllData(mdType:MdType) {
         return; 
     }
     const modelData = await mdModel.findAll();
-    modelData.forEach(async (element:any) => {
-        await getInstance(mdType.className, element.id); 
-    });
+    await modelData.forEach(async(element:any) => {
+        console.log('2 now fetch');
+        
+        await getInstance(mdType.className, element.id);  
+    }); 
 };

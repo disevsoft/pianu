@@ -14,16 +14,16 @@ export default class ResponseArgs{
         return Messages.getMessage(this.messageId);
     }
 
-    public send(){
+    public async send(){
         if(this.cancel){
-            this.res.status(this.status).send(this.message);
+            await this.res.status(this.status).send(this.message);
         }
         else{
             if (this.sendJson){
-                this.res.status(200).json(this.resData);   
+                await this.res.status(200).json(this.resData);   
             }
             else{
-                this.res.status(200).send(this.resData);   
+                await this.res.status(200).send(this.resData);   
             }
         }
     }

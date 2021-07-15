@@ -12,15 +12,15 @@ export async function processCommand(req:any, res:any)
     }
     const resArgs = new ResponseArgs(res);
     await processRequest(commandName, options, resArgs);
-    resArgs.send();
+    await resArgs.send();
  }
 
- function processRequest(name: string, params: any, resArgs:ResponseArgs) {
+ async function processRequest(name: string, params: any, resArgs:ResponseArgs) {
     if (!processors[name]) {
         resArgs.res.status(500).send('unprocessed request');
         return;
     }
-      return processors[name](params, resArgs);
+      return await processors[name](params, resArgs);
 }
 
 
@@ -28,7 +28,7 @@ async function getMdObjectsList(options: any, resArgs:ResponseArgs){
     const mdTypeId = options.mdTypeId;
     const parentId = options.parentId;
     const t = await mdHelper.getObjectsList(mdTypeId, parentId); 
-    resArgs.resData = t; 
+    resArgs.resData = t;  
     return true;
 }; 
 
@@ -54,7 +54,7 @@ export async function saveMdObject(options: any, resArgs:ResponseArgs){
         return true;
     }
     const mdObject = await Metadata.fillMdObject(fieldValues, resArgs);
-    mdObject.save();
+    await mdObject.save(); 
     resArgs.resData = mdObject?.mdFields; 
     
 } 

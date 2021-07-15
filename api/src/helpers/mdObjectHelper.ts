@@ -16,20 +16,20 @@ export async function getModelData(modelName:string, mdObjectId:string){
         console.log('empty');           
         return undefined;
     }
-    console.log('4get model data start');
-    console.log('5getMdModel');         
+    console.log('4get model data start');    
     const mdModel = await getMdModel(modelName);  
-    console.log('6get model data progress');
+
+    console.log('6get model data progress', mdModel);
     const mdModelData:any = await mdModel.findOne({ where: { id: mdObjectId } });
      console.log('7get model data end'); 
-    return await mdModelData;  
+    return mdModelData;  
 } 
 
-export async function getMdModel(modelName:string){    
+export function getMdModel(modelName:string){    
     console.log('5getMdModel');         
-    const mdModel =  await require('../database/config/models/'+modelName)[modelName];
+    const mdModel =  require('../database/config/models/'+modelName)[modelName];
     console.log('51 modelModule[modelName]', mdModel);  
-    return await mdModel; 
+    return mdModel; 
 }
 
 

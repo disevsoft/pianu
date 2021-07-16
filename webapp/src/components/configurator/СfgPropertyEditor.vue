@@ -66,7 +66,7 @@ export default defineComponent({
       mdObjectData.value = response;
   
       dataLoadingComplete.value = true;    
-      let elementData:any = mdObjectData.value.find((el:any) => el.name === "id");
+      let elementData:any = mdObjectData.value.find((el:any) => el.name === "id");      
       var dataId = elementData.value; 
       const eventArgs = {data:mdObjectData.value, targetElementId:props.elementId, id:dataId};
       EventBus.emit('dataChanged', eventArgs);

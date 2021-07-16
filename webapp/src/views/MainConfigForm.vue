@@ -225,7 +225,7 @@ export default defineComponent({
       if(!tabData){
         return;
       }
-      tabData.data.id = dataChangedArgs.dataId;
+      tabData.data.id = dataChangedArgs.id;
       if(tabData.node.data.nodeType=== NodeType.MdRootType  || tabData.node.data.nodeType===NodeType.MdObjectFolder){
         parentNode = tabData.node;
         }
@@ -242,7 +242,7 @@ export default defineComponent({
     const updateNodes= async (parentNode:any)=> {    
       parentNode.childNodes.forEach((nodeElement:any) => {
         let tabData:any = tabs.value.find((elem:any)=>elem.data.id === nodeElement.data.id);
-        if (tabData){
+        if (tabData){        
           tabData.title= nodeElement.data.name,
           tabData.data =  nodeElement.data,
           tabData.node =nodeElement;  

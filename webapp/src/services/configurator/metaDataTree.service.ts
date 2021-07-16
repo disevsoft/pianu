@@ -23,8 +23,6 @@ class TreeHelper {
   }
 
   public static async getTreeNodes(nodeData: any) {
-    console.log(nodeData);
-    
     const queryParam = {
       command: "getMdObjectsList",
       options: {
@@ -32,9 +30,7 @@ class TreeHelper {
       },
     };
     const data = await TreeHelper.postMd(queryParam);
-    const nodes = TreeHelper.prepareMapData(data, NodeType.MdObject);
-    console.log(data);
-    
+    const nodes = TreeHelper.prepareMapData(data, NodeType.MdObject);    
     return nodes;
   }
 
@@ -56,9 +52,7 @@ class TreeHelper {
         mdObject: mdObjectData,
       },
     };
-    const data = await TreeHelper.postMd(queryParam);
-    console.log(data);
-    
+    const data = await TreeHelper.postMd(queryParam);    
     return data;
   }
 

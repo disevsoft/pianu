@@ -3,6 +3,7 @@ import db from '../database/config/sequilize.metadata'
 import {md_objects_types} from '../database/config/models/md_objects_types'
 import {md_map} from '../database/config/models/md_map'
 const { v4: uuidv4 } = require('uuid');
+import * as mdHelper from '../helpers/mdObjectHelper'
 
 export default class BaseMeta{
     private mdId: string = '';
@@ -57,10 +58,28 @@ export default class BaseMeta{
         }else{
             let updatedFields = await this.getModelFields();
             await model.update(updatedFields,  
-              {where:{id: this.id}, 
+              {where:{id: this.id},  
               //returning: true, 
               });
         } 
+    }
+
+    async delete(){
+        try{
+            db.sequelize.transaction(async(t)=>{  
+            const childObjects:any = md_map.findAll({where:{md_owner_id: this.id}})
+            for (let childObject of childObjects){
+                const mdObject:BaseMeta = await mdHelper.getInstanceById(childObject.md_object_id);  
+                mdObject.delete();
+                md_map.destroy({where:{md_owner_id: this.id, md_object_id:childObject.md_object_id}})
+            } 
+            await md_objects_types.destroy({where:{md_object_id: this.id}})
+            const model = await require('../database/config/models/'+this.modelName)[this.modelName];
+            model.destroy({where:{id: this.id}})
+            });
+        }catch{
+            console.log('cant delete');           
+        }
     }
 
     async getModelFields(){

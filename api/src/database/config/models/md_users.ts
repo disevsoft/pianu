@@ -28,18 +28,6 @@ interface mdUsersInstance extends Model {
             allowNull: true,
             defaultValue:false            
         },
-        // list_name:{
-        //     type: Sequelize.STRING,
-        //     allowNull: true,
-        // },
-        // synonym:{
-        //     type: Sequelize.STRING,
-        //     allowNull: true,
-        // },
-        // list_synonym:{
-        //     type: Sequelize.STRING,
-        //     allowNull: true,
-        // },
     }, {
         freezeTableName: true
 });   

@@ -58,11 +58,24 @@
   height: 100%;
 }
 .el-table {
-  height: 100%;
+  max-height: 100%;
+  overflow: auto !important;
+  
 }
 .el-footer {
   height: 50px !important;
   padding: 5px !important;
+}
+.el-header {
+  height: 50px !important;
+  padding: 5px !important;
+}
+.el-tree{
+  max-height: 100%;
+  overflow: auto !important;
+}
+.logger{
+  max-height: 30%;
 }
   /* .full-height{
     height: 100%;  

@@ -8,22 +8,41 @@ import BaseMeta from './basemeta.class';
 
 export class Metadata{
 
-    public static async getMdObject(mdTypeId:string, mdObjectId:string,  resArgs:ResponseArgs){
+    public static async getMdObject(mdTypeId:string, mdObjectId:string, mdParentId:string, resArgs:ResponseArgs){
 
          
         const objectType = await MdType.getMdType(mdTypeId);
         if(objectType?.className)
         {
                 const data = await mdHelper.getInstance(objectType?.className, mdObjectId);
+                await data.setParentId(mdParentId);
                 return data; 
         }
         resArgs.messageId = 1;
         resArgs.cancel = true;
     } 
 
-    public static async getMdObjectFields(mdTypeId:string, mdObjectId:string,  resArgs:ResponseArgs)
+    public static async deleteMdObject(mdTypeId:string, mdObjectId:string,  resArgs:ResponseArgs)
     {
-        const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, resArgs);
+        const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, '', resArgs);
+        if(mdObject){
+            try{
+                mdObject.delete();
+                resArgs.messageId = 5;
+            }
+            catch(e){
+                resArgs.messageId = 4;
+                resArgs.cancel=true;
+                resArgs.errorDescription = String(e);
+                resArgs.status = 500;
+            }
+        }
+       
+    }
+
+    public static async getMdObjectFields(mdTypeId:string, mdObjectId:string, mdParentId:string, resArgs:ResponseArgs)
+    {
+        const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, mdParentId, resArgs);
         resArgs.resData = mdObject?.mdFields;
     }
 
@@ -32,7 +51,8 @@ export class Metadata{
         const typeId = await Metadata.getTypeIdFromFields(fieldsArray);
         if(!typeId){throw 'error'}; 
         const id = await Metadata.getIdFromFields(fieldsArray);
-        const mdObject:any = await Metadata.getMdObject(typeId, id, resArgs);
+        const parentId = await Metadata.getParentIdFromFields(fieldsArray);
+        const mdObject:any = await Metadata.getMdObject(typeId, id, parentId, resArgs);
         for (let mdField of mdObject?.mdFields) {
             if(mdField.fieldMap){
                 const field = fieldsArray.find(elem=>(elem.name===mdField.name));
@@ -52,6 +72,12 @@ export class Metadata{
     private static async getIdFromFields(fieldsArray: Array<any>)
     {
         const id = fieldsArray.find(elem=>(elem.name ==='id'));                                    
+        return id.value; 
+    }
+
+    private static async getParentIdFromFields(fieldsArray: Array<any>)
+    {
+        const id = fieldsArray.find(elem=>(elem.name ==='parentId'));                                    
         return id.value; 
     }
 }

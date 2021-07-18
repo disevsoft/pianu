@@ -39,7 +39,7 @@ module.exports =  [{
         synonym: "Реквизит",
         list_synonym: "Реквизиты",
         table_name: "md_fields",
-        class_name: "MdFields",
+        class_name: "MdField",
         database_type: "",
         is_database_type: false
     },
@@ -50,7 +50,7 @@ module.exports =  [{
         synonym: "ВебФорма",
         list_synonym: "ВебФормы",
         table_name: "md_webforms",
-        class_name: "MdWebForms",
+        class_name: "MdWebForm",
         database_type: "",
         is_database_type: false
     },
@@ -61,7 +61,7 @@ module.exports =  [{
         synonym: "Пользователь",
         list_synonym: "Пользователи",
         table_name: "md_users",
-        class_name: "MdUsers",
+        class_name: "MdUser",
         database_type: "",
         is_database_type: false
     },
@@ -69,10 +69,32 @@ module.exports =  [{
         id: "1ba5d068-38a7-44e5-82b8-d51e680a6cb1",
         name: "Domains",
         list_name: "Domains",
-        synonym: "Домены",
+        synonym: "Домен",
         list_synonym: "Домены",
         table_name: "md_domains",
-        class_name: "MdDomains",
+        class_name: "MdDomain",
+        database_type: "",
+        is_database_type: false
+    },
+    {
+        id: "b2aa362b-5872-411a-9cd8-fc65428e54eb",
+        name: "Reports",
+        list_name: "Reports",
+        synonym: "Отчет",
+        list_synonym: "Отчеты",
+        table_name: "md_reports",
+        class_name: "MdReport",
+        database_type: "",
+        is_database_type: false
+    },
+    {
+        id: "273c017b-b7d9-49a2-ac51-e0f2d6f0f75c",
+        name: "Subsystems",
+        list_name: "Subsystems",
+        synonym: "Подсистема",
+        list_synonym: "Подсистемы",
+        table_name: "md_subsystems",
+        class_name: "MdSubsystem",
         database_type: "",
         is_database_type: false
     }

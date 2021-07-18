@@ -27,7 +27,7 @@ export async function processCommand(req:any, res:any)
 async function getMdObjectsList(options: any, resArgs:ResponseArgs){
     const mdTypeId = options.mdTypeId;
     const parentId = options.parentId;
-    const t = await mdHelper.getObjectsList(mdTypeId, parentId); 
+    const t = await mdHelper.getObjectsList(mdTypeId, parentId);  
     resArgs.resData = t;  
     return true;
 }; 
@@ -35,13 +35,28 @@ async function getMdObjectsList(options: any, resArgs:ResponseArgs){
 export async function getMdObjectData(options: any, resArgs:ResponseArgs){
     const mdTypeId = options.mdTypeId;
     const mdObjectId = options.mdObjectId;
+    const mdParentId = options.parentId;
     if(!mdTypeId){
         resArgs.messageId = 1;
         resArgs.status = 500;
     }
     else
     {
-        await Metadata.getMdObjectFields(mdTypeId, mdObjectId, resArgs);
+        await Metadata.getMdObjectFields(mdTypeId, mdObjectId, mdParentId, resArgs);
+    }
+    return true;
+} 
+
+export async function deleteMdObject(options: any, resArgs:ResponseArgs){
+    const mdTypeId = options.mdTypeId;
+    const mdObjectId = options.mdObjectId;
+    if(!mdObjectId){
+        resArgs.messageId = 1;
+        resArgs.status = 500;
+    }
+    else
+    {
+        await Metadata.deleteMdObject(mdTypeId, mdObjectId, resArgs);
     }
     return true;
 } 
@@ -59,12 +74,27 @@ export async function saveMdObject(options: any, resArgs:ResponseArgs){
     
 } 
 
+export async function initConfigModel(options:any, resArgs:ResponseArgs) {
+    let force = options.force;
+    if(!force){force = false}
+    try{
+        await mdHelper.initModel(force);
+        resArgs.messageId = 2;
+    }catch(e){
+        resArgs.status = 500;
+        resArgs.messageId = 3;
+        resArgs.errorDescription = String(e); 
+        resArgs.cancel = true;
+    }
+}
 
 
 const processors: { [K: string]: Function } = {
     getMdObjectsList: getMdObjectsList,
     getMdObject:getMdObjectData,
-    saveMdObject:saveMdObject
+    saveMdObject:saveMdObject,
+    initConfigModel:initConfigModel,
+    deleteMdObject:deleteMdObject
 };
 
 

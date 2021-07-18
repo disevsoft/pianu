@@ -35,6 +35,13 @@ export default class BaseMeta{
         return this.mdId;  
     };
 
+    async setParentId(parentId:string){
+        this.parentId = parentId;
+        var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='parentId'));
+        if(idFieldIndex >= 0){ 
+            this.mdFields[idFieldIndex].value = this.parentId;
+        }    
+    }
     async save() {  
         const model = await require('../database/config/models/'+this.modelName)[this.modelName];
         if(!model){return;}
@@ -67,18 +74,19 @@ export default class BaseMeta{
     async delete(){
         try{
             db.sequelize.transaction(async(t)=>{  
-            const childObjects:any = md_map.findAll({where:{md_owner_id: this.id}})
+            const childObjects:any = await md_map.findAll({where:{md_owner_id: this.id}})
             for (let childObject of childObjects){
                 const mdObject:BaseMeta = await mdHelper.getInstanceById(childObject.md_object_id);  
-                mdObject.delete();
-                md_map.destroy({where:{md_owner_id: this.id, md_object_id:childObject.md_object_id}})
+                await mdObject.delete();
+                await md_map.destroy({where:{md_owner_id: this.id, md_object_id:childObject.md_object_id}})
             } 
             await md_objects_types.destroy({where:{md_object_id: this.id}})
             const model = await require('../database/config/models/'+this.modelName)[this.modelName];
-            model.destroy({where:{id: this.id}})
+            await model.destroy({where:{id: this.id}})
+            BaseMeta.mdObjects = [];
             });
         }catch{
-            console.log('cant delete');           
+            console.log('cant delete');            
         }
     }
 

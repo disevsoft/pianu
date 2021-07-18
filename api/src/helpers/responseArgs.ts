@@ -7,23 +7,27 @@ export default class ResponseArgs{
     messageId:number=0;
     resData:any = null;
     sendJson = true;
+    errorDescription = '';
     constructor(res:Response){
         this.res = res;
     }
     public get message(){
-        return Messages.getMessage(this.messageId);
+        return Messages.getMessage(this.messageId) + (this.errorDescription===''? '':' ') 
+            + this.errorDescription;
     }
 
     public async send(){
+        const addInfo = {message:this.message}
+        const data = {data: this.resData, info:addInfo}
         if(this.cancel){
-            await this.res.status(this.status).send(this.message);
+            this.res.status(this.status).json(data);
         }
         else{
             if (this.sendJson){
-                await this.res.status(200).json(this.resData);   
+                this.res.status(200).json(data);   
             }
             else{
-                await this.res.status(200).send(this.resData);   
+                this.res.status(200).send(data);   
             }
         }
     }

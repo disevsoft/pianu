@@ -4,8 +4,8 @@ import * as Sequelize from 'sequelize'
 const sequelize = db.sequelize;
 
 interface mdMapInstance extends Model { 
-    id: string;
-    name: string;
+    md_owner_id: string;
+    md_object_id: string;
   }
 
   export const md_map = sequelize.define<mdMapInstance>('md_map', {

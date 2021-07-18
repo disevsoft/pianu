@@ -1,6 +1,9 @@
 import BaseMeta from '../metadata/basemeta.class'
 import MdType from '../metadata/mdType.class'
 import {md_objects_types} from '../database/config/models/md_objects_types'
+import {md_types} from '../database/config/models/md_types'
+import {md_map} from '../database/config/models/md_map'
+import db from '../database/config/sequilize.metadata'
 
 export async function loadFromModelData(mdObject:any, modelData:any){
     for (let mdField of mdObject.mdFields) {
@@ -50,10 +53,10 @@ export async function getInstanceById(mdObjectId:string) {
     if(!mdTypeIdModel || !mdTypeIdModel['md_type_id']) {return undefined};
     const mdType:MdType|undefined = await MdType.getMdType(mdTypeIdModel['md_type_id']); 
     if(!mdType){return undefined}
-    return getInstance(mdObjectId, mdType.className);
+    return getInstance(mdType.className, mdObjectId);
 }
 
-export async function getInstance(id:string, className:string){    
+export async function getInstance(className:string, id:string){    
     const newObject:any =  new DynamicClass(className, id); 
     if(!id){//its new
         return newObject;   
@@ -72,20 +75,76 @@ export async function getInstance(id:string, className:string){
 
 export async function getObjectsList(mdTypeId:string, parentId:string){
     if(!mdTypeId) {return undefined};
-    const mdType:any = await MdType.getMdType(mdTypeId);   
-    await fetchAllData(mdType); 
-    const filteredObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId ===mdTypeId);
+    const mdType:any = await MdType.getMdType(mdTypeId);  
+    let filteredObjects =[];
+    if(parentId){
+        await fetchChildrenData(mdType, parentId); 
+        filteredObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId ===mdTypeId && elem.parentId===parentId);
+    }else{
+        await fetchAllData(mdType);  
+        filteredObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId ===mdTypeId);
+    }
     return filteredObjects;  
 }
 
+export async function fetchChildrenData(mdType:MdType, parentId:string) {
+    const mdModel =  await require('../database/config/models/'+mdType.tableName)[mdType.tableName];
+    if (!mdModel){
+        console.log('model not found ' + mdType.tableName);
+        return; 
+    }
+    const childrenData:any = await md_map.findAll({where:{md_owner_id:parentId}});
+    for (let element of childrenData){
+        const instance = await getInstanceById(element.md_object_id);    
+        await instance.setParentId(parentId);
+    } 
+}
 export async function fetchAllData(mdType:MdType) {
     const mdModel =  await require('../database/config/models/'+mdType.tableName)[mdType.tableName];
     if (!mdModel){
         console.log('model not found ' + mdType.tableName);
         return; 
     }
-    const modelData = await mdModel.findAll();
+    const modelData = await mdModel.findAll({ order: [['name', 'ASC'], ],});
     for (let element of modelData){
         await getInstance(mdType.className, element.id);    
     } 
 };
+
+export async function initModel(force:boolean){
+    let updateOpts:any={};
+    if(force){
+      updateOpts.force = true;
+    }else{
+      updateOpts.alter = true;
+    }
+    await db.sequelize.sync(updateOpts).then(() => {
+      console.log('Alter database');
+    });
+  
+    await setBaseValues();  
+  
+    await db.sequelize.sync(updateOpts).then(() => {
+      console.log('Alter database');
+    });
+  };
+  
+  async function initMdModel(modelName:string){
+    await require('../database/config/models/' + modelName)[modelName]; 
+  };
+  
+  async function setBaseValues(){
+    const mdTypes = require('../database/config/md_types.config') 
+     for (const item of mdTypes){      
+      await initMdModel(item.table_name);
+      const obj = await md_types.findOne({ where: { id: item.id } });
+      if(obj){
+         await md_types.update(item, 
+          { 
+            where: { id: item.id }
+          })
+      } else{ 
+          await md_types.create(item); 
+      }  
+     };
+  }; 

@@ -3,7 +3,8 @@
     <Splitpanes class="default-theme" vertical>
       <Pane :size="30">
         <el-container>
-          <el-header> </el-header>
+          <el-header> 
+          </el-header>
           <el-main>
             <el-tree
               @current-change="onCurrentNodeChange"
@@ -14,6 +15,7 @@
               :expand-on-click-node="false"
               lazy
               :props="defaultTreeProps"
+
             >
               <template #default="{ node, data }">
                 <span class="custom-tree-node">
@@ -43,15 +45,26 @@
                         @click="onEditNode(node)"
                       >
                       </i>
-                      <i
+                      <el-popconfirm
+                        confirmButtonText='OK'
+                        cancelButtonText='No, Thanks'
+                        icon="el-icon-info"
+                        iconColor="red"
+                        title="Are you sure to delete this?"
+                        @confirm="onDeleteNode(node)"
+                      >
+                      <template #reference>
+                        <i
                         v-show="data.canEdit"
                         class="el-icon-delete"
                         style="float: right"
                         margin-left="5px"
                         title="Delete node"
-                        @click="onDeleteNode(node)"
+                        
                       >
                       </i>
+                        </template>
+                      </el-popconfirm>
                     </span>
                   </span>
                 </span>
@@ -62,8 +75,12 @@
       </Pane>
       <Pane>
         <el-container>
-          <el-header> </el-header>
+          <el-header> 
+            <el-button @click="onInitModel">Init DB model</el-button>
+          </el-header>
           <el-main>
+             <Splitpanes class="default-theme" horizontal>
+                <Pane :size="80">
             <el-tabs
               ref="tabPanel"
               v-model="editableTabsValue"
@@ -88,7 +105,17 @@
                 ></component>
               </el-tab-pane>
             </el-tabs>
+                </Pane>
+                <Pane>
+                  <ul id="log" class="logger">
+                    <li v-for="item in logData" :key="item">
+                      {{ item }}
+                    </li>
+                  </ul>
+                </Pane>
+            </Splitpanes>
           </el-main>
+          
         </el-container>
       </Pane>
     </Splitpanes>
@@ -113,6 +140,7 @@ import { uuid } from "vue-uuid";
 import СfgPropertyEditor from "../components/configurator/СfgPropertyEditor.vue";
 import EventBus from '../components/configurator/CfgEventBus';
 import {NodeType} from '../configs/configurator/mdTree.config';
+import {getTypeIconName} from '../common/MdTypes'
 export default defineComponent({
   components: {
     Splitpanes,
@@ -128,6 +156,8 @@ export default defineComponent({
     const selectedNodeId = ref("");
     const tabs = ref([{}]);
     tabs.value = [];
+    const logData = ref([{}]);
+    logData.value = [];
     const editableTabsValue = ref("");
     const metaDataTreeRef = ref(ElTree);
     const defaultTreeProps = {
@@ -138,7 +168,9 @@ export default defineComponent({
     const currentTabComponent = computed(() => {
       return СfgPropertyEditor;
     });
-
+    const onInitModel=()=>{
+      TreeService.TreeHelper.initModel();  
+    };
     const getTabProps = (tabItem: any) => {
       
       const mdObjectDescr = {
@@ -170,6 +202,7 @@ export default defineComponent({
         editableTabsValue.value = activeName;
         tabs.value = _tabs.filter((tab:any) => tab.name !== targetName);
     };
+
     const onEditNode = (node: any) => {
       if (findeAndActivateTab(node)) {
         return;
@@ -186,6 +219,16 @@ export default defineComponent({
       editableTabsValue.value = tabData.name;
     };
 
+    const onDeleteNode=async(node:any)=>{
+      await TreeService.TreeHelper.deleteMdObject(node.data);
+
+      const parentNode = node.parent;
+      if(parentNode){   
+        const data = await TreeService.TreeHelper.getTreeNodes(parentNode.data);
+        metaDataTreeRef.value.updateKeyChildren(parentNode.data.elementId, data);
+        updateNodes(parentNode);
+      }
+    };
     const findeAndActivateTab = (node: any) => {
       let result = false;
       let tab: any = tabs.value.find((el: any) => el?.data.id === node.data.id);
@@ -214,11 +257,18 @@ export default defineComponent({
         const data = TreeService.TreeHelper.getMdTreeRoot();
         return resolve(data);
       } else {
-        const data = await TreeService.TreeHelper.getTreeNodes(node.data);      
-        return resolve(data);
+        const data = await TreeService.TreeHelper.getTreeNodes(node.data);   
+        if(data){
+          return resolve(data);
+        }
       }
     };
 
+    const apiLog = async (logInfo:any)=>{
+      if(logInfo && logInfo.message){
+        logData.value.push(logInfo)
+      }
+    }
     const dataChanged = async (dataChangedArgs:any) => {   
       let parentNode:any|undefined = undefined;
       let tabData:any = tabs.value.find((elem:any)=>elem.elementId === dataChangedArgs.targetElementId)     
@@ -253,26 +303,8 @@ export default defineComponent({
       return selectedNodeId.value === node.elementId;
     };
 
-    const getTreeNodeClassName = (nodeData: any) => {
-      let iconName = "";
-      if (nodeData.mdTypeId === "834cd9ad-9720-4fc5-aa09-cef6f7a895a0") {
-        iconName = "el-icon-notebook-2";
-      }
-      if (nodeData.mdTypeId === "cc94220b-20f8-4a63-9f29-d02fe64ba918") {
-        iconName = "el-icon-document";
-      }
-      //table
-      if (nodeData.mdTypeId === "0cf72dda-2547-4333-aec0-c852d2f3f235") {
-        iconName = "el-icon-s-grid";
-      }
-      //field
-      if (nodeData.mdTypeId === "8c474f75-b63a-4f3a-b624-f9a58cb7eeae") {
-        iconName = "el-icon-minus";
-      }
-      //WebForm
-      if (nodeData.mdTypeId === "370c9fb7-c2c8-4360-9863-6dc456460080") {
-        iconName = "el-icon-s-platform";
-      }
+     const getTreeNodeClassName = (nodeData: any) => {
+      let iconName = getTypeIconName(nodeData.mdTypeId);
       return iconName;
     };
 
@@ -290,12 +322,17 @@ export default defineComponent({
       getTabProps,
       onEditNode,
       dataChanged,
-      metaDataTreeRef
+      metaDataTreeRef,
+      onInitModel,
+      onDeleteNode,
+      apiLog,
+      logData
     };
   },
    mounted() {
 
     EventBus.on('dataChanged', this.dataChanged); // 1
+     EventBus.on('apiLog', this.apiLog);
   },
 });
 </script>

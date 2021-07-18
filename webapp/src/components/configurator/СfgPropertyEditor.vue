@@ -9,6 +9,7 @@
         :cell-class-name="cellClassName"
         v-loading="!dataLoadingComplete"
         :cell-style="{ padding: '0px', height: '20px' }"
+        height="250"
       >
         <el-table-column prop="key" label="Property" width="140" fixed="left">
           <template #default="scope">

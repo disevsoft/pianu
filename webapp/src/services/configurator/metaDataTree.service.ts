@@ -1,8 +1,10 @@
 import config from "@/configs/configurator/mdTree.config";
+import {mdTreeSubfolders} from "@/configs/configurator/mdTreeSubFolders.config";
 import { uuid } from "vue-uuid";
 import { NodeType } from "@/configs/configurator/mdTree.config";
 export { NodeType as NodeType };
-
+import EventBus from '../../components/configurator/CfgEventBus';
+import { MdTypes } from "@/common/MdTypes";
 class TreeHelper {
   public static getMdTreeRoot() {
     const confNodes = config;
@@ -22,16 +24,38 @@ class TreeHelper {
     return nodes;
   }
 
-  public static async getTreeNodes(nodeData: any) {
+  private static async getMdObjectsList(nodeData: NodeData){
     const queryParam = {
       command: "getMdObjectsList",
       options: {
         mdTypeId: nodeData.mdTypeId,
-      },
+        parentId: nodeData.parentId,
+      }, 
     };
     const data = await TreeHelper.postMd(queryParam);
     const nodes = TreeHelper.prepareMapData(data, NodeType.MdObject);    
     return nodes;
+  }
+
+  private static async getMdObjectSubfolder(nodeData: NodeData){
+    const data =  await mdTreeSubfolders[nodeData.mdTypeId](nodeData.mdTypeId, nodeData.id);
+    if(!data){return []};
+    const nodes = TreeHelper.prepareMapData(data, NodeType.MdObjectFolder);    
+    return nodes;
+  }
+
+  public static async getTreeNodes(nodeData: NodeData) { 
+    if(nodeData.nodeType===NodeType.MdRootType){
+      return await TreeHelper.getMdObjectsList(nodeData);
+    }
+
+    if(nodeData.nodeType===NodeType.MdObject){
+      return await TreeHelper.getMdObjectSubfolder(nodeData);
+    }
+
+    if(nodeData.nodeType===NodeType.MdObjectFolder){
+      return await TreeHelper.getMdObjectsList(nodeData);
+    }
   }
 
   public static async getMdObjectData(targetNode: any) {   
@@ -40,8 +64,10 @@ class TreeHelper {
       options: {
         mdTypeId: targetNode.mdTypeId,
         mdObjectId: targetNode.id,
+        parentId:targetNode.parentId
       },
     };    
+    
     return await TreeHelper.postMd(queryParam);
   }
 
@@ -56,13 +82,37 @@ class TreeHelper {
     return data;
   }
 
+  public static async deleteMdObject(targetNode: any) {   
+    const queryParam = {
+      command: "deleteMdObject",
+      options: {
+        mdTypeId: targetNode.mdTypeId,
+        mdObjectId: targetNode.id,
+      },
+    };    
+    return await TreeHelper.postMd(queryParam);
+  }
+
   private static async postMd(queryParam: any) {
     const response = await fetch("/api/md", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(queryParam),
     });
-    const data = await response.json();
+    
+    const resData = await response.json();    
+    EventBus.emit('apiLog', resData.info);
+    return resData.data;
+  }
+
+  static async initModel(){
+    const queryParam = {
+      command: "initConfigModel",
+      options: {
+        force: false,
+      },
+    };
+    const data = await TreeHelper.postMd(queryParam);    
     return data;
   }
 
@@ -116,6 +166,7 @@ class TreeHelper {
     }
     return false;
   }
+  
 }
 class NodeData {
   name = "";

@@ -2,6 +2,7 @@ import BaseMeta from './basemeta.class'
 import MdTypeField from './mdTypeField.class'
 
 export default class MdDomain extends BaseMeta{
+    databaseName = '';
     constructor(id:string){
         
         super(id);
@@ -10,7 +11,8 @@ export default class MdDomain extends BaseMeta{
         this.modelName= 'md_domains';
         this.typeName = 'Domain'
         
-        this.mdFields.push(new MdTypeField('listName', "char(150)", "", "", false, "list_name"));
-        this.mdFields.push(new MdTypeField('typeId', "char(150)", this.typeId, "", true,''));
+        this.mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
+        this.mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
+        this.mdFields.push(new MdTypeField('databaseName', "String", '', "", true,'database_name'));
     }
 }

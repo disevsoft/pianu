@@ -3,6 +3,8 @@ import MdType from '../metadata/mdType.class'
 import {md_objects_types} from '../database/config/models/md_objects_types'
 import {md_types} from '../database/config/models/md_types'
 import {md_map} from '../database/config/models/md_map'
+
+
 import db from '../database/config/sequilize.metadata'
 
 export async function loadFromModelData(mdObject:any, modelData:any){
@@ -121,7 +123,9 @@ export async function initModel(force:boolean){
     await db.sequelize.sync(updateOpts).then(() => {
       console.log('Alter database');
     });
-  
+    
+    initMdModel('md_domain_users');
+
     await setBaseValues();  
   
     await db.sequelize.sync(updateOpts).then(() => {
@@ -135,7 +139,8 @@ export async function initModel(force:boolean){
   
   async function setBaseValues(){
     const mdTypes = require('../database/config/md_types.config') 
-     for (const item of mdTypes){      
+    for (const item of mdTypes){      
+      if(item.is_database_type){continue};
       await initMdModel(item.table_name);
       const obj = await md_types.findOne({ where: { id: item.id } });
       if(obj){
@@ -146,5 +151,5 @@ export async function initModel(force:boolean){
       } else{ 
           await md_types.create(item); 
       }  
-     };
+    };
   }; 

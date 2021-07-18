@@ -10,7 +10,7 @@ export default class MdReport extends BaseMeta{
         this.modelName= 'md_reports';
         this.typeName = 'Report'
         
-        this.mdFields.push(new MdTypeField('listName', "char(150)", "", "", false, "list_name"));
-        this.mdFields.push(new MdTypeField('typeId', "char(150)", this.typeId, "", true,''));
+        this.mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
+        this.mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
     }
 }

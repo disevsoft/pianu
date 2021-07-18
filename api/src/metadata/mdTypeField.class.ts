@@ -6,6 +6,7 @@ export default class MdTypeField
     defaultValue:any = undefined;
     readonly = false;
     fieldMap = '';
+    objectField = '';
     constructor(name:string, type: string, value: any, defaultValue: any, readOnly: boolean, fieldMap:string){
         this.name = name;
         this.type = type;
@@ -13,5 +14,5 @@ export default class MdTypeField
         this.defaultValue = defaultValue;
         this.readonly=readOnly;
         this.fieldMap=fieldMap;
-    }
+    };
 }

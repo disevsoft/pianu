@@ -97,6 +97,39 @@ module.exports =  [{
         class_name: "MdSubsystem",
         database_type: "",
         is_database_type: false
-    }
+    },
+    {
+        id: "a6135646-7a2a-40a0-bce2-40da3f76f078",
+        name: "Number",
+        list_name: "Number",
+        synonym: "Число",
+        list_synonym: "Число",
+        table_name: "",
+        class_name: "",
+        database_type: "",
+        is_database_type: true
+    },
+    {
+        id: "38a7b85c-acd0-4a3a-aa2b-02f685007f49",
+        name: "String",
+        list_name: "String",
+        synonym: "Строка",
+        list_synonym: "Строка",
+        table_name: "",
+        class_name: "",
+        database_type: "",
+        is_database_type: true
+    },
+    {
+        id: "19034973-d6a4-4dbf-b900-4eb9a78e405b",
+        name: "Boolean",
+        list_name: "Boolean",
+        synonym: "Логический",
+        list_synonym: "Логический",
+        table_name: "",
+        class_name: "",
+        database_type: "",
+        is_database_type: true
+    },
 ];
 

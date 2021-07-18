@@ -10,8 +10,8 @@ export default class MdCatalog extends BaseMeta{
         this.modelName= 'md_catalogs';
         this.typeName = 'Catalog'
         
-        this.mdFields.push(new MdTypeField('listName', "char(150)", "", "", false, "list_name"));
+        this.mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
         this.mdFields.push(new MdTypeField('isHierarchical',"Boolean", false, false, false, "is_hierarchical"));
-        this.mdFields.push(new MdTypeField('typeId', "char(150)", this.typeId, "", true,''));
+        this.mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
     }
 }

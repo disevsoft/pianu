@@ -221,7 +221,12 @@ export default defineComponent({
 
     const onDeleteNode=async(node:any)=>{
       await TreeService.TreeHelper.deleteMdObject(node.data);
-
+      const tabIndex = tabs.value.findIndex((elem:any)=>elem.data.id===node.data.id);
+      console.log(tabIndex);
+      
+      if(tabIndex>=0){
+        tabs.value.splice(tabIndex, 1);       
+      }
       const parentNode = node.parent;
       if(parentNode){   
         const data = await TreeService.TreeHelper.getTreeNodes(parentNode.data);

@@ -17,18 +17,10 @@ interface mdDomainInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        // list_name:{
-        //     type: Sequelize.STRING,
-        //     allowNull: true,
-        // },
-        // synonym:{
-        //     type: Sequelize.STRING,
-        //     allowNull: true,
-        // },
-        // list_synonym:{
-        //     type: Sequelize.STRING,
-        //     allowNull: true,
-        // },
+        database_name:{
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
     }, {
         freezeTableName: true
 });   

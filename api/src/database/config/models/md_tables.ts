@@ -18,6 +18,11 @@ interface mdTableInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false,
         },
+        database_name:{
+            type: Sequelize.STRING,
+            allowNull: true,
+            defaultValue:''            
+        },
         
     }, {
         freezeTableName: true

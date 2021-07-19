@@ -1,29 +1,26 @@
 import { authHeader } from '../helpers/authHeader';
-
 export const userService = {
     login,
     logout,
     getAll
 };
 
-function login(username:string, password:string) {
+async function login(username:string, password:string) {
+    console.log('login');
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     };
 
-    return fetch(`/users/authenticate`, requestOptions)
-        .then(handleResponse)
-        .then(user => {
-            // login successful if there's a jwt token in the response
-            if (user.token) {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
-            }
-
-            return user;
-        });
+    const response = await fetch('/api/md', requestOptions);
+    const user = await handleResponse(response);
+    // login successful if there's a jwt token in the response
+    if (user.token) {
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem('user', JSON.stringify(user));
+    }
+    return user;
 }
 
 function logout() {
@@ -31,13 +28,14 @@ function logout() {
     localStorage.removeItem('user');
 }
 
-function getAll() {
+async function getAll() {
     const requestOptions:any = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(`/users`, requestOptions).then(handleResponse);
+    const response = await fetch('/api/md', requestOptions);
+    return handleResponse(response);
 }
 
 function handleResponse(response:any) {
@@ -47,7 +45,7 @@ function handleResponse(response:any) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
                 logout();
-                location.reload(true);
+                location.reload();
             }
 
             const error = (data && data.message) || response.statusText;

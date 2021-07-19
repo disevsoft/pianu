@@ -17,6 +17,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { ElForm } from "element-plus";
+import { useStore } from 'vuex'
 export default defineComponent({
     data() {
        
@@ -25,10 +26,11 @@ export default defineComponent({
         };
     },
     setup () {
+        const store = useStore();
         const ruleForm: any = ref({email: "", password: "" });
         const loginForm = ref(ElForm);
 
-        const  rules:any = {
+        const  rules:any = { 
             password: [
                 { required: true, message: 'Please input password', trigger: 'blur' },
             ],
@@ -42,9 +44,11 @@ export default defineComponent({
             if (valid) {
                 // const { ruleForm.email, ruleForm.password } = this;
                 // const { dispatch } = this.$store;
-                // if (ruleForm.email && ruleForm.password) {
-                //     dispatch('authentication/login', { ruleForm.email, ruleForm.password });
-                // }
+                if (ruleForm.value.email && ruleForm.value.password) {
+                    
+                    store.dispatch('authentication/login', {  });
+                    //root.$store.dispatch('authentication/login', { ruleForm.email, ruleForm.password });
+                }
             } else {
                 return false;  
             }

@@ -1,8 +1,16 @@
 import { createStore } from "vuex";
+import { alert } from './alert.module';
+import { authentication } from './authentication.module';
+import { users } from './users.module';
 
-export default createStore({
+const store =  createStore({
   state: {},
   mutations: {},
   actions: {},
-  modules: {},
+  modules: {
+    alert,
+    authentication,
+    users
+  },
 });
+export default store;

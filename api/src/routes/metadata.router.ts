@@ -8,7 +8,7 @@ metadataRouter.get( "/", async ( req, res ) => {
 } );
 
 metadataRouter.post( "/", async ( req, res ) => {
-   await processRequest(req, res); 
+   processRequest(req, res); 
 });
 
 

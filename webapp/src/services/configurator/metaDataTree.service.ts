@@ -4,7 +4,8 @@ import { uuid } from "vue-uuid";
 import { NodeType } from "@/configs/configurator/mdTree.config";
 export { NodeType as NodeType };
 import EventBus from '../../components/configurator/CfgEventBus';
-import { MdTypes } from "@/common/MdTypes";
+import {authHeader} from '../../helpers/authHeader';
+
 class TreeHelper {
   public static getMdTreeRoot() {
     const confNodes = config;
@@ -66,8 +67,7 @@ class TreeHelper {
         mdObjectId: targetNode.id,
         parentId:targetNode.parentId
       },
-    };    
-    
+    };       
     return await TreeHelper.postMd(queryParam);
   }
 
@@ -93,10 +93,15 @@ class TreeHelper {
     return await TreeHelper.postMd(queryParam);
   }
 
+  private static async getHeaders(){
+    const userHeader:any = authHeader();
+    return {"Content-Type": "application/json", userHeader};
+  } 
+  
   private static async postMd(queryParam: any) {
     const response = await fetch("/api/md", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: await TreeHelper.getHeaders(),
       body: JSON.stringify(queryParam),
     });
     

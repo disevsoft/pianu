@@ -40,7 +40,11 @@ export default defineComponent({
         const submitForm=(formName:string)=> {
             loginForm.value.validate((valid:boolean) => {
             if (valid) {
-                //alert('submit!');
+                // const { ruleForm.email, ruleForm.password } = this;
+                // const { dispatch } = this.$store;
+                // if (ruleForm.email && ruleForm.password) {
+                //     dispatch('authentication/login', { ruleForm.email, ruleForm.password });
+                // }
             } else {
                 return false;  
             }
@@ -48,7 +52,7 @@ export default defineComponent({
         };
 
       return {submitForm, ruleForm, loginForm, rules}
-    }
+    },
 })
 </script>
 

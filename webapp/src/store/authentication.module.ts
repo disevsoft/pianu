@@ -14,20 +14,20 @@ export const authentication = {
     namespaced: true,
     state: initialState,
     actions: {
-        login({ dispatch, commit }:any, { username, password }:any) {
+        async login({ dispatch, commit }:any, user:any) { 
+            const username = user.username;
+            const password = user.password;
             commit('loginRequest', { username });
-
-            userService.login(username, password)
-                .then(
-                    user => {
-                        commit('loginSuccess', user);
-                        router.push('/');
-                    },
-                    error => {
-                        commit('loginFailure', error);
-                        dispatch('alert/error', error, { root: true });
-                    }
-                );
+            try {
+                const userData = await userService.login(username, password);
+                await commit('loginSuccess', userData);
+                router.push('/');
+            }catch(e) {  
+                const errMsg = e.message;                          
+                await commit('loginFailure', errMsg);
+                await dispatch('alert/error', errMsg, { root: true });
+            }
+                
         },
         logout({ commit }:any) {
             userService.logout();

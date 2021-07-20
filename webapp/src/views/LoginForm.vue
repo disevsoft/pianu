@@ -7,6 +7,9 @@
   <el-form-item label="Password" prop="password">
     <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
   </el-form-item>
+    <el-collapse-transition>
+        <div v-show="alert.message" class="transition-box alert-message">{{alert.message}}</div>
+    </el-collapse-transition>
   <el-form-item>
     <el-button type="primary" @click="submitForm('ruleForm')" class="submit-button">OK</el-button>
   </el-form-item>
@@ -18,18 +21,16 @@
 import { defineComponent, ref } from 'vue'
 import { ElForm } from "element-plus";
 import { useStore } from 'vuex'
-export default defineComponent({
+export default defineComponent({ 
     data() {
-       
-        return {
-           
+        return {          
         };
     },
     setup () {
         const store = useStore();
         const ruleForm: any = ref({email: "", password: "" });
         const loginForm = ref(ElForm);
-
+        const alert = ref(store.state.alert);
         const  rules:any = { 
             password: [
                 { required: true, message: 'Please input password', trigger: 'blur' },
@@ -39,15 +40,11 @@ export default defineComponent({
                 { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }
                 ]
         };
-        const submitForm=(formName:string)=> {
-            loginForm.value.validate((valid:boolean) => {
+        const submitForm=async (formName:string)=> {
+            await loginForm.value.validate((valid:boolean) => {
             if (valid) {
-                // const { ruleForm.email, ruleForm.password } = this;
-                // const { dispatch } = this.$store;
                 if (ruleForm.value.email && ruleForm.value.password) {
-                    
-                    store.dispatch('authentication/login', {  });
-                    //root.$store.dispatch('authentication/login', { ruleForm.email, ruleForm.password });
+                   store.dispatch('authentication/login', {username:ruleForm.value.email, password:ruleForm.value.password});
                 }
             } else {
                 return false;  
@@ -55,17 +52,23 @@ export default defineComponent({
             });
         };
 
-      return {submitForm, ruleForm, loginForm, rules}
+      return {submitForm, ruleForm, loginForm, rules, alert}
     },
 })
 </script>
 
 <style scoped>
 .login-form{
-    padding: 10px 10px;
+    padding: 50px 50px;
     width: 460px
 }
 .submit-button{
     width:100%
 }
+
+.alert-message{
+    color:red;
+    text-align: center
+}
+
 </style>

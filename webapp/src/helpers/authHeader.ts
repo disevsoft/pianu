@@ -9,6 +9,6 @@ export function authHeader() {
             return {};
         }
     }else{
-        return {};       
+        return {};      
     }
 }

@@ -6,14 +6,13 @@ export const userService = {
 };
 
 async function login(username:string, password:string) {
-    console.log('login');
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     };
 
-    const response = await fetch('/api/md', requestOptions);
+    const response = await fetch('/api/login', requestOptions);
     const user = await handleResponse(response);
     // login successful if there's a jwt token in the response
     if (user.token) {
@@ -23,7 +22,7 @@ async function login(username:string, password:string) {
     return user;
 }
 
-function logout() {
+async function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
 }
@@ -35,23 +34,22 @@ async function getAll() {
     };
 
     const response = await fetch('/api/md', requestOptions);
-    return handleResponse(response);
+    return await handleResponse(response);
 }
 
-function handleResponse(response:any) {
-    return response.text().then((text:any) => {
-        const data = text && JSON.parse(text);
+async function handleResponse(response:any) {
+    
+    const text = await response.text();
+    const data = text && await JSON.parse(text);
         if (!response.ok) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
                 logout();
-                location.reload();
+                //location.reload();
             }
-
             const error = (data && data.message) || response.statusText;
-            return Promise.reject(error);
+            
+            throw new Error(error);
         }
-
         return data;
-    });
 }

@@ -2,6 +2,10 @@
   <router-view />
 </template>
 
+<script>
+
+</script>
+
 <style lang="scss">
 #app {
   -webkit-font-smoothing: antialiased;

@@ -6,6 +6,7 @@ const sequelize = db.sequelize;
 interface mdUsersInstance extends Model { 
     id: string;
     name: string;
+    password:string
   }
   export const md_users = sequelize.define<mdUsersInstance>('md_users', {
         id:{
@@ -13,10 +14,15 @@ interface mdUsersInstance extends Model {
             primaryKey: true,
             allowNull: false,
         },
-         database_name:{
+        name:{
+            type: Sequelize.STRING,
+            allowNull: false,
+            defaultValue:''            
+        },
+        password:{
             type: Sequelize.STRING,
             allowNull: true,
-            defaultValue:''            
+            defaultValue:''  
         },
         config_admin:{
             type: Sequelize.BOOLEAN,

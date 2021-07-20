@@ -1,7 +1,7 @@
 <template>
  <div id="example-2">
 
-  <button @click="show = !show">Переключить отображение</button>
+  <el-button @click="show = !show">Переключить отображение</el-button>
   <transition name="bounce">
     <p v-if="show">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
   </transition>

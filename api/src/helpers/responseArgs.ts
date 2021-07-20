@@ -24,10 +24,10 @@ export default class ResponseArgs{
         }
         else{
             if (this.sendJson){
-                this.res.status(200).json(data);   
+                this.res.status(this.status).json(data);   
             }
             else{
-                this.res.status(200).send(data);   
+                this.res.status(this.status).send(data);   
             }
         }
     }

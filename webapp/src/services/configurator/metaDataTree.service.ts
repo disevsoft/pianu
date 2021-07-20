@@ -34,14 +34,14 @@ class TreeHelper {
       }, 
     };
     const data = await TreeHelper.postMd(queryParam);
-    const nodes = TreeHelper.prepareMapData(data, NodeType.MdObject);    
+    const nodes = TreeHelper.prepareNodeData(data, NodeType.MdObject);    
     return nodes;
   }
 
   private static async getMdObjectSubfolder(nodeData: NodeData){
     const data =  await mdTreeSubfolders[nodeData.mdTypeId](nodeData.mdTypeId, nodeData.id);
     if(!data){return []};
-    const nodes = TreeHelper.prepareMapData(data, NodeType.MdObjectFolder);    
+    const nodes = TreeHelper.prepareNodeData(data, NodeType.MdObjectFolder);    
     return nodes;
   }
 
@@ -105,7 +105,7 @@ class TreeHelper {
       body: JSON.stringify(queryParam),
     });
     
-    const resData = await response.json();    
+    const resData = await response.json();  
     EventBus.emit('apiLog', resData.info);
     return resData.data;
   }
@@ -121,7 +121,10 @@ class TreeHelper {
     return data;
   }
 
-  static prepareMapData(nodeData: any, nodeType: NodeType) {
+  static prepareNodeData(nodeData: any, nodeType: NodeType) {
+    if(!nodeData){
+      return[];
+    }
     const nodes: Array<NodeData> = [];
     nodeData.forEach((elData: any) => {
       const element = elData;

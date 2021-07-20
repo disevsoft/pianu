@@ -271,7 +271,7 @@ export default defineComponent({
 
     const apiLog = async (logInfo:any)=>{
       if(logInfo && logInfo.message){
-        logData.value.push(logInfo)
+        logData.value.push(logInfo.message)
       }
     }
     const dataChanged = async (dataChangedArgs:any) => {   

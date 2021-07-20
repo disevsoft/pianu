@@ -48,4 +48,14 @@ export default [
     parentId: undefined,
     synonym: "Подсистема",
   },
+  {
+    canAdd: true,
+    canEdit: false,
+    children: undefined,
+    mdTypeId: MdTypes.User, 
+    name: "Users",
+    nodeType: NodeType.MdRootType,
+    parentId: undefined,
+    synonym: "Пользователь",
+  },
 ];

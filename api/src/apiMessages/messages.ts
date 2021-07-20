@@ -12,5 +12,7 @@ const msgs: msgOptions ={
     2:'model updated succesfully',
     3:'error on model updating',
     4:'error on delete mdObject',
-    5:'object deleted succesfully'
+    5:'object deleted succesfully',
+    6:'No token provided',
+    7:'Unauthorized'
 }

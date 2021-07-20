@@ -69,9 +69,10 @@ export async function saveMdObject(options: any, resArgs:ResponseArgs){
         return true;
     }
     const mdObject = await Metadata.fillMdObject(fieldValues, resArgs);
-    await mdObject.save(); 
-    resArgs.resData = mdObject?.mdFields; 
-    
+    await mdObject.save();
+    await Metadata.getMdObjectFields(mdObject.typeId, mdObject.id, mdObject.parentId, resArgs); 
+     
+    return true;
 } 
 
 export async function initConfigModel(options:any, resArgs:ResponseArgs) {

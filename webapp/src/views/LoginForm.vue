@@ -62,6 +62,7 @@ export default defineComponent({
     padding: 50px 50px;
     width: 460px
 }
+
 .submit-button{
     width:100%
 }
@@ -70,5 +71,4 @@ export default defineComponent({
     color:red;
     text-align: center
 }
-
 </style>

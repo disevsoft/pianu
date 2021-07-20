@@ -62,6 +62,8 @@ export default defineComponent({
     };
 
     const onSave = async(targetName: any) => {
+      if(!mdObjectData.value){return;}
+      
       dataLoadingComplete.value = false;
       let response:any = await TreeService.TreeHelper.saveMdObjectData(mdObjectData.value);
       mdObjectData.value = response;

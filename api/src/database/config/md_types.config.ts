@@ -103,7 +103,7 @@ module.exports =  [{
         name: "Number",
         list_name: "Number",
         synonym: "Число",
-        list_synonym: "Число",
+        list_synonym: "Число", 
         table_name: "",
         class_name: "",
         database_type: "",

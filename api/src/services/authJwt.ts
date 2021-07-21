@@ -16,10 +16,11 @@ export async function verifyToken(req:any, res:any, next:any) {
      var decoded:any = jwt.verify(token, config.secret);
      req.userId = decoded.id;
      next(); 
-    } catch(err) {
+    } 
+    catch(err) {
         const resArgs = new ResponseArgs(res);
         resArgs.status = 401;
         resArgs.messageId = 7;
         return resArgs.send(); 
-      }
+    }
 };

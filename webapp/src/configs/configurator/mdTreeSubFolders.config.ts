@@ -93,23 +93,6 @@ mdTreeSubfolders[MdTypes.Field] = function(parentMdType:MdTypes, parentId:string
     return undefined;
 }
 
-//documents
-// mdTreeSubfolders.set(MdTypes.Document, [tablesSubFolder, webFormsSubFolder])
-// mdTreeSubfolders.set(MdTypes.Catalog, [tablesSubFolder, webFormsSubFolder])
-//mdTreeSubfolders.set(MdTypes.Catalog, [tablesSubFolder, webFormsSubFolder])
-// //tables
-// mdTreeSubfolders["0cf72dda-2547-4333-aec0-c852d2f3f235"] = 
-// function(parentMdTypeID){
-//     const subFolders = [];
-//     subFolders.push(fieldsSubFolder);
-//     if(!parentMdTypeID){
-//         subFolders.push(webFormsSubFolder);   
-//     };
-// return subFolders} ;
-
-// //catalogs
-// mdTreeSubfolders["8c474f75-b63a-4f3a-b624-f9a58cb7eeae"] = 
-//     function(parentMdTypeID){
-//         return []
-//     } ;
-// module.exports = mdTreeSubfolders; 
+mdTreeSubfolders[MdTypes.User] = function(parentMdType:MdTypes, parentId:string){
+    return undefined;
+}

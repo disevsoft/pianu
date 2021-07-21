@@ -76,7 +76,7 @@
       <Pane>
         <el-container>
           <el-header style="text-align: right; font-size: 12px" > 
-            <el-dropdown trigger="click">
+            <el-dropdown trigger="click" style= "cursor:pointer">
               <i class="el-icon-setting" style="margin-right: 15px"></i>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -85,7 +85,7 @@
               </template>
             </el-dropdown>
             
-            <el-dropdown trigger="click">
+            <el-dropdown trigger="click" style= "cursor:pointer">
             <span class="el-dropdown-link">
               {{user.name}}
               <i class="el-icon-arrow-down el-icon--right"></i>
@@ -153,6 +153,7 @@ import {
   computed,
 } from "vue";
 import { Splitpanes, Pane } from "splitpanes";
+import 'splitpanes/dist/splitpanes.css';
 import TreeService from "../services/configurator/metaDataTree.service";
 import NodeData from "../services/configurator/metaDataTree.service";
 import { ElTree } from "element-plus";
@@ -162,6 +163,7 @@ import EventBus from '../components/configurator/CfgEventBus';
 import {NodeType} from '../configs/configurator/mdTree.config';
 import {getTypeIconName} from '../common/MdTypes'
 import { useStore } from 'vuex'
+
 export default defineComponent({
   components: {
     Splitpanes,

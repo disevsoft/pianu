@@ -1,8 +1,7 @@
 import BaseMeta from './basemeta.class'
 import MdTypeField from './mdTypeField.class'
 import SaveMdObjectArgs from '../helpers/saveMdObjectArgs'
-import bcrypt from 'bcryptjs';
-
+import {getPasswordHash} from '../services/user.service'
 export default class mdUser extends BaseMeta{
     domainAdmin = false;
     configAdmin = false;
@@ -26,7 +25,7 @@ export default class mdUser extends BaseMeta{
     async beforeSave(saveMdObjectArgs:SaveMdObjectArgs){
         await super.beforeSave(saveMdObjectArgs);
         if(!this.id){
-            this.password = bcrypt.hashSync(this.password, 8)
+            this.password = await getPasswordHash(this.password)
         }
     }
 }

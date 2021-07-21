@@ -1,4 +1,4 @@
-import {processCommand} from '../services/login.service'
+import {processCommand} from '../services/user.service'
 
 export function processRequest(req:any, res:any){
   processCommand(req, res);

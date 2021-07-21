@@ -3,7 +3,7 @@ import MdType from '../metadata/mdType.class'
 import {md_objects_types} from '../database/config/models/md_objects_types'
 import {md_types} from '../database/config/models/md_types'
 import {md_map} from '../database/config/models/md_map'
-
+import {createDefaultUser} from '../services/user.service'
 
 import db from '../database/config/sequilize.metadata'
 
@@ -127,7 +127,7 @@ export async function initModel(force:boolean){
     initMdModel('md_domain_users');
 
     await setBaseValues();  
-  
+    
     await db.sequelize.sync(updateOpts).then(() => {
       console.log('Alter database');
     });
@@ -152,4 +152,5 @@ export async function initModel(force:boolean){
           await md_types.create(item); 
       }  
     };
+    await createDefaultUser();
   }; 

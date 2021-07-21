@@ -79,16 +79,11 @@ export default defineComponent({
       EventBus.emit('dataChanged', eventArgs);
     };
 
-    const cellClassName = (
-      row: any,
-      column: any,
-      rowIndex: any,
-      columnIndex: any
-    ) => {
-      if (columnIndex == 0) {
-        return "input-readonly-background-color";
+    const cellClassName = (cell: any) => {
+      if (cell.columnIndex === 0) {
+        return "prop_name-cell-class";
       } else{
-        return 'cell-class';
+        return 'cell';
       }
     };
 
@@ -115,12 +110,7 @@ export default defineComponent({
 }
 
 .cell {
-    // box-sizing: border-box;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    // white-space: normal;
-    // word-break: break-all;
-    // line-height: 23px;
+
     padding-left: 0px !important;
     padding-right: 0px !important;
 }  
@@ -130,5 +120,7 @@ export default defineComponent({
     padding: 5px !important;
     text-overflow: ellipsis;
   }
-
+.prop_name-cell-class{
+  padding-left: 5px !important;
+}
 </style>

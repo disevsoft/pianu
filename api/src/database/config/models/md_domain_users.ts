@@ -21,7 +21,11 @@ interface mdDomainUsersInstance extends Model {
             allowNull: false,
             unique: false
         },
-        
+        domain_admin:{
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue:false            
+        },
        
     }, {
         freezeTableName: true

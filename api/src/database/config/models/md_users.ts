@@ -16,6 +16,7 @@ interface mdUsersInstance extends Model {
         },
         name:{
             type: Sequelize.STRING,
+            primaryKey: true,
             allowNull: false,
             defaultValue:''            
         },
@@ -25,11 +26,6 @@ interface mdUsersInstance extends Model {
             defaultValue:''  
         },
         config_admin:{
-            type: Sequelize.BOOLEAN,
-            allowNull: true,
-            defaultValue:false            
-        },
-        domain_admin:{
             type: Sequelize.BOOLEAN,
             allowNull: true,
             defaultValue:false            

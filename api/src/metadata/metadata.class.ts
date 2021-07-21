@@ -15,7 +15,7 @@ export class Metadata{
         if(objectType?.className)
         {
                 const data = await mdHelper.getInstance(objectType?.className, mdObjectId);
-                await data.setParentId(mdParentId);
+                if(data){await data.setParentId(mdParentId)};
                 return data; 
         }
         resArgs.messageId = 1;

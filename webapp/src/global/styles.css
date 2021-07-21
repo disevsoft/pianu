@@ -64,11 +64,13 @@
 }
 .el-footer {
   height: 50px !important;
+  line-height: 50px;
   padding: 5px !important;
 }
 .el-header {
   height: 50px !important;
   padding: 5px !important;
+  line-height: 50px;
 }
 .el-tree{
   max-height: 100%;

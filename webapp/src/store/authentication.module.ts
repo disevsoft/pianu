@@ -1,10 +1,17 @@
 import { userService } from '../services/user.service';
 import  router  from '../router';
 
-const user = localStorage.getItem('user');
-let userData = {};
-if(user){
-    userData = JSON.parse(user);
+const userData = localStorage.getItem('user');
+let user = {};
+if(userData){
+    try{
+        user = JSON.parse(userData);        
+    }
+   catch(e){
+       console.log(e); 
+       user = {};     
+   }
+    
 }
 const initialState = user
     ? { status: { loggedIn: true }, user }
@@ -19,8 +26,8 @@ export const authentication = {
             const password = user.password;
             commit('loginRequest', { username });
             try {
-                const userData = await userService.login(username, password);
-                await commit('loginSuccess', userData);
+                const user = await userService.login(username, password);
+                await commit('loginSuccess', user);
                 router.push('/');
             }catch(e) {  
                 const errMsg = e.message;                          
@@ -32,6 +39,7 @@ export const authentication = {
         logout({ commit }:any) {
             userService.logout();
             commit('logout');
+            location.reload();
         }
     },
     mutations: {

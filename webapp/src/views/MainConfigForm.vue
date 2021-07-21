@@ -75,8 +75,28 @@
       </Pane>
       <Pane>
         <el-container>
-          <el-header> 
-            <el-button @click="onInitModel">Init DB model</el-button>
+          <el-header style="text-align: right; font-size: 12px" > 
+            <el-dropdown trigger="click">
+              <i class="el-icon-setting" style="margin-right: 15px"></i>
+              <template #dropdown>
+                <el-dropdown-menu>
+                    <el-dropdown-item @click="onInitModel">Init DB model</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+            
+            <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              {{user.name}}
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="onLogOut">Log out</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+
           </el-header>
           <el-main>
              <Splitpanes class="default-theme" horizontal>
@@ -107,11 +127,11 @@
             </el-tabs>
                 </Pane>
                 <Pane>
-                  <ul id="log" class="logger">
-                    <li v-for="item in logData" :key="item">
+                  <div id="log" class="logger">
+                    <p v-for="item in logData" :key="item">
                       {{ item }}
-                    </li>
-                  </ul>
+                    </p>
+                  </div>
                 </Pane>
             </Splitpanes>
           </el-main>
@@ -141,6 +161,7 @@ import СfgPropertyEditor from "../components/configurator/СfgPropertyEditor.vu
 import EventBus from '../components/configurator/CfgEventBus';
 import {NodeType} from '../configs/configurator/mdTree.config';
 import {getTypeIconName} from '../common/MdTypes'
+import { useStore } from 'vuex'
 export default defineComponent({
   components: {
     Splitpanes,
@@ -160,6 +181,8 @@ export default defineComponent({
     logData.value = [];
     const editableTabsValue = ref("");
     const metaDataTreeRef = ref(ElTree);
+    const store = useStore();
+    const user = ref(store.state.authentication.user)
     const defaultTreeProps = {
       children: "children",
       label: "name",
@@ -170,6 +193,9 @@ export default defineComponent({
     });
     const onInitModel=()=>{
       TreeService.TreeHelper.initModel();  
+    };
+    const onLogOut=()=>{
+      store.dispatch('authentication/logout');
     };
     const getTabProps = (tabItem: any) => {
       
@@ -222,7 +248,6 @@ export default defineComponent({
     const onDeleteNode=async(node:any)=>{
       await TreeService.TreeHelper.deleteMdObject(node.data);
       const tabIndex = tabs.value.findIndex((elem:any)=>elem.data.id===node.data.id);
-      console.log(tabIndex);
       
       if(tabIndex>=0){
         tabs.value.splice(tabIndex, 1);       
@@ -331,11 +356,12 @@ export default defineComponent({
       onInitModel,
       onDeleteNode,
       apiLog,
-      logData
+      logData,
+      user,
+      onLogOut
     };
   },
    mounted() {
-
     EventBus.on('dataChanged', this.dataChanged); // 1
      EventBus.on('apiLog', this.apiLog);
   },
@@ -349,6 +375,9 @@ export default defineComponent({
   right: 0;
   bottom: 0;
   left: 0;
+}
+.logger{
+  text-align:left;
 }
 /* .full-height{
     height: 100% !important;  

@@ -8,7 +8,7 @@
         :highlight-current-row="true"
         :cell-class-name="cellClassName"
         v-loading="!dataLoadingComplete"
-        :cell-style="{ padding: '0px', height: '20px' }"
+        :cell-style="{padding: '0'}">
         height="250"
       >
         <el-table-column prop="key" label="Property" width="140" fixed="left">
@@ -18,8 +18,8 @@
         </el-table-column>
         <el-table-column prop="value" label="Value" width="200">
           <template #default="scope">
-            <input v-model="scope.row.value" />
-            <!-- <CfgInput v-model="scope.row.props.value" :controlProperties="scope.row.props"> </CfgInput> -->
+            <!-- <input v-model="scope.row.value" /> -->
+            <CfgInput v-model="scope.row.value"> </CfgInput>
           </template>
         </el-table-column>
       </el-table>
@@ -40,10 +40,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from "vue"; 
 import TreeService from "../../services/configurator/metaDataTree.service";
 import EventBus from './CfgEventBus';
+import CfgInput from './CfgInput.vue';
 export default defineComponent({
+   components: {
+    CfgInput,
+  },
   props: {
     mdObjectDescr: Object,
     elementId: String,
@@ -83,6 +87,8 @@ export default defineComponent({
     ) => {
       if (columnIndex == 0) {
         return "input-readonly-background-color";
+      } else{
+        return 'cell-class';
       }
     };
 
@@ -100,4 +106,29 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.el-table__header tr,
+  .el-table__header th {
+    padding: 0 !important;
+    height: 20px !important;
+    text-align: center
+}
+
+.cell {
+    // box-sizing: border-box;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    // white-space: normal;
+    // word-break: break-all;
+    // line-height: 23px;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}  
+
+.cell>.el-input>.el-input__inner{
+    border-radius:0px !important;
+    padding: 5px !important;
+    text-overflow: ellipsis;
+  }
+
+</style>

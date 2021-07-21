@@ -94,14 +94,16 @@ class TreeHelper {
   }
 
   private static async getHeaders(){
-    const userHeader:any = authHeader();
-    return {"Content-Type": "application/json", userHeader};
+    const headers:Headers = authHeader();
+    headers.set('Content-Type', 'application/json');
+    return headers;
   } 
   
   private static async postMd(queryParam: any) {
+    const headers = await TreeHelper.getHeaders();
     const response = await fetch("/api/md", {
       method: "POST",
-      headers: await TreeHelper.getHeaders(),
+      headers: headers,
       body: JSON.stringify(queryParam),
     });
     

@@ -31,17 +31,17 @@ export async function processCommand(req:any, res:any)
     if(!user) {
         return undefined;
     }
-    // var passwordIsValid = bcrypt.compareSync(
-    //     pwd,
-    //     user.password
-    //   );
+    var passwordIsValid = await bcrypt.compare(
+        pwd,
+        user.password
+      );
 
-    // if (!passwordIsValid) {
-    //     return undefined;
-    // }
+    if (!passwordIsValid) {
+        return undefined;
+    }
 
     var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        expiresIn: config.tokenLife // 24 hours
       });
      
      const userData = new UserData(user.name, token);

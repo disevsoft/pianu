@@ -1,4 +1,4 @@
 export default class SaveArgs{
 
-    cancel:boolean = false;
+    cancel:boolean = false; 
 }

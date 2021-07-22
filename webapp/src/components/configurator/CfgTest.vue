@@ -1,177 +1,102 @@
 <template>
-<el-container div v-show="modelValue " class="popup">
+<div class="popup">
     <el-header
         class="popup-header"
         id="modalTitle"
       >
-        <slot name="header">
-          Header
-        </slot>
-        <i
-          type="button" 
-          class="btn-full-screen el-icon-full-screen"
-          @click="close"
-          aria-label="Close modal"
-        >
-          </i>
-        <i
-          type="button"
-          class="btn-close el-icon-close"
-          @click="close"
-          aria-label="Close modal"
-        >
-        </i>
+       
     </el-header>
     <el-main>
-      <component :is="currentComponent" @dataChoosen="onDataChoosen"></component>
+      
     </el-main>
     <el-footer>
-      <el-button @click="onOkButtonClick">OK</el-button>
-      <el-button @click="onCancelButtonClick">Cancel</el-button>
     </el-footer>
-  </el-container>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue'
-import {GetMaxZIndex} from './dialogUtils'
+
+class Position{
+    x = 0;
+    y = 0;
+    constructor(x:number, y:number){
+      this.x = x;
+      this.y = y;
+    }
+};
+
+class Size{
+    height = 0;
+    width = 0;
+    constructor(height:number, width:number){
+      this.height = height;
+      this.width = width;
+    }
+
+};
+
+class RectArea{
+  size:Size;
+  position:Position;
+  constructor(left:number, top:number, height:number, width:number){
+    this.size = new Size(left, top);
+    this.position = new Position(left, top);
+  }
+};
+
 export default defineComponent({
     props: { 
         'modelValue': [Boolean], 
     },
     setup () {
        onMounted(() => {
-           console.log('mnt');
+         const elem:any = document.getElementsByClassName("popup")[0];         
+         initDragElement(elem);
         });
+        
+        const initDragElement = async (element:any)=>{
+          const header:any = await getHeader(element);    
+          if(header)
+          {
+            header.onmousedown = dragMouseDown;
+            header.parentPopup = element;
+          }
+        };
 
-        ////////////
-        const initDragElement=()=> {
-            var pos1 = 0,
-            pos2 = 0,
-            pos3 = 0,
-            pos4 = 0;
-            var popups = document.getElementsByClassName("popup");
-            var elmnt:any = null;
-            //var currentZIndex = 100; //TODO reset z index when a threshold is passed
+        const dragMouseDown=(e:any)=>{
+          const parentElement:any = e.target.parentPopup;
+          e = e || window.event;
+          parentElement.position = new Position(e.clientX, e.clientY)
+          document.onmouseup = closeDragElement;
+          document.onmousemove = elementDrag;
+        };
 
-            for (var i = 0; i < popups.length; i++) {
-                var popup:any = popups[i];
-                var header = getHeader(popup);
-                let zIndex:number = await GetMaxZIndex(); 
-                popup.style.zIndex = "" + ++zIndex;
-                popup.onmousedown = function() {
-                    let zIndex = await GetMaxZIndex(); 
-                    this.style.zIndex = "" + ++zIndex;    
-                };
-                if (header) {
-                    header.parentPopup = popup;
-                    header.onmousedown = dragMouseDown;
-                }
-            }
+        const elementDrag=(e:any)=>{
+           e = e || window.event; 
+          const parentElement:any = e.target.parentPopup; 
+          if(!parentElement){return;}       
+          const startPos:Position = parentElement.position;
+          if(!startPos){return;}
+          parentElement.style.top = parentElement.offsetTop - (startPos.y - e.clientY) + "px";
+          parentElement.style.left = parentElement.offsetLeft - (startPos.x - e.clientX) + "px";
+          
+          parentElement.position.x = e.clientX;
+          parentElement.position.y = e.clientY;
+        };
 
-            function dragMouseDown(e:any) {
-            elmnt = this.parentPopup;
-                let zIndex = await GetMaxZIndex();
-            elmnt.style.zIndex = "" + ++zIndex;
+        const closeDragElement=(e:any)=>{
+          document.onmouseup = null;
+          document.onmousemove = null;
+        };
 
-            e = e || window.event;
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-            }
-
-            function elementDrag(e) {
-            if (!elmnt) {
-                return;
-            }
-
-            e = e || window.event;
-            // calculate the new cursor position:
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // set the element's new position:
-            elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-            elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
-            }
-
-            function closeDragElement() {
-            /* stop moving when mouse button is released:*/
-            document.onmouseup = null;
-            document.onmousemove = null;
-            }
-
-            function getHeader(element) {
-            var headerItems = element.getElementsByClassName("popup-header");
-
-            if (headerItems.length === 1) {
-                return headerItems[0];
-            }
-
-            return null;
-            }
-      },
-
-initResizeElement() {
-  var popups = document.getElementsByClassName("popup");
-  var element = null;
-  var startX, startY, startWidth, startHeight;
-
-  for (var i = 0; i < popups.length; i++) {
-    var p = popups[i];
-
-    var right = document.createElement("div");
-    right.className = "resizer-right";
-    p.appendChild(right);
-    right.addEventListener("mousedown", initDrag, false);
-    right.parentPopup = p;
-
-    var bottom = document.createElement("div");
-    bottom.className = "resizer-bottom";
-    p.appendChild(bottom);
-    bottom.addEventListener("mousedown", initDrag, false);
-    bottom.parentPopup = p;
-
-    var both = document.createElement("div");
-    both.className = "resizer-both";
-    p.appendChild(both);
-    both.addEventListener("mousedown", initDrag, false);
-    both.parentPopup = p;
-  }
-
-  function initDrag(e) {
-    element = this.parentPopup;
-
-    startX = e.clientX;
-    startY = e.clientY;
-    startWidth = parseInt(
-      document.defaultView.getComputedStyle(element).width,
-      10
-    );
-    startHeight = parseInt(
-      document.defaultView.getComputedStyle(element).height,
-      10
-    );
-    document.documentElement.addEventListener("mousemove", doDrag, false);
-    document.documentElement.addEventListener("mouseup", stopDrag, false);
-  }
-
-  function doDrag(e) {
-    element.style.width = startWidth + e.clientX - startX + "px";
-    element.style.height = startHeight + e.clientY - startY + "px";
-  }
-
-  function stopDrag() {
-    document.documentElement.removeEventListener("mousemove", doDrag, false);
-    document.documentElement.removeEventListener("mouseup", stopDrag, false);
-  }
-},
-        //////////////
-
+        const getHeader=(element:any) =>{
+          var headerItems = element.getElementsByClassName("popup-header");
+          if (headerItems.length === 1) {
+            return headerItems[0];
+          }
+          return null;
+        };
 
 
         return {}
@@ -179,9 +104,14 @@ initResizeElement() {
 })
 </script>
 
+
 <style ang="scss">
 /*--------------------------------*/ 
-  .popup {
+.vue-grid-item.cssTransforms { transition-property: inherit !important; }
+  .vue-resizable.resizing { pointer-events: none; }
+  .vue-draggable-dragging { pointer-events: none; }
+
+.popup {
   z-index: 9;
   background-color: #f1f1f1;
   border: 1px solid #d3d3d3;

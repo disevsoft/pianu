@@ -6,17 +6,21 @@ export default class CfgDialog
 {
     static openedForms = [];
     public static showDialog(owner:any, unique:string){
+      console.log('showDialog');
+      
         const appComponent = createApp({
-             components: { CfgTest },
+             components: { CfgDialogForm },
              render() {
-              const formElement = h(CfgTest,{modelValue:true, targetElmentId:unique,onClose: () => CfgDialog.onFormClose(unique)})
-              console.log(formElement);
+              console.log('formElementrender');
+              const formElement = h(CfgDialogForm,{modelValue:true, targetElmentId:unique,onClose: () => CfgDialog.onFormClose(unique)})
+              
               
             //   //CfgDialog.openedForms.push({elementId:unique, element:formElement});
                return formElement;
              }
           });
-
+          console.log(owner);
+          console.log('showDialoguse');
         appComponent.use(ElementPlus) 
         appComponent.mount(owner);
     }

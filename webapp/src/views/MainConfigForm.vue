@@ -2,7 +2,7 @@
   <div id="mainSurface" class="fullSize">
     <Splitpanes class="default-theme" vertical>
       <Pane :size="30">
-        <el-container>
+        <el-container class="full-height">
           <el-header> 
           </el-header>
           <el-main>
@@ -74,7 +74,7 @@
         </el-container>
       </Pane>
       <Pane>
-        <el-container>
+        <el-container class="full-height">
           <el-header style="text-align: right; font-size: 12px" > 
             <el-dropdown trigger="click" style= "cursor:pointer">
               <i class="el-icon-setting" style="margin-right: 15px"></i>

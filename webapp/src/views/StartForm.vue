@@ -1,27 +1,32 @@
 <template>
 <div>
  <button @click = "onClick">sdfg</button>
-  <div id ='elem'>
-    
-  </div>
+  
+  <CfgInput v-model="v"/>
+  
+</div>
+<div>
+<CfgTest/>
 </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import CfgInput from '../components/configurator/CfgInput.vue'
+import CfgTest from '../components/configurator/CfgTest.vue'
 import CfgDialog from '../components/configurator/CfgDialog'
 
 
 export default defineComponent({
-  components: {},
+  components: {CfgInput, CfgTest},
   setup() {
+    const v = ref('');
     const show = ref(false);
     const onClick = ()=>{
       console.log('click');
-      CfgDialog.showDialog(document.getElementById('elem'), '1');
+      CfgDialog.showDialog(document.getElementById('elem2'), '1');
     }
-    return {show, onClick};
+    return {show, onClick, v};
   },
 });
 </script>

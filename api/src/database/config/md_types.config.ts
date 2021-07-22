@@ -8,7 +8,11 @@ module.exports =  [{
         table_name: "md_documents",
         class_name: "MdDocument",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:11,
+        field_type:true,
     },
     {
         id: "834cd9ad-9720-4fc5-aa09-cef6f7a895a0",
@@ -19,7 +23,11 @@ module.exports =  [{
         table_name: "md_catalogs",
         class_name: "MdCatalog",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:10,
+        field_type:true,
     },
     {
         id: "0cf72dda-2547-4333-aec0-c852d2f3f235",
@@ -30,7 +38,11 @@ module.exports =  [{
         table_name: "md_tables",
         class_name: "MdTable",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:9,
+        field_type:false,
     },
     {
         id: "8c474f75-b63a-4f3a-b624-f9a58cb7eeae",
@@ -41,7 +53,11 @@ module.exports =  [{
         table_name: "md_fields",
         class_name: "MdField",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:8,
+        field_type:false,
     },
     {
         id: "370c9fb7-c2c8-4360-9863-6dc456460080",
@@ -52,7 +68,11 @@ module.exports =  [{
         table_name: "md_webforms",
         class_name: "MdWebForm",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:7,
+        field_type:false,
     },
     {
         id: "60a34539-5b85-4d96-b619-cefc7b6b894b",
@@ -63,7 +83,11 @@ module.exports =  [{
         table_name: "md_users",
         class_name: "MdUser",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:6,
+        field_type:false,
     },
     {
         id: "1ba5d068-38a7-44e5-82b8-d51e680a6cb1",
@@ -74,7 +98,11 @@ module.exports =  [{
         table_name: "md_domains",
         class_name: "MdDomain",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:5,
+        field_type:false,
     },
     {
         id: "b2aa362b-5872-411a-9cd8-fc65428e54eb",
@@ -85,7 +113,11 @@ module.exports =  [{
         table_name: "md_reports",
         class_name: "MdReport",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:4,
+        field_type:false,
     },
     {
         id: "273c017b-b7d9-49a2-ac51-e0f2d6f0f75c",
@@ -96,7 +128,11 @@ module.exports =  [{
         table_name: "md_subsystems",
         class_name: "MdSubsystem",
         database_type: "",
-        is_database_type: false
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:3,
+        field_type:false,
     },
     {
         id: "a6135646-7a2a-40a0-bce2-40da3f76f078",
@@ -107,7 +143,11 @@ module.exports =  [{
         table_name: "",
         class_name: "",
         database_type: "",
-        is_database_type: true
+        is_md_type: false,
+        has_length:false,
+        has_fraction:false,
+        order:2,
+        field_type:true,
     },
     {
         id: "38a7b85c-acd0-4a3a-aa2b-02f685007f49",
@@ -118,7 +158,11 @@ module.exports =  [{
         table_name: "",
         class_name: "",
         database_type: "",
-        is_database_type: true
+        is_md_type: false,
+        has_length:false,
+        has_fraction:false,
+        order:1,
+        field_type:true,
     },
     {
         id: "19034973-d6a4-4dbf-b900-4eb9a78e405b",
@@ -129,7 +173,11 @@ module.exports =  [{
         table_name: "",
         class_name: "",
         database_type: "",
-        is_database_type: true
+        is_md_type: false,
+        has_length:false,
+        has_fraction:false, 
+        order:0,
+        field_type:true,
     },
 ];
 

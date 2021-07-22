@@ -8,8 +8,12 @@ export default class MdType{
     listSynonym:string = '';
     tableName:string = '';
     className:string = '';
-    isDataBaseType:boolean = false;
+    isMdType:boolean = false;
+    hasLength = false;
+    hasFraction = false;
     databasType:string = '';
+    order:number = 0;
+    fieldType:boolean = false;
     private static _mdTypes:Map<String, MdType> = new Map();
 
     private constructor(id:string){
@@ -23,8 +27,12 @@ export default class MdType{
         ['list_synonym', 'listSynonym'],
         ['table_name', 'tableName'],
         ['class_name', 'className'],
-        ['is_database_type', 'isDataBaseType'],
-        ['database_type','dataBaseType']
+        ['is_md_type', 'isMdType'],
+        ['database_type','dataBaseType'],
+        ['hasLength','has_length'],
+        ['hasFraction','has_fraction'],
+        ['order','order'],
+        ['fieldType','field_type']
     ]);
     public static async getMdType(mdTypeId:string){
 

@@ -1,25 +1,27 @@
 <template>
- <div id="example-2">
-
-  <el-button @click="show = !show">Переключить отображение</el-button>
-  <transition name="bounce">
-    <p v-if="show">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
-  </transition>
-  
-     <transition name="el-fade-in-linear">
-        <div v-show="show" class="transition-box">.el-fade-in-linear</div>
-      </transition>
-  
+<div>
+ <button @click = "onClick">sdfg</button>
+  <div id ='elem'>
+    
+  </div>
 </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import CfgInput from '../components/configurator/CfgInput.vue'
+import CfgDialog from '../components/configurator/CfgDialog'
+
+
 export default defineComponent({
   components: {},
   setup() {
     const show = ref(false);
-    return {show};
+    const onClick = ()=>{
+      console.log('click');
+      CfgDialog.showDialog(document.getElementById('elem'), '1');
+    }
+    return {show, onClick};
   },
 });
 </script>

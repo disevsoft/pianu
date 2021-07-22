@@ -7,7 +7,10 @@ export enum MdTypes{
     User = '60a34539-5b85-4d96-b619-cefc7b6b894b',
     Report = 'b2aa362b-5872-411a-9cd8-fc65428e54eb',
     Subsystem = '273c017b-b7d9-49a2-ac51-e0f2d6f0f75c',
-    Domains = '1ba5d068-38a7-44e5-82b8-d51e680a6cb1'
+    Domains = '1ba5d068-38a7-44e5-82b8-d51e680a6cb1',
+    Number = 'a6135646-7a2a-40a0-bce2-40da3f76f078',
+    String ='38a7b85c-acd0-4a3a-aa2b-02f685007f49',
+    Boolean= '19034973-d6a4-4dbf-b900-4eb9a78e405b'
 }
 
 export function getTypeIconName(mdType:MdTypes) {

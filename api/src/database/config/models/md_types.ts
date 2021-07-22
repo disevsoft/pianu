@@ -38,16 +38,36 @@ export const md_types = sequelize.define<mdTypeInstance>('md_types', {
             type: Sequelize.STRING,
             allowNull: true,
         },
-        is_database_type:{
+        is_md_type:{
             type: Sequelize.BOOLEAN,
-            allowNull: false,
+            allowNull: true,
             defaultValue: false
         },
         database_type:{
             type: Sequelize.STRING,
             allowNull: true,
-        }
+        },
+        has_length:{
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
+        },
+        has_fraction:{
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
+        },
+        order:{
+            type: Sequelize.INTEGER,
+            allowNull: true,
+            defaultValue: 0
+        },
+        field_type:{
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
+        },
     }, {
-        freezeTableName: true
+        freezeTableName: true 
 }); 
 

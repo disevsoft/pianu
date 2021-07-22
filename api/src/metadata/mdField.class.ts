@@ -5,7 +5,6 @@ export default class MdField extends BaseMeta{
     type:string = '';
     length:number = 0;
     fraction:number = 0;
-    databaseName:string = '';
     mask:string='';
 
     constructor(id:string){ 
@@ -19,7 +18,6 @@ export default class MdField extends BaseMeta{
         this.mdFields.push(new MdTypeField('type', "String", "", "", false, "type"));
         this.mdFields.push(new MdTypeField('length', "Number", 0, 0, false, "length"));
         this.mdFields.push(new MdTypeField('fraction', "Number", 0, 0, false, "fraction"));
-        this.mdFields.push(new MdTypeField('databaseName', "String", "", "", false, "database_name")); 
         this.mdFields.push(new MdTypeField('mask', "String", "", "", false, "mask"));
     }
 }

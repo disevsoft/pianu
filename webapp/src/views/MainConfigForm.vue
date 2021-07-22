@@ -190,6 +190,9 @@ export default defineComponent({
       label: "name",
     };
 
+    onMounted(() => {
+      console.log('mounted!')
+    });
     const currentTabComponent = computed(() => {
       return СfgPropertyEditor;
     });

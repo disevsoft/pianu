@@ -31,11 +31,6 @@ interface mdFieldInstance extends Model {
             allowNull: true,
             defaultValue:0
         },
-        database_name:{
-            type: Sequelize.STRING,
-            allowNull: true,
-            defaultValue:''            
-        },
         mask:{ 
             type: Sequelize.STRING,
             allowNull: true,

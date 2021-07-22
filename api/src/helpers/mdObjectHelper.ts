@@ -140,8 +140,8 @@ export async function initModel(force:boolean){
   async function setBaseValues(){
     const mdTypes = require('../database/config/md_types.config') 
     for (const item of mdTypes){      
-      if(item.is_database_type){continue};
-      await initMdModel(item.table_name);
+      if(item.is_md_type){ await initMdModel(item.table_name)};
+     
       const obj = await md_types.findOne({ where: { id: item.id } });
       if(obj){
          await md_types.update(item, 

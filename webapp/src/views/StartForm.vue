@@ -1,10 +1,5 @@
 <template>
-<div>
- <button @click = "onClick">sdfg</button>
-  
-  <CfgInput v-model="v"/>
-  
-</div>
+
 <div>
 <CfgTest/>
 </div>
@@ -12,13 +7,13 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import CfgInput from '../components/configurator/CfgInput.vue'
+
 import CfgTest from '../components/configurator/CfgTest.vue'
 import CfgDialog from '../components/configurator/CfgDialog'
 
 
 export default defineComponent({
-  components: {CfgInput, CfgTest},
+  components: {CfgTest},
   setup() {
     const v = ref('');
     const show = ref(false);

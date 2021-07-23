@@ -16,34 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue'
-
-class Position{
-    x = 0;
-    y = 0;
-    constructor(x:number, y:number){
-      this.x = x;
-      this.y = y;
-    }
-};
-
-class Size{
-    height = 0;
-    width = 0;
-    constructor(height:number, width:number){
-      this.height = height;
-      this.width = width;
-    }
-
-};
-
-class RectArea{
-  size:Size;
-  position:Position;
-  constructor(left:number, top:number, height:number, width:number){
-    this.size = new Size(left, top);
-    this.position = new Position(left, top);
-  }
-};
+import initDragResize from '../../helpers/dragResize'
 
 export default defineComponent({
     props: { 
@@ -51,54 +24,10 @@ export default defineComponent({
     },
     setup () {
        onMounted(() => {
-         const elem:any = document.getElementsByClassName("popup")[0];         
-         initDragElement(elem);
+         initDragResize("popup", "popup-header");
         });
         
-        const initDragElement = async (element:any)=>{
-          const header:any = await getHeader(element);    
-          if(header)
-          {
-            header.onmousedown = dragMouseDown;
-            header.parentPopup = element;
-          }
-        };
-
-        const dragMouseDown=(e:any)=>{
-          const parentElement:any = e.target.parentPopup;
-          e = e || window.event;
-          parentElement.position = new Position(e.clientX, e.clientY)
-          document.onmouseup = closeDragElement;
-          document.onmousemove = elementDrag;
-        };
-
-        const elementDrag=(e:any)=>{
-           e = e || window.event; 
-          const parentElement:any = e.target.parentPopup; 
-          if(!parentElement){return;}       
-          const startPos:Position = parentElement.position;
-          if(!startPos){return;}
-          parentElement.style.top = parentElement.offsetTop - (startPos.y - e.clientY) + "px";
-          parentElement.style.left = parentElement.offsetLeft - (startPos.x - e.clientX) + "px";
-          
-          parentElement.position.x = e.clientX;
-          parentElement.position.y = e.clientY;
-        };
-
-        const closeDragElement=(e:any)=>{
-          document.onmouseup = null;
-          document.onmousemove = null;
-        };
-
-        const getHeader=(element:any) =>{
-          var headerItems = element.getElementsByClassName("popup-header");
-          if (headerItems.length === 1) {
-            return headerItems[0];
-          }
-          return null;
-        };
-
-
+        
         return {}
     }
 })
@@ -129,7 +58,7 @@ export default defineComponent({
   position: fixed;
   height:300px;
   /*resize: both; /*!*enable this to css resize*! */
-  overflow: auto;
+  overflow: hidden;
 }
 
 .popup-header {
@@ -143,15 +72,6 @@ export default defineComponent({
 
 /*Resizeable*/
 
-.popup .resizer-right {
-  width: 5px;
-  height: 100%;
-  background: transparent;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  cursor: e-resize;
-}
 
 .popup .resizer-bottom {
   width: 100%;

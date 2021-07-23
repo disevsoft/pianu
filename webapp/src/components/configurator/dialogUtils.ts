@@ -1,4 +1,4 @@
-export async function getMaxZIndex(){
+export function getMaxZIndex(){
     const elements:any = document.getElementsByTagName("*");
     let highest_index = 0;
 

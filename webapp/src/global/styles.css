@@ -80,21 +80,71 @@
 .logger{
   max-height: 30%;
 }
+/* sizers */
+.resize {
+  display: inline-block;
+  position: absolute;
+  min-width: 10px;
+  min-height: 10px;
+}
 
+.resizeTL {
+  cursor: nw-resize;
+}
+.resizeTC {
+  cursor: n-resize;
+}
+.resizeTR {
+  cursor: ne-resize;
+}
+.resizeCL {
+  cursor: w-resize;
+}
+.resizeCR {
+  cursor: e-resize;
+}
+.resizeBL {
+  cursor: sw-resize;
+}
+.resizeBC {
+  cursor: s-resize;
+}
+.resizeBR {
+  cursor: se-resize;
+}
+.resizeTL, .resizeBL, .resizeCL {
+  left: -4px;
+}
+.resizeTL, .resizeTC {
+  top: -4px;
+}
+.resizeTC, .resizeBC {
+  left: 6px;
+  right: 6px;
+}
 
+.resizeTR {
+  top: -4px;
+  right: -4px;
+}
 
-  /* .full-height{
-    height: 100%;  
-  }
-/* .el-table{
-  height: 100%;  
-} */
+.resizeCR, .resizeCL {
+  top: 6px;
+  bottom: 6px;
+}
 
-  /* .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  } */
+.resizeCR {
+  right: -4px;
+}
 
-  /* .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  } */
+.resizeBC, .resizeBL {
+  bottom: -4px;
+}
+.resizeTC, .resizeBC {
+  left: 6px;
+  right: 6px;
+}
+.resizeBR {
+  right: -4px;
+  bottom: -4px;
+}

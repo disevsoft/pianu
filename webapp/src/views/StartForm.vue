@@ -1,8 +1,10 @@
 <template>
-
+<el-container>
 <div>
-<CfgTest/>
+<CfgTest elementId="124"/>
+<CfgTest elementId="123"/>
 </div>
+</el-container>
 </template>
 
 <script lang="ts">

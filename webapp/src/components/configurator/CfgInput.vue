@@ -31,7 +31,7 @@ export default defineComponent({
 
         const chooseButtonClick=()=>{
             console.log('chooseButtonClick', 'windowBox-'+elementId.value);
-            CfgDialog.showDialog(document.getElementById('windowBox-'+elementId.value), '2');
+            CfgDialog.showDialog(document.getElementById('windowBox-'+elementId.value), elementId.value);
         };
 
         return {displayValue, chooseButtonClick, elementId}

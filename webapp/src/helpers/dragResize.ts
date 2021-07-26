@@ -1,75 +1,15 @@
 import {getMaxZIndex} from '../components/configurator/dialogUtils';
 
-enum Borders{
-    None = 0,
-    Left,
-    Top, 
-    Right, 
-    Bottom
-}
-
-export class SizingElement{
-    static elements:any=[];
-    static sizers:string[] = [
-        'resizeTL',
-        'resizeTC',
-        'resizeTR',
-        'resizeCL',
-        'resizeCR',
-        'resizeBL',
-        'resizeBC',
-        'resizeBR',
-    ];
-    static getSizeElement(){
-        if(SizingElement.elements){
-            return SizingElement.elements[0];
-        }
-        return undefined;
-    }
-
-
-    static startResize(element:any, eventArgs:any, sizeBorder:Borders, rect:RectArea){
-        console.log('start resize'); 
-        SizingElement.elements.push(element);
-        element.startResize = true;
-        element.startPosition = new Position(eventArgs.clientX, eventArgs.clientY);
-        element.sizeBorder = sizeBorder;
-        element.rect = rect;
-    }
-    static stopResize(){
-        if(SizingElement.elements && SizingElement.elements[0]){
-            SizingElement.elements[0].startResize = false;   
-            SizingElement.elements[0].style.cursor = 'default';          
-            SizingElement.elements = [];
-            console.log('stop resize');          
-        }
-    } 
-
-    static preventResize(popup:any, mouseArgs:any){
-        if(!popup || !popup.startResize) {return};
-        const offsetX = (mouseArgs.clientX - popup.startPosition.x);
-        const offsetY = (mouseArgs.clientY - popup.startPosition.y);
-        if(popup.sizeBorder === Borders.Right){            
-           popup.style.width = popup.rect.width + offsetX + "px";    
-        }
-        if(popup.sizeBorder === Borders.Left){ 
-            popup.style.left = popup.offsetLeft + offsetX + "px";  
-            popup.style.width = popup.rect.width - offsetX + "px";            
-        }
-        if(popup.sizeBorder === Borders.Bottom){ 
-            popup.style.height = popup.rect.height + offsetY + "px";            
-        }
-        if(popup.sizeBorder === Borders.Top){ 
-            popup.style.top = popup.offsetTop + offsetY + "px"
-            popup.style.height = popup.rect.height - offsetY + "px";            
-        }
-
-        const clientRect = popup.getBoundingClientRect();
-        const size = getSize(popup);   
-        popup.rect = new RectArea(clientRect.left, clientRect.top, size.width, size.height);
-        popup.startPosition = new Position(mouseArgs.clientX, mouseArgs.clientY);
-    }
-}
+export const Sizers:string[] = [
+    'resizeTL',
+    'resizeTC',
+    'resizeTR',
+    'resizeCL',
+    'resizeCR',
+    'resizeBL',
+    'resizeBC',
+    'resizeBR',
+];
 export class Position{
     x = 0;
     y = 0;
@@ -125,180 +65,167 @@ export class RectArea{
     contain(x:number, y:number){
         return (x>=this.left && x<=this.right && y>=this.top && y<=this.bottom)
     }
-    getBorder(x:number, y:number)
-    {
-        const righBorder = new RectArea(this.right - this.borderWidth/2, this.top, this.borderWidth, this.height);
-        if(righBorder.contain(x, y)){return Borders.Right}
-        const leftBorder = new RectArea(this.left-this.borderWidth/2, this.top, this.borderWidth, this.height);
-        if(leftBorder.contain(x, y)){return Borders.Left}
-        const topBorder = new RectArea(this.left, this.top-this.borderWidth/2, this.width, this.borderWidth);
-        if(topBorder.contain(x, y)){return Borders.Top}
-        const bottomBorder = new RectArea(this.left, this.bottom-this.borderWidth/2, this.width, this.borderWidth);
-        if(bottomBorder.contain(x, y)){return Borders.Bottom}
-        return Borders.None;
-    }
 };
 
-export default function initDragResize(ownerId: string, elementName:string, headerName:string){
-   // initDrag(elementName, headerName);
-    //initResize(ownerId, elementName, headerName)      
-}
-
-function initResize(ownerId: string, elementName:string, headerName:string)
-{
-    const popups:any = document.getElementsByClassName(elementName);   
-    const owner:any = document.getElementById(ownerId);
-    for (let i = 0; i < popups.length; i++) {
-        const popup = popups[i];
-        if (!popup){continue}
-        // SizingElement.sizers.forEach(elem=>{ 
-        //     const sizer:any = document.createElement("div");
-        //     sizer.className = elem + " resize";
-        //     console.log(sizer.className);
-            
-        //     owner.appendChild(sizer);
-        //     sizer.addEventListener("mousedown", sizerMouseDown, false);
-        //     sizer.parentPopup = popup;
-        // })
-        // for (let k = 0; i < SizingElement.sizers.length; k++) {
-        //     console.log(popup);
-            
-            // const sizer:any = document.createElement("div");
-            // sizer.className = SizingElement.sizers[k] + " resize";
-            // console.log(sizer.className);
-            
-            // owner.appendChild(sizer);
-            // sizer.addEventListener("mousedown", sizerMouseDown, false);
-            // sizer.parentPopup = popup;
-        //}
-        // if (popup){
-        //     document.documentElement.addEventListener("mousemove",sizeMouseMove, false);
-        //     document.documentElement.addEventListener("mousedown",sizeMouseDown, false);
-        // }  
-    }
-}
-    function sizerMouseDown(e:any){
-        console.log(e);
-        
-    }
-    function sizeMouseDown(e:any){
-        const popup:any = getParentPopup(e.target); 
-        if(!popup){return}
-        const clientRect = popup.getBoundingClientRect();
-        const size = getSize(popup);   
-        const rect = new RectArea(clientRect.left, clientRect.top, size.width, size.height);
-         const border = rect.getBorder(e.clientX, e.clientY);
-         if(border != Borders.None){
-            SizingElement.startResize(popup, e, border, rect);
-            document.documentElement.addEventListener('mouseup', sizeMouseUp);
-         }
-      };
-
-    function sizeMouseUp(e:any){
-        document.documentElement.removeEventListener('mouseup', sizeMouseUp);
-        SizingElement.stopResize();          
-      };
-
+export class DragResize{
     
-    function getCursor(border:Borders){
-        let cursor = '';
-        if(border=== Borders.Bottom)(cursor = 's-resize');
-        if(border=== Borders.Top)(cursor = 'n-resize');
-        if(border=== Borders.Left)(cursor = 'w-resize');
-        if(border=== Borders.Right)(cursor = 'e-resize');
-        return cursor;  
+    private dragResizeElement:any = null;
+    startRectArea:RectArea = new RectArea(0,0,0,0);
+    startPosition:Position = new Position(0,0);
+    sizingBorder='';
+    dragResizeElementId = '';
+
+    draggerMouseMoveHandler:any = null;
+    draggerMouseUpHandler:any = null;
+    draggerMouseDownHandler:any = null;
+    sizerMouseMoveHandler:any = null;
+    sizerMouseUpHandler:any = null;
+    sizerMouseDownHandler:any = null;
+
+    constructor(dragResizeElementId:string)
+    {
+        this.dragResizeElementId = dragResizeElementId;
+        this.dragResizeElement = document.getElementById(dragResizeElementId);
+        
+        const sizers = this.dragResizeElement.getElementsByClassName("resize");
+        this.sizerMouseDownHandler = ((event:any) => this.sizerMouseDown(event, this));
+        for (let i = 0; i < sizers.length; i++) {
+            const sizer = sizers[i];
+            sizer.addEventListener('mousedown',  this.sizerMouseDownHandler, false);
+        }
+
+        this.draggerMouseDownHandler = ((event:any) => this.draggerMouseDown(event, this));
+        const draggers = this.dragResizeElement.getElementsByClassName("drag-header");
+        for (let i = 0; i < draggers.length; i++) {
+            const dragger = draggers[i];           
+            dragger.addEventListener('mousedown', this.draggerMouseDownHandler, false);
+        }
     }
 
-    export function getSize(element:any)
+    public static init(dragResizeElementId:string){
+        const dragResizer = new DragResize(dragResizeElementId);
+    }
+    private upZIndex(element:any){
+        
+        if(!element){return};
+        let zIndex = getMaxZIndex();
+         element.style.zIndex = "" + ++zIndex;
+    };
+
+    setSizerMouseMoveHandler(context:DragResize){
+        if(!context.sizerMouseMoveHandler){
+            context.sizerMouseMoveHandler = ((event:any)=>context.sizerMouseMove(event, context));
+        }
+        document.addEventListener('mousemove', context.sizerMouseMoveHandler, false)  
+    }
+
+    setSizerMouseUpHandler(context:DragResize){
+        if(!context.sizerMouseUpHandler){
+            context.sizerMouseUpHandler = ((event:any)=>context.sizerMouseUp(event, context));
+        }
+        document.addEventListener('mouseup', context.sizerMouseUpHandler, false)
+    }
+
+    sizerMouseDown(e:any, context:DragResize){
+
+        context.upZIndex(context.dragResizeElement);  
+       
+        context.setSizerMouseMoveHandler(context);
+        context.setSizerMouseUpHandler(context);
+
+        document.addEventListener('mouseup', context.sizerMouseUpHandler, false)
+        const clientRect = context.dragResizeElement.getBoundingClientRect();
+        const size:any = context.getComputedStyleSize(context.dragResizeElement);   
+        context.startRectArea = new RectArea(clientRect.left, clientRect.top, size.width, size.height);
+        context.startPosition = new Position(e.clientX, e.clientY);
+        context.sizingBorder = e.target.className;
+    }
+
+    sizerMouseMove(e:any, context:DragResize){
+        const offsetX = (e.clientX - context.startPosition.x);
+        const offsetY = (e.clientY - context.startPosition.y);
+       
+        let left = context.startRectArea.left;
+        let top = context.startRectArea.top;
+        let height = context.startRectArea.height;
+        let width = context.startRectArea.width;
+   
+        if(context.sizingBorder.includes('resizeCR') || context.sizingBorder.includes('resizeBR') ||context.sizingBorder.includes('resizeTR')){
+          width = context.startRectArea.width + offsetX; 
+        }
+        if(context.sizingBorder.includes('resizeBC') || context.sizingBorder.includes('resizeBR') ||context.sizingBorder.includes('resizeBL')){
+          height = context.startRectArea.height + offsetY;   
+        }
+
+         if(context.sizingBorder.includes('resizeCL')||context.sizingBorder.includes('resizeTL') ||context.sizingBorder.includes('resizeBL')){       
+          left =  context.startRectArea.left + offsetX;
+          width = context.startRectArea.width - offsetX;
+        }
+
+        if(context.sizingBorder.includes('resizeTC') || context.sizingBorder.includes('resizeTR') ||context.sizingBorder.includes('resizeTL')){
+          top = context.startRectArea.top + offsetY
+          height = context.startRectArea.height - offsetY;    
+        }
+        context.dragResizeElement.style.width = width + "px"; 
+        context.dragResizeElement.style.height = height + "px"; 
+        context.dragResizeElement.style.top = top + "px";
+        context.dragResizeElement.style.left = left + "px";
+
+        context.startRectArea = new RectArea(left, top, width, height);
+        context.startPosition = new Position(e.clientX, e.clientY);      
+    }
+
+    sizerMouseUp(e:any, context:DragResize){
+        console.log('sizerMouseUp');
+        document.removeEventListener('mousemove', context.sizerMouseMoveHandler, false);  
+        document.removeEventListener('mouseup',context.sizerMouseUpHandler, false); 
+        context.sizingBorder = '';
+    }
+
+    draggerMouseUp(e:any, context:DragResize){
+        document.removeEventListener('mousemove', context.draggerMouseMoveHandler, false);  
+        document.removeEventListener('mouseup', context.draggerMouseUpHandler, false); 
+    }
+
+    setDraggerMouseMoveHandler(context:DragResize){
+        if(!context.draggerMouseMoveHandler){
+            context.draggerMouseMoveHandler = ((event:any) => context.draggerMouseMove(event, context));
+        }
+        document.addEventListener('mousemove', context.draggerMouseMoveHandler, false);  
+    }
+
+    setDraggerMouseUpHandler(context:DragResize){
+        if(!context.draggerMouseUpHandler){
+            context.draggerMouseUpHandler = (event:any)=>context.draggerMouseUp(event, context);
+        }
+        document.addEventListener('mouseup', context.draggerMouseUpHandler, false)
+    }
+
+    draggerMouseDown(e:any, context:DragResize){   
+        context.setDraggerMouseMoveHandler(context);
+        context. setDraggerMouseUpHandler(context);
+        context.upZIndex(context.dragResizeElement);
+        const clientRect = context.dragResizeElement.getBoundingClientRect();
+        const size:any = context.getComputedStyleSize(e.target.parentNode);   
+        context.startRectArea = new RectArea(clientRect.left, clientRect.top, size.width, size.height);
+        context.startPosition = new Position(e.clientX, e.clientY);
+    }
+
+    getComputedStyleSize(element:any)
     {
         const dv:any = document.defaultView;
         const computedStyle = dv.getComputedStyle(element);
         return new Size(parseInt(computedStyle.width,10), parseInt(computedStyle.height, 10));
-    }
-
-    function sizeMouseMove(e:any){
-        
-        const sizeElement = SizingElement.getSizeElement();
-        let popup:any = undefined;
-        if(sizeElement && sizeElement.startResize){
-            popup =  sizeElement;  
-        }else{
-            popup = getParentPopup(e.target);
-        }       
-            if(!popup){return;}
-            const clientRect = popup.getBoundingClientRect();
-            const size = getSize(popup);
-            const rect = new RectArea(clientRect.left, clientRect.top, size.width, size.height);   
-            const border = rect.getBorder(e.clientX, e.clientY);
-            e.target.style.cursor = getCursor(border);    
-            SizingElement.preventResize(popup, e);
-         } 
-
-    function  getParentPopup(elem:any){
-      if(!elem || !elem.parentNode){return undefined};
-      
-        try{
-            if(elem.hasAttribute('drag-resize')){return elem};
-
-            if (elem.parentNode.hasAttribute('drag-resize')){
-                return elem.parentNode;
-            }else{
-                const res:any = getParentPopup(elem.parentNode);
-                return res;
-            }
-        }catch(e)
-        { 
-            return undefined;   
-        }
-    }
-
-    function initDrag(elementName:string, headerName:string){
-        const popups:any = document.getElementsByClassName(elementName);   
-        for (let i = 0; i < popups.length; i++) {
-        const popup = popups[i];
-        const header = getHeader(popup, headerName);
-            if(header && popup)
-            {
-            header.onmousedown = dragMouseDown;
-            header.parentPopup = popup;
-            }
-        }
     };
 
-  function dragMouseDown(e:any){
-    const parentElement:any = e.target.parentPopup;
-    if(!parentElement){return;}
-    let zIndex:number = getMaxZIndex();
-    parentElement.style.zIndex = "" + ++zIndex;
-    e = e || window.event;
-    parentElement.position = new Position(e.clientX, e.clientY)
-    document.documentElement.addEventListener('mousemove', elementDrag)
-    document.documentElement.addEventListener('mouseup', closeDragElement)
-    return;
-  };
-
-  function elementDrag(e:any){
-     e = e || window.event; 
-    const parentElement:any = e.target.parentPopup; 
-    if(!parentElement){return;}       
-    const startPos:Position = parentElement.position;
-    if(!startPos){return;}
-    parentElement.style.top = parentElement.offsetTop - (startPos.y - e.clientY) + "px";
-    parentElement.style.left = parentElement.offsetLeft - (startPos.x - e.clientX) + "px";     
-    parentElement.position.x = e.clientX;
-    parentElement.position.y = e.clientY;
-  };
-
-  function closeDragElement(e:any){
-    document.documentElement.removeEventListener('mousemove', elementDrag)
-    document.documentElement.removeEventListener('mouseup', closeDragElement)
-  };
-
-  function getHeader(element:any, headerName:string){
-    const headerItems = element.getElementsByClassName(headerName);
-    if (headerItems.length === 1) {
-      return headerItems[0];
+    draggerMouseMove(e:any, context:DragResize){
+        
+        context.dragResizeElement.style.top = context.dragResizeElement.offsetTop - (context.startPosition.y - e.clientY) + "px";
+        context.dragResizeElement.style.left = context.dragResizeElement.offsetLeft - (context.startPosition.x - e.clientX) + "px";    
+        context.startPosition = new Position(e.clientX, e.clientY);   
     }
-    return null;
-  };
+}
+
+
+
   

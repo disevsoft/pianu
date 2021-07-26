@@ -1,21 +1,17 @@
 <template>
 <el-container>
 <div>
-<CfgTest elementId="124"/>
-<CfgTest elementId="123"/>
+
 </div>
 </el-container>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-
-import CfgTest from '../components/configurator/CfgTest.vue'
 import CfgDialog from '../components/configurator/CfgDialog'
 
-
 export default defineComponent({
-  components: {CfgTest},
+  components: {},
   setup() {
     const v = ref('');
     const show = ref(false);

@@ -374,19 +374,19 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.fullSize {
+/* .fullSize {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-}
+} */
 .logger{
   text-align:left;
 }
-/* .full-height{
+.full-height{
     height: 100% !important;  
-  } */
+  }
 /* .el-tabs{
    height: 100% !important;  
   } */

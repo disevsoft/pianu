@@ -12,7 +12,7 @@ export default class CfgDialog
              components: { CfgDialogForm },
              render() {
               console.log('formElementrender');
-              const formElement = h(CfgDialogForm,{modelValue:true, targetElmentId:unique,onClose: () => CfgDialog.onFormClose(unique)})
+              const formElement = h(CfgDialogForm,{modelValue:true, elementId:unique,onClose: () => CfgDialog.onFormClose(unique)})
               
               
             //   //CfgDialog.openedForms.push({elementId:unique, element:formElement});

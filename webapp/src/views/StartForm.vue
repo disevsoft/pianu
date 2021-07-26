@@ -1,7 +1,7 @@
 <template>
 <el-container>
 <div>
-
+<CfgDialogForm :dialogVisible="true" elementId="123"/>
 </div>
 </el-container>
 </template>
@@ -9,9 +9,9 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import CfgDialog from '../components/configurator/CfgDialog'
-
+import CfgDialogForm from '../components/configurator/CfgDialogForm.vue'
 export default defineComponent({
-  components: {},
+  components: {CfgDialogForm},
   setup() {
     const v = ref('');
     const show = ref(false);

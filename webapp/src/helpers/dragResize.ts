@@ -70,7 +70,7 @@ export class RectArea{
 export class DragResize{
     
     private dragResizeElement:any = null;
-    startRectArea:RectArea = new RectArea(0,0,0,0);
+    startRectArea:RectArea =new RectArea(0,0,0,0);
     startPosition:Position = new Position(0,0);
     sizingBorder='';
     dragResizeElementId = '';
@@ -97,13 +97,31 @@ export class DragResize{
         this.draggerMouseDownHandler = ((event:any) => this.draggerMouseDown(event, this));
         const draggers = this.dragResizeElement.getElementsByClassName("drag-header");
         for (let i = 0; i < draggers.length; i++) {
-            const dragger = draggers[i];           
+            const dragger = draggers[i];       
+            console.log(dragger);
             dragger.addEventListener('mousedown', this.draggerMouseDownHandler, false);
         }
     }
 
+
     public static init(dragResizeElementId:string){
         const dragResizer = new DragResize(dragResizeElementId);
+        return dragResizer;
+    }
+
+    public expand(){
+        
+        const clientRect = this.dragResizeElement.getBoundingClientRect();
+        const size:any = this.getComputedStyleSize(this.dragResizeElement);   
+        this.startRectArea = new RectArea(clientRect.left, clientRect.top, size.width, size.height);
+        this.setElementStyle(this.dragResizeElement, 10, 10, 500, 500);
+    }
+    public restore(){
+       this.setElementStyleByRect(this.dragResizeElement, this.startRectArea);       
+    }
+
+    setElementStyleByRect(element:any, rectArea:RectArea){
+        this.setElementStyle(element, rectArea.left, rectArea.top, rectArea.width, rectArea.height);          
     }
     private upZIndex(element:any){
         
@@ -128,19 +146,20 @@ export class DragResize{
 
     sizerMouseDown(e:any, context:DragResize){
 
-        context.upZIndex(context.dragResizeElement);  
-       
+        context.upZIndex(context.dragResizeElement);      
         context.setSizerMouseMoveHandler(context);
         context.setSizerMouseUpHandler(context);
-
         document.addEventListener('mouseup', context.sizerMouseUpHandler, false)
+        context.setStartPosition(context, e);
+        context.sizingBorder = e.target.className;
+    }
+
+    setStartPosition(context:any, e:any){
         const clientRect = context.dragResizeElement.getBoundingClientRect();
         const size:any = context.getComputedStyleSize(context.dragResizeElement);   
         context.startRectArea = new RectArea(clientRect.left, clientRect.top, size.width, size.height);
         context.startPosition = new Position(e.clientX, e.clientY);
-        context.sizingBorder = e.target.className;
     }
-
     sizerMouseMove(e:any, context:DragResize){
         const offsetX = (e.clientX - context.startPosition.x);
         const offsetY = (e.clientY - context.startPosition.y);
@@ -166,17 +185,20 @@ export class DragResize{
           top = context.startRectArea.top + offsetY
           height = context.startRectArea.height - offsetY;    
         }
-        context.dragResizeElement.style.width = width + "px"; 
-        context.dragResizeElement.style.height = height + "px"; 
-        context.dragResizeElement.style.top = top + "px";
-        context.dragResizeElement.style.left = left + "px";
 
+        context.setElementStyle(context.dragResizeElement, left, top, width, height);
         context.startRectArea = new RectArea(left, top, width, height);
         context.startPosition = new Position(e.clientX, e.clientY);      
     }
 
+    setElementStyle(element:any, left:number, top:number, width:number, height:number){
+        element.style.width = width + "px"; 
+        element.style.height = height + "px"; 
+        element.style.top = top + "px";
+        element.style.left = left + "px";    
+    }
     sizerMouseUp(e:any, context:DragResize){
-        console.log('sizerMouseUp');
+       
         document.removeEventListener('mousemove', context.sizerMouseMoveHandler, false);  
         document.removeEventListener('mouseup',context.sizerMouseUpHandler, false); 
         context.sizingBorder = '';
@@ -201,14 +223,11 @@ export class DragResize{
         document.addEventListener('mouseup', context.draggerMouseUpHandler, false)
     }
 
-    draggerMouseDown(e:any, context:DragResize){   
+    draggerMouseDown(e:any, context:DragResize){           
         context.setDraggerMouseMoveHandler(context);
         context. setDraggerMouseUpHandler(context);
         context.upZIndex(context.dragResizeElement);
-        const clientRect = context.dragResizeElement.getBoundingClientRect();
-        const size:any = context.getComputedStyleSize(e.target.parentNode);   
-        context.startRectArea = new RectArea(clientRect.left, clientRect.top, size.width, size.height);
-        context.startPosition = new Position(e.clientX, e.clientY);
+        context.setStartPosition(context, e);
     }
 
     getComputedStyleSize(element:any)

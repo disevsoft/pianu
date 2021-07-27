@@ -1,4 +1,4 @@
-import {getMaxZIndex} from '../components/configurator/dialogUtils';
+import {setMaxZIndex} from '../components/configurator/dialogUtils';
 
 export const Sizers:string[] = [
     'resizeTL',
@@ -122,11 +122,9 @@ export class DragResize{
     setElementStyleByRect(element:any, rectArea:RectArea){
         this.setElementStyle(element, rectArea.left, rectArea.top, rectArea.width, rectArea.height);          
     }
-    private upZIndex(element:any){
-        
-        if(!element){return};
-        let zIndex = getMaxZIndex();
-         element.style.zIndex = "" + ++zIndex;
+    private upZIndex(element:any){       
+       if(!element){return};
+       setMaxZIndex(element);
     };
 
     setSizerMouseMoveHandler(context:DragResize){

@@ -10,3 +10,8 @@ export function getMaxZIndex(){
     }
     return Math.max(highest_index, 100);
   }
+
+  export function setMaxZIndex(element:any){
+    let zIndex =getMaxZIndex()
+    element.style.zIndex= "" + ++zIndex;  
+  }

@@ -45,7 +45,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref,computed } from 'vue';
 import {DragResize, Sizers}  from '../../helpers/dragResize';
-
+import {setMaxZIndex} from './dialogUtils';
 export default defineComponent({ 
     props: { 
         'elementId': String,
@@ -83,6 +83,8 @@ export default defineComponent({
         elementId =(props.elementId as string); 
         show.value = (props.dialogVisible as boolean);
         dragResizer = DragResize.init('VM-'+elementId);
+        const dv = document.getElementById('VM-'+elementId);
+        setMaxZIndex(dv);
       });     
         return {sizers, closeDialog, show, showFullScreen, expanded }
     }
@@ -90,7 +92,7 @@ export default defineComponent({
 </script>
 
 
-<style ang="scss">
+<style lang="scss">
 .display-inline{
   display: inline;
 }

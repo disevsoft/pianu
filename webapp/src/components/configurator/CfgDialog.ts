@@ -11,16 +11,13 @@ export default class CfgDialog
         const formData = CfgDialog.openedForms.get(unique);
         if(formData){
          let zIndex =getMaxZIndex()
-          formData.el.children[0].style.zIndex= "" + ++zIndex;
-          console.log(formData);
-          
+          formData.el.children[0].style.zIndex= "" + ++zIndex;  
           return;
         }
       }
         const appComponent = createApp({
              components: { CfgDialogForm },
              render() {
-              console.log('formElementrender');
               const formElement = h(CfgDialogForm,{dialogVisible:true, elementId:unique, onClose: () => CfgDialog.onFormClose(unique)})            
                CfgDialog.openedForms.set(unique, formElement);
                return formElement;
@@ -30,10 +27,9 @@ export default class CfgDialog
         appComponent.mount(owner);
     }
     static onFormClose(unique:string)
-    { 
-    //   if(unique){  
-    //     const formDataindex = CfgDialog.openedForms.findIndex(el => el.elementId === unique);
-    //     CfgDialog.openedForms.splice(formDataindex,1);
-    //   }
+    {  
+      if(unique){  
+        CfgDialog.openedForms.delete(unique);
+      }
     }
 }

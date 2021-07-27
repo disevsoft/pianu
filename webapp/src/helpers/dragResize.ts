@@ -98,7 +98,6 @@ export class DragResize{
         const draggers = this.dragResizeElement.getElementsByClassName("drag-header");
         for (let i = 0; i < draggers.length; i++) {
             const dragger = draggers[i];       
-            console.log(dragger);
             dragger.addEventListener('mousedown', this.draggerMouseDownHandler, false);
         }
     }

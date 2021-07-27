@@ -63,7 +63,8 @@ export default defineComponent({
       };
 
       const closeDialog=()=> { 
-        show.value = false
+        show.value = false;
+        emit('close');
       };
 
      const showFullScreen=(e:any)=> { 
@@ -77,8 +78,7 @@ export default defineComponent({
       }
 
     };
-
-     
+  
       onMounted(() => {
         elementId =(props.elementId as string); 
         show.value = (props.dialogVisible as boolean);

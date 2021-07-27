@@ -33,9 +33,9 @@
         </i>
         </span>      
     </el-header>
-    <el-main>
-    <!-- <component :is="currentComponent"/>  -->
-    </el-main>
+    <div class="fullHeight">
+      <component :is="currentComponent"/> 
+    </div>
     </el-container>
     <i v-for="sizer in sizers()" :key="sizer" :class= "'resize ' + sizer"></i>
   </div>
@@ -43,10 +43,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref,computed } from 'vue';
+import { defineComponent, onMounted, ref,computed,markRaw } from 'vue';
 import {DragResize, Sizers}  from '../../helpers/dragResize';
 import {setMaxZIndex} from './dialogUtils';
+import CfgChooseTypeForm from './CfgChooseTypeForm.vue'
 export default defineComponent({ 
+  data: function () {
+      return {
+        currentComponent: markRaw(CfgChooseTypeForm),
+      }
+    },
     props: { 
         'elementId': String,
         'dialogVisible': Boolean, 
@@ -68,7 +74,7 @@ export default defineComponent({
       };
 
      const showFullScreen=(e:any)=> { 
-       e.stopPropagation();
+      e.stopPropagation();
       expanded.value = !expanded.value;   
       if(!dragResizer){return;}
       if(expanded.value){
@@ -76,7 +82,6 @@ export default defineComponent({
       }else{
         dragResizer.restore();
       }
-
     };
   
       onMounted(() => {
@@ -85,7 +90,8 @@ export default defineComponent({
         dragResizer = DragResize.init('VM-'+elementId);
         const dv = document.getElementById('VM-'+elementId);
         setMaxZIndex(dv);
-      });     
+      });  
+         
         return {sizers, closeDialog, show, showFullScreen, expanded }
     }
 })

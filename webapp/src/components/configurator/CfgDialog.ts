@@ -2,11 +2,12 @@ import { createApp, h } from 'vue'
 import ElementPlus from 'element-plus';
 import CfgDialogForm from './CfgDialogForm.vue'
 import {setMaxZIndex} from './dialogUtils'
+import FormEvents from '../../helpers/formEvents'
 export default class CfgDialog
 {
     static openedForms = new Map();
     public static showDialog(owner:any, unique:string){
-      console.log('showDialog');
+
       if(unique){
         const formElement = CfgDialog.openedForms.get(unique);
         if(formElement){
@@ -14,10 +15,12 @@ export default class CfgDialog
           return;
         }
       }
+        const formEvents = new FormEvents(unique);
+        formEvents.on('afterClose', CfgDialog.afterFormClose);
         const appComponent = createApp({
              components: { CfgDialogForm },
-             render() {
-              const formElement:any = h(CfgDialogForm,{dialogVisible:true, elementId:unique, onClose: () => CfgDialog.onFormClose(unique)})            
+             render() {     
+              const formElement:any = h(CfgDialogForm,{dialogVisible:true, elementId:unique, formEvents:formEvents});            
                CfgDialog.openedForms.set(unique, formElement);
                return formElement;
              }
@@ -25,10 +28,12 @@ export default class CfgDialog
         appComponent.use(ElementPlus) 
         appComponent.mount(owner);
     }
-    static onFormClose(unique:string)
-    {  
-      if(unique){  
-        CfgDialog.openedForms.delete(unique);
+
+    private static afterFormClose(evetArgs:any){
+      console.log('afterFormClose');
+      
+      if(evetArgs.elementId){
+        CfgDialog.openedForms.delete(evetArgs.elementId);
       }
     }
 }

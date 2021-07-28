@@ -191,7 +191,8 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      console.log('mounted!')
+       EventBus.on('dataChanged', dataChanged); // 1
+      EventBus.on('apiLog', apiLog);
     });
     const currentTabComponent = computed(() => {
       return СfgPropertyEditor;
@@ -366,10 +367,7 @@ export default defineComponent({
       onLogOut
     };
   },
-   mounted() {
-    EventBus.on('dataChanged', this.dataChanged); // 1
-     EventBus.on('apiLog', this.apiLog);
-  },
+  
 });
 </script>
 

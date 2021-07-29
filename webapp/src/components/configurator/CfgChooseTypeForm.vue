@@ -1,11 +1,11 @@
 <template>
     <el-container>
         <el-main>
-            <el-tree ref="metaDataTree" :data="nodes" :expand-on-click-node="false"   
+            <el-tree ref="tree" :data="nodes" :expand-on-click-node="false"   
                 :props="defaultTreeProps" show-checkbox :check-strictly="true" 
                 :node-key="elementId"
                 @check-change="checkChange"
-                class="ht">
+                >
             </el-tree>
         </el-main>
         <el-footer>
@@ -64,7 +64,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.ht{
-    
-}
+
+
 </style>

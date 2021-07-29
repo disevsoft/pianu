@@ -3,6 +3,7 @@ import ElementPlus from 'element-plus';
 import CfgDialogForm from './CfgDialogForm.vue'
 import {setMaxZIndex} from './dialogUtils'
 import FormEvents from '../../helpers/formEvents'
+
 export default class CfgDialog
 {
     static openedForms = new Map();

@@ -2,10 +2,11 @@ import BaseMeta from '../metadata/basemeta.class';
 import {Metadata} from '../metadata/metadata.class'
 import ResponseArgs from '../helpers/responseArgs'
 import * as mdHelper from '../helpers/mdObjectHelper'
+
 export async function processCommand(req:any, res:any)
  {
     let body = req.body;
-    const commandName = body.command;
+    const commandName = body.commandName;
     const options = body.options;
     if (!commandName){
         res.status(500).send('there is no command to process');
@@ -31,6 +32,13 @@ async function getMdObjectsList(options: any, resArgs:ResponseArgs){
     resArgs.resData = t;  
     return true;
 }; 
+
+async function getMdTypesList(options: any, resArgs:ResponseArgs){
+    const t = await mdHelper.getMdTypesList();  
+    resArgs.resData = t;  
+    return true;
+}; 
+ 
 
 export async function getMdObjectData(options: any, resArgs:ResponseArgs){
     const mdTypeId = options.mdTypeId;
@@ -95,7 +103,8 @@ const processors: { [K: string]: Function } = {
     getMdObject:getMdObjectData,
     saveMdObject:saveMdObject,
     initConfigModel:initConfigModel,
-    deleteMdObject:deleteMdObject
+    deleteMdObject:deleteMdObject,
+    getMdTypesList:getMdTypesList
 };
 
 

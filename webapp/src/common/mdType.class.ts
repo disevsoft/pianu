@@ -1,32 +1,48 @@
-export default class MdType{
-    id: string;
-    name:string = '';
-    listName:string = '';
-    synonym:string = '';
-    listSynonym:string = '';
-    tableName:string = '';
-    className:string = '';
-    isMdType:boolean = false;
+import {ApiCommandArgs, ApiMain} from '../services/app/api.service'
+import { MdTypes } from './MdTypes';
+
+export class MdType{
+    
+    id ='';
+    name = '';
+    listName = '';
+    synonym = '';
+    listSynonym = '';
+    tableName = '';
+    className = '';
+    isMdType = false;
     hasLength = false;
     hasFraction = false;
-    databasType:string = '';
+    databasType = '';
     order = 0;
-    private static _mdTypes:Map<String, MdType> = new Map();
+    fieldType = false;
+
+    private static _mdTypes:Array<MdType> =[];
 
     private constructor(id:string){
         this.id = id;
     }
-    public static async getMdType(mdTypeId:string){
+    
 
-        if(!MdType._mdTypes.get(mdTypeId)){
-            await MdType.loadType(mdTypeId);
-        }
-        return MdType._mdTypes.get(mdTypeId);
-    } 
-
-    private static async loadType(mdTypeId:string) 
+    private static async loadTypes() 
     {
-        
-        //MdType._mdTypes.set(mdTypeId, mdType);
+        if(MdType._mdTypes.length===0){
+            const apiCommandArgs = new ApiCommandArgs("getMdTypesList", {})
+            const data = await ApiMain.execApiCommand(apiCommandArgs);
+            for (const element of data) {
+                const mdType = new MdType(element.id);
+                for (const key in mdType) {
+                    (mdType as any)[key] = element[key];
+                }  
+                MdType._mdTypes.push(mdType)  
+            }
+            MdType._mdTypes.sort((n1,n2) => n1.order - n2.order );
+        }
     }   
+
+    public static async getTypes() 
+    {
+        await MdType.loadTypes();
+        return MdType._mdTypes;    
+    }  
 }

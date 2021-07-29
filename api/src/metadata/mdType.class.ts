@@ -57,4 +57,18 @@ export default class MdType{
         });
         MdType._mdTypes.set(mdTypeId, mdType);
     }   
+
+    private static async fetchTypes(){
+        const mdTypeModel = await md_types.findAll();
+        if(!mdTypeModel){return;}
+        for (let element of mdTypeModel){
+            await MdType.getMdType(element.id)    
+        } 
+    }
+
+    public static async getAllTypes() 
+    {
+        await MdType.fetchTypes();
+        return Array.from(MdType._mdTypes.values());
+    }   
 }

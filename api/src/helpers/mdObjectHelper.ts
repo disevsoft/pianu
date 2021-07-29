@@ -23,7 +23,7 @@ export async function getModelData(modelName:string, mdObjectId:string){
         return undefined;
     }
     const mdModel = await getMdModel(modelName);  
-    const mdModelData:any = await GetModelDataFromDB(mdModel, mdObjectId);
+    const mdModelData:any = await getModelDataFromDB(mdModel, mdObjectId);
     return mdModelData;    
 } 
 
@@ -32,11 +32,10 @@ export async function getMdModel(modelName:string){
     return mdModel; 
 }
 
-export async function GetModelDataFromDB(mdModel:any, mdObjectId:string){
+export async function getModelDataFromDB(mdModel:any, mdObjectId:string){
     const mdModelData:any = await mdModel.findOne({ where: { id: mdObjectId } });
     return mdModelData;
 } 
-
 
 export class DynamicClass {  
 
@@ -54,7 +53,7 @@ export async function getInstanceById(mdObjectId:string) {
 
     if(!mdTypeIdModel || !mdTypeIdModel['md_type_id']) {return undefined};
     const mdType:MdType|undefined = await MdType.getMdType(mdTypeIdModel['md_type_id']); 
-    if(!mdType){return undefined}
+    if(!mdType || !mdType.isMdType){return undefined}
     return getInstance(mdType.className, mdObjectId);
 }
 
@@ -89,7 +88,14 @@ export async function getObjectsList(mdTypeId:string, parentId:string){
     return filteredObjects;  
 }
 
+export async function getMdTypesList(){
+   
+    return MdType.getAllTypes();
+
+}
+
 export async function fetchChildrenData(mdType:MdType, parentId:string) {
+    if(!mdType.tableName){return}
     const mdModel =  await require('../database/config/models/'+mdType.tableName)[mdType.tableName];
     if (!mdModel){
         console.log('model not found ' + mdType.tableName);
@@ -102,6 +108,7 @@ export async function fetchChildrenData(mdType:MdType, parentId:string) {
     } 
 }
 export async function fetchAllData(mdType:MdType) {
+    if(!mdType.tableName){return}
     const mdModel =  await require('../database/config/models/'+mdType.tableName)[mdType.tableName];
     if (!mdModel){
         console.log('model not found ' + mdType.tableName);

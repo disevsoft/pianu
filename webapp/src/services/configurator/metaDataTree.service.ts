@@ -3,9 +3,8 @@ import {mdTreeSubfolders} from "@/configs/configurator/mdTreeSubFolders.config";
 import { uuid } from "vue-uuid";
 import { NodeType } from "@/configs/configurator/mdTree.config";
 export { NodeType as NodeType };
-import EventBus from '../../components/configurator/CfgEventBus';
-import {authHeader} from '../../helpers/authHeader';
-
+import {ApiCommandArgs, ApiMain} from '../app/api.service'
+import {MdType} from '../../common/mdType.class'
 class TreeHelper {
   public static getMdTreeRoot() {
     const confNodes = config;
@@ -25,23 +24,17 @@ class TreeHelper {
     return nodes;
   }
 
-  private static async getMdObjectsList(nodeData: NodeData){
-    const queryParam = {
-      command: "getMdObjectsList",
-      options: {
-        mdTypeId: nodeData.mdTypeId,
-        parentId: nodeData.parentId,
-      }, 
-    };
-    const data = await TreeHelper.postMd(queryParam);
-    const nodes = TreeHelper.prepareNodeData(data, NodeType.MdObject);    
+  private static async getMdObjectsList(nodeData: NodeData){ 
+    const apiCommandArgs = new ApiCommandArgs("getMdObjectsList", {mdTypeId: nodeData.mdTypeId, parentId: nodeData.parentId})
+    const data = await ApiMain.execApiCommand(apiCommandArgs);
+    const nodes = await TreeHelper.prepareNodeData(data, NodeType.MdObject);    
     return nodes;
   }
 
   private static async getMdObjectSubfolder(nodeData: NodeData){
     const data =  await mdTreeSubfolders[nodeData.mdTypeId](nodeData.mdTypeId, nodeData.id);
     if(!data){return []};
-    const nodes = TreeHelper.prepareNodeData(data, NodeType.MdObjectFolder);    
+    const nodes = await TreeHelper.prepareNodeData(data, NodeType.MdObjectFolder);    
     return nodes;
   }
 
@@ -60,75 +53,51 @@ class TreeHelper {
   }
 
   public static async getMdObjectData(targetNode: any) {   
-    const queryParam = {
-      command: "getMdObject",
-      options: {
-        mdTypeId: targetNode.mdTypeId,
-        mdObjectId: targetNode.id,
-        parentId:targetNode.parentId
-      },
-    };       
-    return await TreeHelper.postMd(queryParam);
+    const apiCommandArgs = new ApiCommandArgs("getMdObject", {mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id, parentId:targetNode.parentId})
+    const data = await ApiMain.execApiCommand(apiCommandArgs); 
+    return data;
   }
 
-  public static async saveMdObjectData(mdObjectData: any) {
-    const queryParam = {
-      command: "saveMdObject",
-      options: {
-        mdObject: mdObjectData,
-      },
+  public static async getMdTypes() {   
+  
+    const data = await MdType.getTypes(); 
+    const typesArray:Array<any> = [];
+    if(!data) return;
+    for await (const elem of data) { 
+      const node = new NodeData(NodeType.MdRootType, elem.id, elem.id, elem.name, '', false, false);
+      const children = await TreeHelper.getMdObjectsList(node);
+      node.children = children;
+      typesArray.push(node);
     };
-    const data = await TreeHelper.postMd(queryParam);    
+    return typesArray;
+  }
+
+  public static async saveMdObjectData(mdObjectData: any) {   
+    const apiCommandArgs = new ApiCommandArgs("saveMdObject", { mdObject: mdObjectData})
+    const data = await ApiMain.execApiCommand(apiCommandArgs); 
     return data;
   }
 
   public static async deleteMdObject(targetNode: any) {   
-    const queryParam = {
-      command: "deleteMdObject",
-      options: {
-        mdTypeId: targetNode.mdTypeId,
-        mdObjectId: targetNode.id,
-      },
-    };    
-    return await TreeHelper.postMd(queryParam);
-  }
-
-  private static async getHeaders(){
-    const headers:Headers = authHeader();
-    headers.set('Content-Type', 'application/json');
-    return headers;
-  } 
-  
-  private static async postMd(queryParam: any) {
-    const headers = await TreeHelper.getHeaders();
-    const response = await fetch("/api/md", {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(queryParam),
-    });
-    
-    const resData = await response.json();  
-    EventBus.emit('apiLog', resData.info);
-    return resData.data;
-  }
-
-  static async initModel(){
-    const queryParam = {
-      command: "initConfigModel",
-      options: {
-        force: false,
-      },
-    };
-    const data = await TreeHelper.postMd(queryParam);    
+   
+    const apiCommandArgs = new ApiCommandArgs("deleteMdObject", { mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id})
+    const data = await ApiMain.execApiCommand(apiCommandArgs); 
     return data;
   }
 
-  static prepareNodeData(nodeData: any, nodeType: NodeType) {
+  static async initModel(){
+   
+    const apiCommandArgs = new ApiCommandArgs("initConfigModel", { force: false})
+    const data = await ApiMain.execApiCommand(apiCommandArgs); 
+    return data;
+  }
+
+  static async prepareNodeData(nodeData: any, nodeType: NodeType) {
     if(!nodeData){
       return[];
     }
     const nodes: Array<NodeData> = [];
-    nodeData.forEach((elData: any) => {
+    await nodeData.forEach((elData: any) => {
       const element = elData;
       nodes.push(
         new NodeData( 
@@ -187,6 +156,7 @@ class NodeData {
   parentId = "";
   nodeType = NodeType.MdObject;
   mdTypeId = "";
+  children:Array<NodeData>=[];
   constructor(
     nodeType: NodeType,
     mdTypeId: string,

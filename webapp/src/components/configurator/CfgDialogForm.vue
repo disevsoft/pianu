@@ -33,9 +33,9 @@
         </i>
         </span>      
     </el-header>
-    <div class="fullHeight">
+    <!-- <div class="fullHeight"> -->
       <component :is="currentComponent" :formEvents="currentProperties()"/> 
-    </div>
+    <!-- </div> -->
     </el-container>
     <i v-for="sizer in sizers()" :key="sizer" :class= "'resize ' + sizer"></i>
   </div>
@@ -102,7 +102,9 @@ export default defineComponent({
         elementId =(props.elementId as string); 
         show.value = (props.dialogVisible as boolean);
         formEvents = (props.formEvents as FormEvents);
-        formEvents.on('onClose', onCloseDialog);
+        if(formEvents){
+          formEvents.on('onClose', onCloseDialog);
+        }
         dragResizer = DragResize.init('VM-'+elementId);
         const dv = document.getElementById('VM-'+elementId);
         setMaxZIndex(dv);
@@ -118,16 +120,14 @@ export default defineComponent({
 .display-inline{
   display: inline;
 }
-.fill{
-  display: contents
-}
+
 .form-header-buttons{
   float: right;
   width:48px;
 }
 .form-header-caption{
   text-align:left;
- width:100%;
+  width:100%;
 }
 
 .dialog-form-header {
@@ -143,7 +143,7 @@ export default defineComponent({
 }
 
 .dialog-form{
-  height:300px;
+  height:450px;
   width:300px;
   position: fixed !important;
 }

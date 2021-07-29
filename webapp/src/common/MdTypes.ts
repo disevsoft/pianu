@@ -47,3 +47,4 @@ export function getTypeIconName(mdType:MdTypes) {
       }
       return iconName;
 }
+

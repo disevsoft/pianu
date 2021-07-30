@@ -2,6 +2,8 @@ import BaseMeta from './basemeta.class'
 
 import MdTypeField from './mdTypeField.class'
 export default class MdCatalog extends BaseMeta{
+    isHierarchical = false;
+    hierarchicalLevels = 0;
     constructor(id:string){
         
         super(id);
@@ -13,5 +15,6 @@ export default class MdCatalog extends BaseMeta{
         this.mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
         this.mdFields.push(new MdTypeField('isHierarchical',"Boolean", false, false, false, "is_hierarchical"));
         this.mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
+        this.mdFields.push(new MdTypeField('hierarchicalLevels',"Boolean", 0, 0, false, "hierarchical_levels"));
     }
 }

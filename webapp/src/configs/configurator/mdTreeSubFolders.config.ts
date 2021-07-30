@@ -1,4 +1,4 @@
-import {MdTypes} from '../../common/MdTypes'
+import {MdTypes} from '../../metadata/MdTypes'
 import {NodeType} from '../configurator/mdTree.config';
 
 
@@ -11,7 +11,7 @@ const tablesSubFolder =  {
     nodeType: NodeType.MdObjectFolder,
     parentId: undefined,
     synonym: "Таблица",
-    
+   
 };
 const webFormsSubFolder = {
     canAdd: true,

@@ -13,6 +13,7 @@
 import { defineComponent, ref, computed, onMounted } from "vue";
 import CfgDialog from './CfgDialog'
 import { uuid } from "vue-uuid";
+import EventBus from './CfgEventBus';
 export default defineComponent({
     props: { 
         'modelValue': [String, Number, Boolean, Array], 
@@ -23,7 +24,15 @@ export default defineComponent({
         const disabled = ref(false);
         onMounted(() => {
             elementId.value = uuid.v4();
+            EventBus.on('dataChoosed', dataChoosed);
         });
+
+        const dataChoosed=async(eventArgs:any)=>{
+            if (eventArgs.elementId === elementId.value){
+                console.log(eventArgs);
+            }
+            
+        }
         const displayValue = computed({ 
             get: () => props.modelValue, 
             set: (value) => emit('update:modelValue', value) 

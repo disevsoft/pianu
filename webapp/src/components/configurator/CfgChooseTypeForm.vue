@@ -1,7 +1,7 @@
 <template>
-    <el-container>
-        <el-main>
-            <el-tree ref="tree" :data="nodes" :expand-on-click-node="false"   
+    <el-container >
+        <el-main class="height200">
+            <el-tree ref = "chooseTypeTree" id="chooseTypeTree" :data="nodes" :expand-on-click-node="false"   
                 :props="defaultTreeProps" show-checkbox :check-strictly="true" 
                 :node-key="elementId"
                 @check-change="checkChange"
@@ -19,6 +19,7 @@
 import { defineComponent, onMounted, ref} from 'vue'
 import FormEvents from '../../helpers/formEvents'
 import TreeService from '../../services/configurator/metaDataTree.service'
+import { ElTree } from "element-plus";
 export default defineComponent({
     props: { 
         'elementId': String,
@@ -31,8 +32,14 @@ export default defineComponent({
             label: "name",
             };
         const nodes = ref([]);
+        const chooseTypeTree = ref(ElTree);
         const onOkButtonClick=()=>{
-            console.log('ok');          
+             let checkedNodes = chooseTypeTree.value.getCheckedNodes();
+              const choosedData:Array<any> = [];
+             for(let item of checkedNodes) {
+                 choosedData.push(item.id);    
+             }  
+             formEvents.close(choosedData);       
         }
 
         const onCancelButtonClick=()=>{
@@ -40,13 +47,13 @@ export default defineComponent({
         }
 
         const checkChange = ()=>{
-            // let checkedNodes = this.$refs.metaDataTree.getCheckedNodes();
-            // const choosedData = [];
-            // for(let item of checkedNodes) {
-            //     choosedData.push(item.id);    
-            // }
-            // this.$emit('dataChoosen', choosedData);
-            console.log('checkChange');
+            //  let checkedNodes = chooseTypeTree.value..getCheckedNodes();
+            //  const choosedData = [];
+            //  for(let item of checkedNodes) {
+            //      choosedData.push(item.id);    
+            //  }
+            
+            //console.log('checkChange');
             
         };
         // const beforeClose=(eventArgs:any)=>{
@@ -58,12 +65,14 @@ export default defineComponent({
         (nodes.value as any) = await TreeService.TreeHelper.getMdTypes();
         //formEvents.on('beforeClose', beforeClose);
       });  
-        return {onOkButtonClick, onCancelButtonClick, nodes, defaultTreeProps, checkChange}
+        return {onOkButtonClick, onCancelButtonClick, nodes, defaultTreeProps, checkChange, chooseTypeTree}
     }
 })
 </script>
 
 <style lang="scss">
-
+.height200{
+     height:200px !important;
+}
 
 </style>

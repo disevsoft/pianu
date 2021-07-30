@@ -3,7 +3,7 @@ import ElementPlus from 'element-plus';
 import CfgDialogForm from './CfgDialogForm.vue'
 import {setMaxZIndex} from './dialogUtils'
 import FormEvents from '../../helpers/formEvents'
-
+import EventBus from './CfgEventBus';
 export default class CfgDialog
 {
     static openedForms = new Map();
@@ -30,11 +30,10 @@ export default class CfgDialog
         appComponent.mount(owner);
     }
 
-    private static afterFormClose(evetArgs:any){
-      console.log('afterFormClose');
-      
-      if(evetArgs.elementId){
-        CfgDialog.openedForms.delete(evetArgs.elementId);
+    private static afterFormClose(eventArgs:any){
+      EventBus.emit('dataChoosed', eventArgs);
+      if(eventArgs.elementId){
+        CfgDialog.openedForms.delete(eventArgs.elementId);
       }
     }
 }

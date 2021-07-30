@@ -1,4 +1,4 @@
-import {MdTypes} from '../../common/MdTypes'
+import {MdTypes} from '../../metadata/MdTypes'
 
 export enum NodeType {
   MdRootType =0,

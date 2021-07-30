@@ -4,8 +4,18 @@ import {md_objects_types} from '../database/config/models/md_objects_types'
 import {md_types} from '../database/config/models/md_types'
 import {md_map} from '../database/config/models/md_map'
 import {createDefaultUser} from '../services/user.service'
-
 import db from '../database/config/sequilize.metadata'
+
+export class DynamicClass {  
+
+    constructor(className: string, opts: any) {
+        const Store = require('../metadata/mdStore').Store;
+        if (Store[className] === undefined || Store[className] === null) {
+            throw new Error(`Class type of \'${className}\' is not in the store`);
+        } 
+        return new Store[className](opts); 
+    } 
+}
 
 export async function loadFromModelData(mdObject:any, modelData:any){
     for (let mdField of mdObject.mdFields) {
@@ -36,17 +46,6 @@ export async function getModelDataFromDB(mdModel:any, mdObjectId:string){
     const mdModelData:any = await mdModel.findOne({ where: { id: mdObjectId } });
     return mdModelData;
 } 
-
-export class DynamicClass {  
-
-    constructor(className: string, opts: any) {
-        const Store = require('../metadata/mdStore').Store;
-        if (Store[className] === undefined || Store[className] === null) {
-            throw new Error(`Class type of \'${className}\' is not in the store`);
-        } 
-        return new Store[className](opts); 
-    } 
-}
 
 export async function getInstanceById(mdObjectId:string) {
     const mdTypeIdModel:any= await md_objects_types.findOne({ attributes: ['md_type_id'], where: {md_object_id:mdObjectId}});

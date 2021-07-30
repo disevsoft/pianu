@@ -25,7 +25,6 @@
       </el-table>
     </el-main>
     <el-footer class="footer">
-      <!-- <el-row> -->
       <el-button
         el-button
         type="info"
@@ -34,7 +33,6 @@
         @click="onSave"
         >Save</el-button
       >
-      <!-- </el-row> -->
     </el-footer>
   </el-container>
 </template>

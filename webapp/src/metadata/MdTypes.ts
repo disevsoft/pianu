@@ -1,4 +1,5 @@
 export enum MdTypes{
+    None = '0000000000000000000000000',
     Catalog = '834cd9ad-9720-4fc5-aa09-cef6f7a895a0',
     Document = 'cc94220b-20f8-4a63-9f29-d02fe64ba918',
     Table = '0cf72dda-2547-4333-aec0-c852d2f3f235',

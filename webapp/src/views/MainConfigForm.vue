@@ -3,7 +3,7 @@
     <Splitpanes class="default-theme" vertical>
       <Pane :size="30">
         <el-container class="full-height">
-          <el-header> 
+          <el-header class="form-header"> 
           </el-header>
           <el-main>
             <el-tree
@@ -75,7 +75,7 @@
       </Pane>
       <Pane>
         <el-container class="full-height">
-          <el-header style="text-align: right; font-size: 12px" > 
+            <el-header  class="form-header" style="text-align: right; font-size: 12px; display: inline !important">
             <el-dropdown trigger="click" style= "cursor:pointer">
               <i class="el-icon-setting" style="margin-right: 15px"></i>
               <template #dropdown>
@@ -161,7 +161,7 @@ import { uuid } from "vue-uuid";
 import СfgPropertyEditor from "../components/configurator/СfgPropertyEditor.vue";
 import EventBus from '../components/configurator/CfgEventBus';
 import {NodeType} from '../configs/configurator/mdTree.config';
-import {getTypeIconName} from '../common/MdTypes'
+import {getTypeIconName} from '../metadata/MdTypes'
 import { useStore } from 'vuex'
 
 export default defineComponent({

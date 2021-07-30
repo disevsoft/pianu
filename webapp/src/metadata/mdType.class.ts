@@ -1,9 +1,9 @@
 import {ApiCommandArgs, ApiMain} from '../services/app/api.service'
 import { MdTypes } from './MdTypes';
 
-export class MdType{
+export default class MdType{
     
-    id ='';
+    id =MdTypes.None;
     name = '';
     listName = '';
     synonym = '';
@@ -16,13 +16,18 @@ export class MdType{
     databasType = '';
     order = 0;
     fieldType = false;
-
+    cached = false;
     private static _mdTypes:Array<MdType> =[];
 
     private constructor(id:string){
-        this.id = id;
+        this.id = (id as MdTypes);
     }
     
+    public static async getType(mdTypeId:MdTypes){
+        await MdType.loadTypes();
+        const mdType = MdType._mdTypes.find((elem)=> elem.id === mdTypeId);
+        return mdType;
+    }
 
     private static async loadTypes() 
     {

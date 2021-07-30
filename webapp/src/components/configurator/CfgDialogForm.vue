@@ -3,7 +3,7 @@
 <div class="fullSize dialog-form" :id="'VM-'+elementId">
   <el-container class="shadow-borders">
     <el-header
-        class="dialog-form-header"
+        class="form-header dialog-form-header"
         id="modalTitle">
         <div class="drag-header display-inline form-header-caption">
         <slot name="header" >
@@ -124,6 +124,7 @@ export default defineComponent({
 .form-header-buttons{
   float: right;
   width:48px;
+  cursor:pointer;
 }
 .form-header-caption{
   text-align:left;
@@ -131,11 +132,7 @@ export default defineComponent({
 }
 
 .dialog-form-header {
-  display: flex;
-  height: 46px !important;
   background: #F2F6FC !important;
-  line-height: 38px;
-  font-size: 20px;
 }
 .shadow-borders{
   -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.12),0 0 6px rgba(0,0,0,0.04);
@@ -143,8 +140,10 @@ export default defineComponent({
 }
 
 .dialog-form{
-  height:450px;
+  height:300px;
   width:300px;
+  min-height:300px;
+  min-width:300px;
   position: fixed !important;
 }
 .el-main{

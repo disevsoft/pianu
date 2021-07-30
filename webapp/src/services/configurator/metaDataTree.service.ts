@@ -4,7 +4,9 @@ import { uuid } from "vue-uuid";
 import { NodeType } from "@/configs/configurator/mdTree.config";
 export { NodeType as NodeType };
 import {ApiCommandArgs, ApiMain} from '../app/api.service'
-import {MdType} from '../../common/mdType.class'
+import MdType from '../../metadata/mdType.class'
+import * as MdHelper from '../../metadata/mdHelper'
+import { MdTypes } from "@/metadata/MdTypes";
 class TreeHelper {
   public static getMdTreeRoot() {
     const confNodes = config;
@@ -25,8 +27,7 @@ class TreeHelper {
   }
 
   private static async getMdObjectsList(nodeData: NodeData){ 
-    const apiCommandArgs = new ApiCommandArgs("getMdObjectsList", {mdTypeId: nodeData.mdTypeId, parentId: nodeData.parentId})
-    const data = await ApiMain.execApiCommand(apiCommandArgs);
+    const data = await MdHelper.getMdObjects(nodeData.mdTypeId, nodeData.parentId);    
     const nodes = await TreeHelper.prepareNodeData(data, NodeType.MdObject);    
     return nodes;
   }
@@ -155,7 +156,7 @@ class NodeData {
   canEdit = false;
   parentId = "";
   nodeType = NodeType.MdObject;
-  mdTypeId = "";
+  mdTypeId = MdTypes.None;
   children:Array<NodeData>=[];
   constructor(
     nodeType: NodeType,
@@ -173,7 +174,7 @@ class NodeData {
     this.elementId = uuid.v4();
     this.canAdd = canAdd;
     this.canEdit = canEdit;
-    this.mdTypeId = mdTypeId;
+    this.mdTypeId = (mdTypeId as MdTypes);
   }
 }
 export default { NodeData, TreeHelper }; 

@@ -5,7 +5,7 @@
     <el-input v-model="ruleForm.email"></el-input>
   </el-form-item>
   <el-form-item label="Password" prop="password">
-    <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+    <el-input type="password" v-model="ruleForm.password" autocomplete="off" @keyup="passwordKeyUp"></el-input>
   </el-form-item>
     <el-collapse-transition>
         <div v-show="alert.message" class="transition-box alert-message">{{alert.message}}</div>
@@ -41,6 +41,11 @@ export default defineComponent({
                 { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }
                 ]
         };
+        const passwordKeyUp=(e:any)=>{
+          if(e.key === "Enter"){
+            submitForm('ruleForm');           
+          }
+        };
         const submitForm=async (formName:string)=> {
             await loginForm.value.validate((valid:boolean) => {
             if (valid) {
@@ -53,7 +58,7 @@ export default defineComponent({
             });
         };
 
-      return {submitForm, ruleForm, loginForm, rules, alert}
+      return {submitForm, ruleForm, loginForm, rules, alert, passwordKeyUp}
     },
 })
 </script>

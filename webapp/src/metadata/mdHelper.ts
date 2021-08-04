@@ -45,15 +45,16 @@ async function loadMdObjects(mdTypeId:MdTypes, parentId:string){
     const data = await ApiMain.execApiCommand(apiCommandArgs);
     
     for await (const iterator of data) {
-        const newObject:any =  new DynamicClass(mdType.className, iterator.mdId);            
-        await loadObjectFromData(newObject, iterator);        
+        const newObject:any =  new DynamicClass(mdType.className, iterator.mdId);           
+        await loadObjectFromData(newObject, iterator);    
         BaseMeta.mdObjects.push(newObject);
     }   
     mdType.cached = true;
 }
 
-async function loadObjectFromData(mdObject:any, data:any){
+async function loadObjectFromData(mdObject:any, data:any){ 
     for (const key in mdObject) {
+        if(key ==='id'){continue}
         (mdObject as any)[key] = data[key];
     }  
 };

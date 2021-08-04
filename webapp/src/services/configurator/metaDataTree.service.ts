@@ -80,6 +80,7 @@ class TreeHelper {
   }
 
   public static async deleteMdObject(targetNode: any) {   
+   console.log(targetNode);
    
     const apiCommandArgs = new ApiCommandArgs("deleteMdObject", { mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id})
     const data = await ApiMain.execApiCommand(apiCommandArgs); 
@@ -104,7 +105,7 @@ class TreeHelper {
         new NodeData( 
           nodeType,
           element.typeId,
-          element.mdId,
+          element.id,
           element.name,
           element.parentId,
           TreeHelper.nodeSupportAdd(nodeType),

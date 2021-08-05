@@ -7,8 +7,8 @@ import * as mdHelper from '../helpers/mdObjectHelper'
 import SaveMdObjectArgs from '../helpers/saveMdObjectArgs'
 
 export default class BaseMeta{
-    private mdId: string = '';
-    mdFields:Array<MdTypeField> = [];
+    id: string = '';
+    
     typeId:string = '';
     modelName:string='';
     typeName:string = '';
@@ -16,35 +16,46 @@ export default class BaseMeta{
     synonym:string = '';
     parentId:string = '';
     constructor(id:string){
-        this.mdFields.push(new MdTypeField('id', "UUID", "", id, true, 'id'));
-        this.mdFields.push(new MdTypeField('name', "char(150)", "", "", false, "name"));
-        this.mdFields.push(new MdTypeField('synonym', "char(150)", "", "", false, "synonym"));
-        this.mdFields.push(new MdTypeField('parentId', "char(150)", "", "", true, ""));
         this.id = id;
     }
     public static mdObjects: Array<BaseMeta> =[];
    
-    public set id(value : string) {
-        this.mdId = value;
-        var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='id'));
-        if(idFieldIndex >= 0){ 
-            this.mdFields[idFieldIndex].value = this.mdId;
-        }
-    };
+    // public set id(value : string) {
+    //     this.mdId = value;
+    //     var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='id'));
+    //     if(idFieldIndex >= 0){ 
+    //         this.mdFields[idFieldIndex].value = this.mdId;
+    //     }
+    // };
 
-    // public get mdFields(){
+    public get mdFields(){
+        let mdFields:Array<MdTypeField> = [];
+        mdFields.push(new MdTypeField('id', "UUID", "", this.id, true, 'id'));
+        mdFields.push(new MdTypeField('name', "char(150)", "", "", false, "name"));
+        mdFields.push(new MdTypeField('synonym', "char(150)", "", "", false, "synonym"));
+        mdFields.push(new MdTypeField('parentId', "char(150)", this.parentId, "", true, ""));
+        return mdFields;
+    }
+    // public get id() { 
+    //     return this.mdId;  
+    // };
 
-    // }
-    public get id() { 
-        return this.mdId;  
-    };
+    public getFields(){
+        const fields = this.mdFields;
+        for (let mdField of fields) {
+            if(mdField.fieldMap){
+                mdField.value = (<any>this)[mdField.name];
+                }
+            }
+        return fields;
+    }
 
-    async setParentId(parentId:string){
+    async setParentId(parentId:string){ 
         this.parentId = parentId;
-        var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='parentId'));
-        if(idFieldIndex >= 0){ 
-            this.mdFields[idFieldIndex].value = this.parentId;
-        }    
+        // var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='parentId'));
+        // if(idFieldIndex >= 0){ 
+        //     this.mdFields[idFieldIndex].value = this.parentId;
+        // }    
     }
     async beforeSave(saveMdObjectArgs: SaveMdObjectArgs){
 

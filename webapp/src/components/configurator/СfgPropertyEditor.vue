@@ -59,7 +59,7 @@ export default defineComponent({
       const data = await TreeService.TreeHelper.getMdObjectData(
         props.mdObjectDescr
       );
-      mdObjectData.value = data;
+      mdObjectData.value = (data as any);
       dataLoadingComplete.value = true;
     };
 

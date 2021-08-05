@@ -9,8 +9,13 @@ export default class MdReport extends BaseMeta{
         this.typeId= 'b2aa362b-5872-411a-9cd8-fc65428e54eb';
         this.modelName= 'md_reports';
         this.typeName = 'Report'
+    }
+
+    public get mdFields(){
+        let mdFields = super.mdFields;
+        mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
+        mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
         
-        this.mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
-        this.mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
+        return mdFields;
     }
 }

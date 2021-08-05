@@ -22,15 +22,20 @@ export async function getMdObject(mdTypeId:MdTypes, mdObjectId:string, parentId:
     return mdObject
 }
 
-export async function getMdObjects(mdTypeId:MdTypes, parentId:string) {   
+export async function getMdObjects(mdTypeId:MdTypes, parentId:string) {      
     let mdObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId === mdTypeId && elem.parentId === parentId);   
     if(mdObjects.length ===0){
         await loadMdObjects(mdTypeId, parentId);
         mdObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId === mdTypeId);  
     }  
+    console.log(mdObjects);
     return mdObjects;
 }
 
+export async function resetCache() {
+   MdType.resetCache();
+   BaseMeta.mdObjects = [];
+}
 async function loadMdObjects(mdTypeId:MdTypes, parentId:string){  
     
     const mdType = await MdType.getType(mdTypeId);      
@@ -44,7 +49,7 @@ async function loadMdObjects(mdTypeId:MdTypes, parentId:string){
     const apiCommandArgs = new ApiCommandArgs("getMdObjectsList", {mdTypeId: mdTypeId, parentId: parentId})
     const data = await ApiMain.execApiCommand(apiCommandArgs);
     
-    for await (const iterator of data) {
+    for await (const iterator of (data as any)) {
         const newObject:any =  new DynamicClass(mdType.className, iterator.mdId);           
         await loadObjectFromData(newObject, iterator);    
         BaseMeta.mdObjects.push(newObject);
@@ -54,7 +59,6 @@ async function loadMdObjects(mdTypeId:MdTypes, parentId:string){
 
 async function loadObjectFromData(mdObject:any, data:any){ 
     for (const key in mdObject) {
-        if(key ==='id'){continue}
         (mdObject as any)[key] = data[key];
     }  
 };

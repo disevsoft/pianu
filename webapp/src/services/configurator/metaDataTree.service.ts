@@ -53,7 +53,7 @@ class TreeHelper {
     }
   }
 
-  public static async getMdObjectData(targetNode: any) {   
+  public static async getMdObjectData(targetNode: any) {     
     const apiCommandArgs = new ApiCommandArgs("getMdObject", {mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id, parentId:targetNode.parentId})
     const data = await ApiMain.execApiCommand(apiCommandArgs); 
     return data;
@@ -74,14 +74,13 @@ class TreeHelper {
   }
 
   public static async saveMdObjectData(mdObjectData: any) {   
+    MdHelper.resetCache();
     const apiCommandArgs = new ApiCommandArgs("saveMdObject", { mdObject: mdObjectData})
     const data = await ApiMain.execApiCommand(apiCommandArgs); 
     return data;
   }
 
-  public static async deleteMdObject(targetNode: any) {   
-   console.log(targetNode);
-   
+  public static async deleteMdObject(targetNode: any) {     
     const apiCommandArgs = new ApiCommandArgs("deleteMdObject", { mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id})
     const data = await ApiMain.execApiCommand(apiCommandArgs); 
     return data;

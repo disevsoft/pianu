@@ -35,6 +35,7 @@ export class ApiMain{
         } catch(e){
             EventBus.emit('apiEvent', e);
         }
+        return result;
       }
    
     public static async execApiCommand(commandArgs:ApiCommandArgs) {

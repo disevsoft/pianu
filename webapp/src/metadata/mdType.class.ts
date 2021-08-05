@@ -33,8 +33,9 @@ export default class MdType{
     {
         if(MdType._mdTypes.length===0){
             const apiCommandArgs = new ApiCommandArgs("getMdTypesList", {})
-            const data = await ApiMain.execApiCommand(apiCommandArgs);
-            for (const element of data) {
+            const data:any = await ApiMain.execApiCommand(apiCommandArgs);
+            if(!data) {return;}
+            for (const element of (data as any)) {
                 const mdType = new MdType(element.id);
                 for (const key in mdType) {
                     (mdType as any)[key] = element[key];
@@ -50,4 +51,8 @@ export default class MdType{
         await MdType.loadTypes();
         return MdType._mdTypes;    
     }  
+
+    public static resetCache(){
+        MdType._mdTypes = [];       
+    }
 }

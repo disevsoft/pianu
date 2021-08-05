@@ -9,8 +9,13 @@ export default class MdSubsystem extends BaseMeta{
         this.typeId= '273c017b-b7d9-49a2-ac51-e0f2d6f0f75c';
         this.modelName= 'md_subsystems';
         this.typeName = 'Subsystem'
+    }
+
+    public get mdFields(){
+        let mdFields = super.mdFields;
+        mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
+        mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
         
-        this.mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
-        this.mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
+        return mdFields;
     }
 }

@@ -13,11 +13,17 @@ export default class MdField extends BaseMeta{
         this.typeId= '8c474f75-b63a-4f3a-b624-f9a58cb7eeae';
         this.modelName= 'md_fields';
         this.typeName = 'Field'
-        this.mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
-        this.mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
-        this.mdFields.push(new MdTypeField('type', "String", "", "", false, "type"));
-        this.mdFields.push(new MdTypeField('length', "Number", 0, 0, false, "length"));
-        this.mdFields.push(new MdTypeField('fraction', "Number", 0, 0, false, "fraction"));
-        this.mdFields.push(new MdTypeField('mask', "String", "", "", false, "mask"));
+    }
+
+    public get mdFields(){
+        let mdFields = super.mdFields;
+        mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
+        mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
+        mdFields.push(new MdTypeField('type', "String", "", "", false, "type"));
+        mdFields.push(new MdTypeField('length', "Number", 0, 0, false, "length"));
+        mdFields.push(new MdTypeField('fraction', "Number", 0, 0, false, "fraction"));
+        mdFields.push(new MdTypeField('mask', "String", "", "", false, "mask"));
+        
+        return mdFields;
     }
 }

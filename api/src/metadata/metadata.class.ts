@@ -43,7 +43,7 @@ export class Metadata{
     public static async getMdObjectFields(mdTypeId:string, mdObjectId:string, mdParentId:string, resArgs:ResponseArgs)
     {
         const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, mdParentId, resArgs);
-        resArgs.resData = mdObject?.mdFields;
+        resArgs.resData = mdObject?.getFields();
     }
 
     public static async fillMdObject(fieldsArray: Array<any>, resArgs:ResponseArgs){

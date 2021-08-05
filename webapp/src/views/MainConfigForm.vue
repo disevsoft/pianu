@@ -306,8 +306,9 @@ export default defineComponent({
       }
     }
     const dataChanged = async (dataChangedArgs:any) => {   
+      
       let parentNode:any|undefined = undefined;
-      let tabData:any = tabs.value.find((elem:any)=>elem.elementId === dataChangedArgs.targetElementId)     
+      let tabData:any = tabs.value.find((elem:any)=>elem.elementId === dataChangedArgs.targetElementId)   
       if(!tabData){
         return;
       }

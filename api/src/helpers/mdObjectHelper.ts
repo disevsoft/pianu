@@ -20,8 +20,9 @@ export class DynamicClass {
 export async function loadFromModelData(mdObject:any, modelData:any){
     for (let mdField of mdObject.mdFields) {
         if(mdField.fieldMap){
-            mdField.value = modelData[mdField.fieldMap];
-            (<any>mdObject)[mdField.name] =  mdField.value;  
+            // mdField.value = modelData[mdField.fieldMap];
+            // (<any>mdObject)[mdField.name] =  mdField.value;  
+            (<any>mdObject)[mdField.name] = modelData[mdField.fieldMap];
             }
         }
     return mdObject;

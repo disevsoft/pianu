@@ -15,13 +15,19 @@ export default class mdUser extends BaseMeta{
         this.domainAdmin = false;
         this.configAdmin = false;
         this.password = '';
-        this.mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
-        this.mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
-        this.mdFields.push(new MdTypeField('domainAdmin', "Boolean", false, false, false, "domain_admin"));
-        this.mdFields.push(new MdTypeField('configAdmin', "Boolean", false, false, false, "config_admin"));
-        this.mdFields.push(new MdTypeField('password', "String", "", "false", false, "password"));
+       
     }
 
+    public get mdFields(){
+        let mdFields = super.mdFields;
+        mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
+        mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
+        mdFields.push(new MdTypeField('domainAdmin', "Boolean", false, false, false, "domain_admin"));
+        mdFields.push(new MdTypeField('configAdmin', "Boolean", false, false, false, "config_admin"));
+        mdFields.push(new MdTypeField('password', "String", "", "false", false, "password"));
+        
+        return mdFields;
+    }
     async beforeSave(saveMdObjectArgs:SaveMdObjectArgs){
         await super.beforeSave(saveMdObjectArgs);
         if(!this.id){

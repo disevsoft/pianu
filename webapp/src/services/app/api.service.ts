@@ -27,10 +27,14 @@ export class ApiMain{
           headers: headers,
           body: JSON.stringify(commandArgs),
         });
-        
+        let result = undefined;
+        try{
         const resData = await response.json();  
-        EventBus.emit('api', resData.info);
-        return resData.data;
+        EventBus.emit('apiEvent', resData.info);
+        result = resData.data;
+        } catch(e){
+            EventBus.emit('apiEvent', e);
+        }
       }
    
     public static async execApiCommand(commandArgs:ApiCommandArgs) {

@@ -192,7 +192,7 @@ export default defineComponent({
 
     onMounted(() => {
        EventBus.on('dataChanged', dataChanged); // 1
-      EventBus.on('apiLog', apiLog);
+      EventBus.on('apiEvent', apiLog);
     });
     const currentTabComponent = computed(() => {
       return СfgPropertyEditor;

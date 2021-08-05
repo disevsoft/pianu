@@ -32,6 +32,9 @@ export default class BaseMeta{
         }
     };
 
+    // public get mdFields(){
+
+    // }
     public get id() { 
         return this.mdId;  
     };

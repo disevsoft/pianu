@@ -1,7 +1,7 @@
 <template>
 <span>
-    <el-input class="cfg-input" v-model="displayValue" :disabled="disabled" size="small">
-         <template  #append>
+    <el-input :type="editType()" :id="'inp-'+elementId" class="cfg-input" v-model="displayValue" :disabled="fieldProp.readOnly" size="small">
+         <template  v-if="!fieldProp.readOnly" #append>
             <el-button @click="chooseButtonClick" icon="el-icon-more"></el-button>
         </template>
     </el-input>
@@ -14,14 +14,15 @@ import { defineComponent, ref, computed, onMounted } from "vue";
 import CfgDialog from './CfgDialog'
 import { uuid } from "vue-uuid";
 import EventBus from './CfgEventBus';
+import MdTypesField from '../../services/configurator/mdTypesField'
+import {MdTypes} from '../../metadata/MdTypes'
 export default defineComponent({
     props: { 
         'modelValue': [String, Number, Boolean, Array], 
-        'disabled':Boolean
+        'fieldProp': [MdTypesField, Object]
     },
     setup (props, { emit }) {
         const elementId = ref('');
-        const disabled = ref(false);
         onMounted(() => {
             elementId.value = uuid.v4();
             EventBus.on('dataChoosed', dataChoosed);
@@ -38,12 +39,19 @@ export default defineComponent({
             set: (value) => emit('update:modelValue', value) 
             });
 
+        const editType = ()=>{
+            
+                let editType = "text";
+                if((props.fieldProp as MdTypesField).type === MdTypes.Number) {editType = 'number'}
+                return editType;
+                };
+
         const chooseButtonClick=()=>{
             console.log('chooseButtonClick', 'windowBox-'+elementId.value);
             CfgDialog.showDialog(document.getElementById('windowBox-'+elementId.value), elementId.value);
         };
 
-        return {displayValue, chooseButtonClick, elementId}
+        return {displayValue, chooseButtonClick, elementId, editType}
     }
 })
 </script>

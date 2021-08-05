@@ -1,17 +1,19 @@
 <template>
 <el-container>
 <div>
-<CfgDialogForm :dialogVisible="true" elementId="123"/>
+<!-- <CfgDialogForm :dialogVisible="true" elementId="123"/> -->
+<el-checkbox size="small"/>
 </div>
+
 </el-container>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import CfgDialog from '../components/configurator/CfgDialog'
-import CfgDialogForm from '../components/configurator/CfgDialogForm.vue'
+// import CfgDialogForm from '../components/configurator/CfgDialogForm.vue'
 export default defineComponent({
-  components: {CfgDialogForm},
+  // components: {CfgDialogForm},
   setup() {
     const v = ref('');
     const show = ref(false);

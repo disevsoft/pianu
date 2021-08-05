@@ -19,7 +19,7 @@
         <el-table-column prop="value" label="Value" width="200">
           <template #default="scope">
             <!-- <input v-model="scope.row.value" /> -->
-            <CfgInput v-model="scope.row.value"> </CfgInput>
+            <component :is="editComponent(scope.row)" v-model="scope.row.value" :fieldProp="scope.row"/> 
           </template>
         </el-table-column>
       </el-table>
@@ -42,6 +42,8 @@ import { defineComponent, ref } from "vue";
 import TreeService from "../../services/configurator/metaDataTree.service";
 import EventBus from './CfgEventBus';
 import CfgInput from './CfgInput.vue';
+import CfgCheckBox from './CfgCheckBox.vue';
+import {MdTypes} from '../../metadata/MdTypes'
 export default defineComponent({
    components: {
     CfgInput,
@@ -56,13 +58,20 @@ export default defineComponent({
     mdObjectData.value = [];
     
     const getData = async () => {
-      const data = await TreeService.TreeHelper.getMdObjectData(
+      const data = await TreeService.TreeHelper.getMdObjectFields(
         props.mdObjectDescr
       );
+      
+      if(!data) {return}
       mdObjectData.value = (data as any);
       dataLoadingComplete.value = true;
     };
 
+    const editComponent =(row:any)=>{
+     
+      if(row.type === MdTypes.Boolean){return CfgCheckBox}
+      return CfgInput;
+    }
     const onSave = async(targetName: any) => {
       if(!mdObjectData.value){return;}
       
@@ -91,6 +100,7 @@ export default defineComponent({
       getData,
       cellClassName,
       onSave,
+      editComponent
     };
   },
   mounted() {

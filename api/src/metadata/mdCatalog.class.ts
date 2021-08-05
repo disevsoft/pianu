@@ -1,6 +1,6 @@
 import BaseMeta from './basemeta.class'
-
 import MdTypeField from './mdTypeField.class'
+import {MdTypes} from './mdTypes'
 export default class MdCatalog extends BaseMeta{
     isHierarchical = false;
     hierarchicalLevels = 0;
@@ -15,10 +15,9 @@ export default class MdCatalog extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('listName', "String", "", "", false, "list_name"));
-        mdFields.push(new MdTypeField('isHierarchical',"Boolean", false, false, false, "is_hierarchical"));
-        mdFields.push(new MdTypeField('typeId', "String", this.typeId, "", true,''));
-        mdFields.push(new MdTypeField('hierarchicalLevels',"Boolean", 0, 0, false, "hierarchical_levels"));
+        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, "", "", false, "list_name"));
+        mdFields.push(new MdTypeField('isHierarchical',MdTypes.Boolean, 0, false, false, false, "is_hierarchical"));      
+        mdFields.push(new MdTypeField('hierarchicalLevels',MdTypes.Number, 2, 0, 0, false, "hierarchical_levels"));
         return mdFields;
     }
 }

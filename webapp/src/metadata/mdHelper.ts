@@ -28,7 +28,6 @@ export async function getMdObjects(mdTypeId:MdTypes, parentId:string) {
         await loadMdObjects(mdTypeId, parentId);
         mdObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId === mdTypeId);  
     }  
-    console.log(mdObjects);
     return mdObjects;
 }
 

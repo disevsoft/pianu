@@ -7,6 +7,7 @@ import {ApiCommandArgs, ApiMain} from '../app/api.service'
 import MdType from '../../metadata/mdType.class'
 import * as MdHelper from '../../metadata/mdHelper'
 import { MdTypes } from "@/metadata/MdTypes";
+import MdTypeField from './mdTypesField'
 class TreeHelper {
   public static getMdTreeRoot() {
     const confNodes = config;
@@ -59,6 +60,17 @@ class TreeHelper {
     return data;
   }
 
+  public static async getMdObjectFields(targetNode: any){
+    const data = await TreeHelper.getMdObjectData(targetNode);
+    if (!data) {return undefined};
+    const fieldsArray:Array<MdTypeField> = [];
+    for await (const iterator of (data as any)) {
+      const fieldProps = new MdTypeField(iterator.name, iterator.type, iterator.size, 
+        iterator.value, iterator.defaultValue, iterator.readOnly, iterator.fieldMap);
+        fieldsArray.push(fieldProps);
+    }
+    return fieldsArray;
+  }
   public static async getMdTypes() {   
   
     const data = await MdType.getTypes(); 

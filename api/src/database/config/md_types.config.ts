@@ -46,6 +46,21 @@ module.exports =  [
         field_type:true,
     },
     {
+        id: "bb5fa9d9-17f0-4246-8470-a76977058cc2",
+        name: "UUID",
+        list_name: "UUID",
+        synonym: "Уникальный идентификатор",
+        list_synonym: "Уникальный идентификатор",
+        table_name: "",
+        class_name: "",
+        database_type: "",
+        is_md_type: false,
+        has_length:false,
+        has_fraction:false, 
+        order:3,
+        field_type:true,
+    },
+    {
         id: "834cd9ad-9720-4fc5-aa09-cef6f7a895a0",
         name: "Catalogs",
         list_name: "Catalogs",
@@ -57,7 +72,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:3,
+        order:4,
         field_type:true,
     },
     {
@@ -72,7 +87,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:4,
+        order:5,
         field_type:true,
     },
     {
@@ -87,7 +102,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:5,
+        order:6,
         field_type:false,
     },
     {
@@ -102,7 +117,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:6,
+        order:7,
         field_type:false,
     },
     {
@@ -117,7 +132,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:7,
+        order:8,
         field_type:false,
     },
     {
@@ -132,7 +147,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:8,
+        order:9,
         field_type:false,
     },
     {
@@ -147,7 +162,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:9,
+        order:10,
         field_type:false,
     },
     {
@@ -162,7 +177,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:10,
+        order:11,
         field_type:false,
     },
     {
@@ -177,7 +192,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:11,
+        order:12,
         field_type:false,
     },
 ];

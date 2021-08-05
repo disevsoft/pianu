@@ -1,4 +1,4 @@
-import {MdTypes} from './mdTypes'
+import {MdTypes} from '../../metadata/MdTypes'
 export default class MdTypeField
 {
     name='';

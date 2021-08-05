@@ -5,6 +5,7 @@ import {md_map} from '../database/config/models/md_map'
 const { v4: uuidv4 } = require('uuid');
 import * as mdHelper from '../helpers/mdObjectHelper'
 import SaveMdObjectArgs from '../helpers/saveMdObjectArgs'
+import {MdTypes} from './mdTypes'
 
 export default class BaseMeta{
     id: string = '';
@@ -30,10 +31,11 @@ export default class BaseMeta{
 
     public get mdFields(){
         let mdFields:Array<MdTypeField> = [];
-        mdFields.push(new MdTypeField('id', "UUID", "", this.id, true, 'id'));
-        mdFields.push(new MdTypeField('name', "char(150)", "", "", false, "name"));
-        mdFields.push(new MdTypeField('synonym', "char(150)", "", "", false, "synonym"));
-        mdFields.push(new MdTypeField('parentId', "char(150)", this.parentId, "", true, ""));
+        mdFields.push(new MdTypeField('id', MdTypes.UUID, 0, "", this.id, true, 'id'));
+        mdFields.push(new MdTypeField('name', MdTypes.String, 150, "", "", false, "name"));
+        mdFields.push(new MdTypeField('synonym', MdTypes.String, 150, "", "", false, "synonym"));
+        mdFields.push(new MdTypeField('parentId', MdTypes.String, 150, this.parentId, "", true, ""));
+        mdFields.push(new MdTypeField('typeId', MdTypes.UUID, 0, this.typeId, "", true,''));
         return mdFields;
     }
     // public get id() { 

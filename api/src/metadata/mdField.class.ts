@@ -6,6 +6,7 @@ export default class MdField extends BaseMeta{
     length:number = 0;
     fraction:number = 0;
     mask:string='';
+    isDBField = false;
 
     constructor(id:string){ 
         super(id);
@@ -17,12 +18,11 @@ export default class MdField extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('typeId', MdTypes.String, 150, this.typeId, "", true,''));
-        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, "", "", false, "list_name"));
-        mdFields.push(new MdTypeField('type', MdTypes.String, 150, "", "", false, "type"));
+        mdFields.push(new MdTypeField('type', MdTypes.None, 0, "", "", false, "type"));
         mdFields.push(new MdTypeField('length', MdTypes.Number, 10, 0, 0, false, "length"));
         mdFields.push(new MdTypeField('fraction', MdTypes.Number, 10, 0, 0, false, "fraction"));
         mdFields.push(new MdTypeField('mask', MdTypes.String, 150, "", "", false, "mask"));
+        mdFields.push(new MdTypeField('isDBField', MdTypes.Boolean, 0,false, false, false, "is_db_field"));
         
         return mdFields;
     }

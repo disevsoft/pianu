@@ -23,6 +23,11 @@ interface mdTableInstance extends Model {
             allowNull: true,
             defaultValue:''            
         },
+        is_db_table:{ 
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue:false 
+        }   
         
     }, {
         freezeTableName: true

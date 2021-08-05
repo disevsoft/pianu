@@ -1,11 +1,9 @@
 <template>
-<span>
     <el-input :type="editType()" :id="'inp-'+elementId" class="cfg-input" v-model="displayValue" :disabled="fieldProp.readOnly" size="small">
-         <template  v-if="!fieldProp.readOnly" #append>
+         <template  v-if="showChooseButton" #append>
             <el-button @click="chooseButtonClick" icon="el-icon-more"></el-button>
         </template>
     </el-input>
-    </span>
     <div :id="'windowBox-'+ elementId"></div>
 </template>
 
@@ -16,6 +14,7 @@ import { uuid } from "vue-uuid";
 import EventBus from './CfgEventBus';
 import MdTypesField from '../../services/configurator/mdTypesField'
 import {MdTypes} from '../../metadata/MdTypes'
+import MdType from '../../metadata/mdType.class'
 export default defineComponent({
     props: { 
         'modelValue': [String, Number, Boolean, Array], 
@@ -35,23 +34,37 @@ export default defineComponent({
             
         }
         const displayValue = computed({ 
-            get: () => props.modelValue, 
+            get: () => {
+                const fieldProp = (props.fieldProp as MdTypesField);
+                if(!fieldProp.mdType || fieldProp.mdType.isMdType){
+                    return props.modelValue;
+                }
+                else{
+                    return props.modelValue
+                }
+                }, 
             set: (value) => emit('update:modelValue', value) 
             });
 
+        const showChooseButton = computed(()=>{
+            const fieldProp = (props.fieldProp as MdTypesField);
+            if(fieldProp.readOnly) {return false} 
+            let result = false;
+            if(!fieldProp.mdType || fieldProp.mdType.isMdType){result = true}
+             return result;           
+        });
+
         const editType = ()=>{
-            
                 let editType = "text";
                 if((props.fieldProp as MdTypesField).type === MdTypes.Number) {editType = 'number'}
                 return editType;
                 };
 
-        const chooseButtonClick=()=>{
-            console.log('chooseButtonClick', 'windowBox-'+elementId.value);
+        const chooseButtonClick=()=>{         
             CfgDialog.showDialog(document.getElementById('windowBox-'+elementId.value), elementId.value);
         };
 
-        return {displayValue, chooseButtonClick, elementId, editType}
+        return {displayValue, chooseButtonClick, elementId, editType, showChooseButton}
     }
 })
 </script>

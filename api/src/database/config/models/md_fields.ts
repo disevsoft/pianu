@@ -35,7 +35,12 @@ interface mdFieldInstance extends Model {
             type: Sequelize.STRING,
             allowNull: true,
             defaultValue:'' 
-        }    
+        },  
+        is_db_field:{ 
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue:false 
+        }       
     }, {
         freezeTableName: true
 });   

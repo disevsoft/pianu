@@ -33,13 +33,14 @@ export default defineComponent({
             };
         const nodes = ref([]);
         const chooseTypeTree = ref(ElTree);
+
         const onOkButtonClick=()=>{
              let checkedNodes = chooseTypeTree.value.getCheckedNodes();
               const choosedData:Array<any> = [];
              for(let item of checkedNodes) {
                  choosedData.push(item.id);    
              }  
-             formEvents.close(choosedData);       
+             formEvents.close(choosedData, 'CfgChooseTypeForm');       
         }
 
         const onCancelButtonClick=()=>{

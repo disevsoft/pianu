@@ -38,13 +38,22 @@ export class Metadata{
             }
         }
        
-    }
+    } 
 
     public static async getMdObjectFields(mdTypeId:string, mdObjectId:string, mdParentId:string, resArgs:ResponseArgs)
     {
         const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, mdParentId, resArgs);
-        resArgs.resData = mdObject?.getFields();
+        resArgs.resData = await mdObject?.getFields();
     }
+
+    public static async getMdObjectById(mdObjectId:string, mdParentId:string, resArgs:ResponseArgs){
+       
+        const data = await mdHelper.getInstanceById(mdObjectId);
+        if(data){await data.setParentId(mdParentId)};
+        const dataArray = [];
+        dataArray.push(data)
+        resArgs.resData = dataArray; 
+    };
 
     public static async fillMdObject(fieldsArray: Array<any>, resArgs:ResponseArgs){
 

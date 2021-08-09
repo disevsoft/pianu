@@ -3,7 +3,7 @@
         <el-main class="height200">
             <el-tree ref = "chooseTypeTree" id="chooseTypeTree" :data="nodes" :expand-on-click-node="false"   
                 :props="defaultTreeProps" show-checkbox :check-strictly="true" 
-                :node-key="elementId"
+                node-key="id"
                 @check-change="checkChange"
                 >
             </el-tree>
@@ -23,7 +23,8 @@ import { ElTree } from "element-plus";
 export default defineComponent({
     props: { 
         'elementId': String,
-        'formEvents':FormEvents
+        'formEvents':[FormEvents, Object],
+        'data':[Object]
     },
     setup (props, {emit}) {
         let formEvents:FormEvents;
@@ -47,11 +48,14 @@ export default defineComponent({
             formEvents.close();     
         }
 
-        const checkChange = ()=>{
-            //  let checkedNodes = chooseTypeTree.value..getCheckedNodes();
+        const checkChange = (node:any)=>{
+            console.log(node);
+            
+            //   let checkedNodes = chooseTypeTree.value.getCheckedNodes();
             //  const choosedData = [];
             //  for(let item of checkedNodes) {
-            //      choosedData.push(item.id);    
+            //      console.log(item);
+                  
             //  }
             
             //console.log('checkChange');
@@ -61,10 +65,16 @@ export default defineComponent({
 
         // }
         onMounted(async() => {
-        //elementId =(props.elementId as string); 
         formEvents = (props.formEvents as FormEvents);
+        console.log(await TreeService.TreeHelper.getMdTypes());
+        
         (nodes.value as any) = await TreeService.TreeHelper.getMdTypes();
-        //formEvents.on('beforeClose', beforeClose);
+        if(props.data){
+            chooseTypeTree.value.setCheckedKeys(props.data, true);
+            // for await (const iterator of (props.data as any)) {
+            //     const node = chooseTypeTree.value.getNode(iterator);                
+            // }
+        }
       });  
         return {onOkButtonClick, onCancelButtonClick, nodes, defaultTreeProps, checkChange, chooseTypeTree}
     }

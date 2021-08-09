@@ -53,14 +53,28 @@ export async function processCommand(req:any, res:any)
 export async function createDefaultUser(){
     const md_users = await require('../database/config/models/' + 'md_users')['md_users']; 
     const obj = await md_users.findOne({ where: { name: config.admin } });
-    const item = {name: config.admin, password: await getPasswordHash(config.password), config_admin:true, id:await uuidv4()}
+    
+    let item = {name: '', password: '', config_admin:true, id:''}
     if(obj){
+        item = {name: config.admin, password: await getPasswordHash(config.password), config_admin:true, id:obj.id}
         await md_users.update(item, 
          { 
            where: { name: config.admin }
          })
      } else{ 
-         await md_users.create(item); 
+        item = {name: config.admin, password: await getPasswordHash(config.password), config_admin:true, id:await uuidv4()}
+        await md_users.create(item); 
+     }  
+
+     const md_objects_types = await require('../database/config/models/' + 'md_objects_types')['md_objects_types']; 
+     const objectType = await md_objects_types.findOne({ where: { md_object_id: item.id } });
+     if(objectType){
+        await md_objects_types.update({md_object_id:item.id, md_type_id:'60a34539-5b85-4d96-b619-cefc7b6b894b'}, 
+         { 
+           where: { md_object_id:item.id }
+         })
+     } else{ 
+         await md_objects_types.create({md_object_id:item.id, md_type_id:'60a34539-5b85-4d96-b619-cefc7b6b894b'}); 
      }  
   }
 

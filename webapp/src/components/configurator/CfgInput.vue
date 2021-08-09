@@ -15,44 +15,63 @@ import EventBus from './CfgEventBus';
 import MdTypesField from '../../services/configurator/mdTypesField'
 import {MdTypes} from '../../metadata/MdTypes'
 import MdType from '../../metadata/mdType.class'
+import TreeService from "../../services/configurator/metaDataTree.service";
 export default defineComponent({
     props: { 
-        'modelValue': [String, Number, Boolean, Array], 
-        'fieldProp': [MdTypesField, Object]
+        'modelValue': [String, Number, ], 
+        'fieldProp': [MdTypesField, Object],
     },
     setup (props, { emit }) {
         const elementId = ref('');
-        onMounted(() => {
+        const presentation = ref('');
+        const _showChooseButton = ref(false);
+        onMounted(async () => {
             elementId.value = uuid.v4();
+            if(props.modelValue && typeof props.modelValue === 'string'){
+                await setPresentationValue(props.modelValue.split(','));
+            }
             EventBus.on('dataChoosed', dataChoosed);
         });
 
         const dataChoosed=async(eventArgs:any)=>{
             if (eventArgs.elementId === elementId.value){
-                console.log(eventArgs);
-            }
-            
-        }
-        const displayValue = computed({ 
-            get: () => {
-                const fieldProp = (props.fieldProp as MdTypesField);
-                if(!fieldProp.mdType || fieldProp.mdType.isMdType){
-                    return props.modelValue;
+                if(eventArgs.resultData && eventArgs.resultData.length > 0){
+                    await setPresentationValue(eventArgs.resultData);
+                    updateValue(eventArgs.resultData.join(','))             
                 }
                 else{
-                    return props.modelValue
+                    updateValue('');  
+                    presentation.value = '';                      
                 }
-                }, 
-            set: (value) => emit('update:modelValue', value) 
+            }   
+        }
+
+        const setPresentationValue= async(items:any)=>{
+            const fieldProp = (props.fieldProp as MdTypesField);
+             if(!fieldProp.mdType || fieldProp.mdType.isMdType){       
+                 presentation.value = await TreeService.TreeHelper.getMdObjectPresentation(items);
+             }else{
+                presentation.value =  (props.modelValue as string);  
+             }
+        };
+
+        const displayValue = computed({ 
+            get: () => {return presentation.value;}, 
+            set: (value) => {updateValue(value)} 
             });
+
+        const updateValue=async (value:any)=>{
+            await emit('update:modelValue', value) ;   
+            await setPresentationValue(props.modelValue); 
+        };
 
         const showChooseButton = computed(()=>{
             const fieldProp = (props.fieldProp as MdTypesField);
             if(fieldProp.readOnly) {return false} 
             let result = false;
-            if(!fieldProp.mdType || fieldProp.mdType.isMdType){result = true}
-             return result;           
-        });
+            if(!fieldProp.mdType || fieldProp.mdType.isMdType){result = true}           
+            return result;   
+        }); 
 
         const editType = ()=>{
                 let editType = "text";
@@ -60,8 +79,12 @@ export default defineComponent({
                 return editType;
                 };
 
-        const chooseButtonClick=()=>{         
-            CfgDialog.showDialog(document.getElementById('windowBox-'+elementId.value), elementId.value);
+        const chooseButtonClick=()=>{     
+            let choosedData:any = undefined   
+            if( typeof props.modelValue === 'string') {
+                choosedData = props.modelValue.split(',')    
+            }
+            CfgDialog.showDialog(document.getElementById('windowBox-'+elementId.value), elementId.value, choosedData);
         };
 
         return {displayValue, chooseButtonClick, elementId, editType, showChooseButton}

@@ -45,10 +45,15 @@ export default class MdType{
     private static async loadType(mdTypeId:string) 
     {
         if(!md_types){
-            console.log('empty');
+            console.log('empty'); 
             
         }
-        const mdTypeModel = await md_types.findOne({ where: { id: mdTypeId } });
+        let mdTypeModel:any = undefined;
+        try{
+            mdTypeModel = await md_types.findOne({ where: { id: mdTypeId } });
+        }catch(e){
+            console.log(e);
+        }
         if(!mdTypeModel){return;}
 
         let mdType = new MdType(mdTypeId);

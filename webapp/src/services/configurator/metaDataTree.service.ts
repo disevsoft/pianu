@@ -60,17 +60,31 @@ class TreeHelper {
     return data;
   }
 
+  public static async getMdObjectPresentation(mdObjects:Array<string>) {     
+    let result = '';
+    for await (const iterator of mdObjects) {
+      const data = await MdHelper.getMdObjectById(iterator, '');   
+      result = result + (result? ' ,': '') + data?.name;  
+    }  
+    return result;
+  }
+
   public static async getMdObjectFields(targetNode: any){
     const data = await TreeHelper.getMdObjectData(targetNode);
+    return await TreeHelper.getFieldsFromResponse(data);
+  }
+
+  private static async getFieldsFromResponse(data:any){
     if (!data) {return undefined};
     const fieldsArray:Array<MdTypeField> = [];
     for await (const iterator of (data as any)) {
-      const fieldProps = new MdTypeField(iterator.name, iterator.type, iterator.size, 
+      const fieldProps = await MdTypeField.getTypeField(iterator.name, iterator.type, iterator.size, 
         iterator.value, iterator.defaultValue, iterator.readOnly, iterator.fieldMap);
         fieldsArray.push(fieldProps);
-    }
+    } 
     return fieldsArray;
   }
+
   public static async getMdTypes() {   
   
     const data = await MdType.getTypes(); 
@@ -86,10 +100,11 @@ class TreeHelper {
   }
 
   public static async saveMdObjectData(mdObjectData: any) {   
-    MdHelper.resetCache();
+    await MdHelper.resetCache();
     const apiCommandArgs = new ApiCommandArgs("saveMdObject", { mdObject: mdObjectData})
-    const data = await ApiMain.execApiCommand(apiCommandArgs); 
-    return data;
+    const data = await ApiMain.execApiCommand(apiCommandArgs);   
+    const fieldsArray = await TreeHelper.getFieldsFromResponse(data);
+    return fieldsArray;
   }
 
   public static async deleteMdObject(targetNode: any) {     

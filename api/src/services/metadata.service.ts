@@ -55,6 +55,13 @@ export async function getMdObjectData(options: any, resArgs:ResponseArgs){
     return true;
 } 
 
+export async function getMdObjectById(options: any, resArgs:ResponseArgs){
+    const mdObjectId = options.mdObjectId;
+    const mdParentId = options.parentId;
+    await Metadata.getMdObjectById(mdObjectId, mdParentId, resArgs);
+    return true;
+} 
+
 export async function deleteMdObject(options: any, resArgs:ResponseArgs){
     const mdTypeId = options.mdTypeId;
     const mdObjectId = options.mdObjectId;
@@ -104,7 +111,8 @@ const processors: { [K: string]: Function } = {
     saveMdObject:saveMdObject,
     initConfigModel:initConfigModel,
     deleteMdObject:deleteMdObject,
-    getMdTypesList:getMdTypesList
+    getMdTypesList:getMdTypesList,
+    getMdObjectById:getMdObjectById
 };
 
 

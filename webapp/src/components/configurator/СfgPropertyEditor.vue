@@ -11,15 +11,14 @@
         :cell-style="{padding: '0'}">
         height="250"
       >
-        <el-table-column prop="key" label="Property" width="140" fixed="left">
+        <el-table-column prop="name" label="Property" width="140" fixed="left">
           <template #default="scope">
             <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="value" label="Value" width="200">
           <template #default="scope">
-            <!-- <input v-model="scope.row.value" /> -->
-            <component :is="editComponent(scope.row)" v-model="scope.row.value" :fieldProp="scope.row"/> 
+            <component :is="editComponent(scope.row)" :fieldProp="scope.row" v-model="scope.row.value"/> 
           </template>
         </el-table-column>
       </el-table>
@@ -38,12 +37,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue"; 
+import { defineComponent, ref, onMounted } from "vue"; 
 import TreeService from "../../services/configurator/metaDataTree.service";
 import EventBus from './CfgEventBus';
 import CfgInput from './CfgInput.vue';
 import CfgCheckBox from './CfgCheckBox.vue';
 import {MdTypes} from '../../metadata/MdTypes'
+import MdTypeField from '../../services/configurator/mdTypesField'
 export default defineComponent({
    components: {
     CfgInput,
@@ -54,16 +54,20 @@ export default defineComponent({
   },
   setup(props) {
     const dataLoadingComplete = ref(false);
-    const mdObjectData = ref([{ key: "id", props: {} }]);
+    const mdObjectData = ref([MdTypeField]);
     mdObjectData.value = [];
     
+  onMounted(async () => {
+    await getData();
+        });
+
     const getData = async () => {
-      const data = await TreeService.TreeHelper.getMdObjectFields(
+      const data:any = await TreeService.TreeHelper.getMdObjectFields(
         props.mdObjectDescr
       );
       
       if(!data) {return}
-      mdObjectData.value = (data as any);
+      mdObjectData.value = data;
       dataLoadingComplete.value = true;
     };
 
@@ -72,23 +76,27 @@ export default defineComponent({
       if(row.type === MdTypes.Boolean){return CfgCheckBox}
       return CfgInput;
     }
+
+    const getInputProps=(row:any)=>{
+      return (row as MdTypeField);     
+    }
+
     const onSave = async(targetName: any) => {
       if(!mdObjectData.value){return;}
       
       dataLoadingComplete.value = false;
       let response:any = await TreeService.TreeHelper.saveMdObjectData(mdObjectData.value);
-      mdObjectData.value = response;
-  
-      dataLoadingComplete.value = true;    
+      mdObjectData.value = response;  
       let elementData:any = mdObjectData.value.find((el:any) => el.name === "id");      
       var dataId = elementData.value; 
       const eventArgs = {data:mdObjectData.value, targetElementId:props.elementId, id:dataId};
       EventBus.emit('dataChanged', eventArgs);
+      dataLoadingComplete.value = true;  
     };
 
     const cellClassName = (cell: any) => {
       if (cell.columnIndex === 0) {
-        return "prop_name-cell-class";
+        return "prop_name-cell-class"; 
       } else{
         return 'cell';
       }
@@ -97,14 +105,10 @@ export default defineComponent({
     return {
       dataLoadingComplete,
       mdObjectData,
-      getData,
       cellClassName,
       onSave,
-      editComponent
+      editComponent, getInputProps
     };
-  },
-  mounted() {
-    this.getData(); // 1
   },
 });
 </script>

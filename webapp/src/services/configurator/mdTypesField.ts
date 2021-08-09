@@ -11,7 +11,7 @@ export default class MdTypeField
     objectField = '';
     size = 0;
     mdType:MdType|undefined=undefined;
-    constructor(name:string, type: MdTypes, size:number, value: any, defaultValue: any, readOnly: boolean, fieldMap:string){
+    public constructor(name:string, type: MdTypes, size:number, value: any, defaultValue: any, readOnly: boolean, fieldMap:string){
         this.name = name;
         this.type = type;
         this.size = size;
@@ -19,6 +19,11 @@ export default class MdTypeField
         this.defaultValue = defaultValue;
         this.readOnly=readOnly;
         this.fieldMap=fieldMap;
-        MdType.getType(this.type).then(mdType=>{this.mdType = mdType});
     };
+
+    public static async getTypeField(name:string, type: MdTypes, size:number, value: any, defaultValue: any, readOnly: boolean, fieldMap:string){
+        const typeField = new MdTypeField(name, type, size, value, defaultValue, readOnly, fieldMap);
+        typeField.mdType = await MdType.getType(typeField.type);
+        return  typeField;
+    }
 }

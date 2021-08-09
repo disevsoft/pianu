@@ -21,14 +21,6 @@ export default class BaseMeta{
     }
     public static mdObjects: Array<BaseMeta> =[];
    
-    // public set id(value : string) {
-    //     this.mdId = value;
-    //     var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='id'));
-    //     if(idFieldIndex >= 0){ 
-    //         this.mdFields[idFieldIndex].value = this.mdId;
-    //     }
-    // };
-
     public get mdFields(){
         let mdFields:Array<MdTypeField> = [];
         mdFields.push(new MdTypeField('id', MdTypes.UUID, 0, "", this.id, true, 'id'));
@@ -38,13 +30,10 @@ export default class BaseMeta{
         mdFields.push(new MdTypeField('typeId', MdTypes.UUID, 0, this.typeId, "", true,''));
         return mdFields;
     }
-    // public get id() { 
-    //     return this.mdId;  
-    // };
 
-    public getFields(){
+    public async getFields(){
         const fields = this.mdFields;
-        for (let mdField of fields) {
+        for await (let mdField of fields) {
             if(mdField.fieldMap){
                 mdField.value = (<any>this)[mdField.name];
                 }
@@ -53,11 +42,7 @@ export default class BaseMeta{
     }
 
     async setParentId(parentId:string){ 
-        this.parentId = parentId;
-        // var idFieldIndex = this.mdFields.findIndex(elem=>(elem.name ==='parentId'));
-        // if(idFieldIndex >= 0){ 
-        //     this.mdFields[idFieldIndex].value = this.parentId;
-        // }    
+        this.parentId = parentId;   
     }
     async beforeSave(saveMdObjectArgs: SaveMdObjectArgs){
 

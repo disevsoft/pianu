@@ -159,5 +159,5 @@ export async function initModel(force:boolean){
           await md_types.create(item); 
       }  
     };
-    await createDefaultUser();
+    await createDefaultUser(); 
   }; 

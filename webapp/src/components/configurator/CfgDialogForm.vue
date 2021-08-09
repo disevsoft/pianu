@@ -34,7 +34,7 @@
         </span>      
     </el-header>
     <!-- <div class="fullHeight"> -->
-      <component :is="currentComponent" :formEvents="currentProperties()"/> 
+      <component :is="currentComponent" :formEvents="currentformEvents()" :data="currentData()"/> 
     <!-- </div> -->
     </el-container>
     <i v-for="sizer in sizers()" :key="sizer" :class= "'resize ' + sizer"></i>
@@ -57,7 +57,8 @@ export default defineComponent({
     props: { 
         'elementId': String,
         'dialogVisible': Boolean, 
-        'formEvents':FormEvents
+        'formEvents':FormEvents, 
+        'data':[Object]
     },
     setup (props, { emit }) {
       const show = ref(false);
@@ -65,13 +66,13 @@ export default defineComponent({
 
       let elementId = '';
       let dragResizer:DragResize;
-      let formEvents:FormEvents;
+      let _formEvents:FormEvents;
       const sizers=()=>{  
         return Sizers;
       };
 
       const closeDialog=()=> { 
-        const eventArgs = formEvents.close();
+        const eventArgs = _formEvents.close();
         if(!eventArgs.cancel){
           show.value = false;
         }        
@@ -82,11 +83,12 @@ export default defineComponent({
           show.value = false;
         }        
       };
-    const currentProperties=()=>{
-       const childProps={formEvents: props.formEvents};
+    const currentformEvents=()=>{
       return props.formEvents;
     }
-
+    const currentData=()=>{
+      return props.data;
+    }
      const showFullScreen=(e:any)=> { 
       e.stopPropagation();
       expanded.value = !expanded.value;   
@@ -101,16 +103,16 @@ export default defineComponent({
       onMounted(() => {       
         elementId =(props.elementId as string); 
         show.value = (props.dialogVisible as boolean);
-        formEvents = (props.formEvents as FormEvents);
-        if(formEvents){
-          formEvents.on('onClose', onCloseDialog);
+        _formEvents = (props.formEvents as FormEvents);
+        if(_formEvents){
+          _formEvents.on('onClose', onCloseDialog);
         }
         dragResizer = DragResize.init('VM-'+elementId);
         const dv = document.getElementById('VM-'+elementId);
         setMaxZIndex(dv);
       });  
          
-        return {sizers, closeDialog, show, showFullScreen, expanded,currentProperties }
+        return {sizers, closeDialog, show, showFullScreen, expanded,currentformEvents, currentData}
     }
 })
 </script>

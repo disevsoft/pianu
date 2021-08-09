@@ -7,7 +7,7 @@ import EventBus from './CfgEventBus';
 export default class CfgDialog
 {
     static openedForms = new Map();
-    public static showDialog(owner:any, unique:string){
+    public static showDialog(owner:any, unique:string, data?:any){
 
       if(unique){
         const formElement = CfgDialog.openedForms.get(unique);
@@ -21,7 +21,7 @@ export default class CfgDialog
         const appComponent = createApp({
              components: { CfgDialogForm },
              render() {     
-              const formElement:any = h(CfgDialogForm,{dialogVisible:true, elementId:unique, formEvents:formEvents});            
+              const formElement:any = h(CfgDialogForm,{dialogVisible:true, elementId:unique, formEvents:formEvents, data:data});            
                CfgDialog.openedForms.set(unique, formElement);
                return formElement;
              }

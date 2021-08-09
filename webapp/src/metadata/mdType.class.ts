@@ -19,7 +19,7 @@ export default class MdType{
     cached = false;
     private static _mdTypes:Array<MdType> =[];
 
-    private constructor(id:string){
+    public constructor(id:string){
         this.id = (id as MdTypes);
     }
     
@@ -52,7 +52,7 @@ export default class MdType{
         return MdType._mdTypes;    
     }  
 
-    public static resetCache(){
+    public static async resetCache(){
         MdType._mdTypes = [];       
     }
 }

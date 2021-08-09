@@ -22,6 +22,39 @@ export async function getMdObject(mdTypeId:MdTypes, mdObjectId:string, parentId:
     return mdObject
 }
 
+export async function getMdObjectById(mdObjectId:string, parentId:string) {
+    const mdType = await MdType.getType((mdObjectId as MdTypes))
+    if(mdType){return mdType}
+    let mdObject = BaseMeta.mdObjects.find(elem=>elem.id === mdObjectId && elem.parentId === parentId);  
+    if(!mdObject){
+        await loadMdObject(mdObjectId, parentId);
+        mdObject = BaseMeta.mdObjects.find(elem=>elem.id === mdObjectId && elem.parentId === parentId);  
+    }
+    return mdObject
+}
+
+async function loadMdObject(mdObjectId:string, parentId:string){
+   
+    const apiCommandArgs = new ApiCommandArgs("getMdObjectById", {mdObjectId: mdObjectId, parentId: parentId})
+    const data = await ApiMain.execApiCommand(apiCommandArgs);
+    
+    if(!data){
+        throw Error('object id = {mdObjectId} not found');
+    }
+   
+    for await (const iterator of (data as any)) {
+        if(!iterator){continue;}
+        const mdType = await MdType.getType(iterator.typeId)
+        if(!mdType){
+            console.log('type ' + iterator.typeId + ' not found');
+            continue;       
+        }
+        const newObject:any =  new DynamicClass(mdType.className, iterator.mdId);           
+        await loadObjectFromData(newObject, iterator);    
+        BaseMeta.mdObjects.push(newObject);
+    }   
+}
+
 export async function getMdObjects(mdTypeId:MdTypes, parentId:string) {      
     let mdObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId === mdTypeId && elem.parentId === parentId);   
     if(mdObjects.length ===0){
@@ -32,7 +65,7 @@ export async function getMdObjects(mdTypeId:MdTypes, parentId:string) {
 }
 
 export async function resetCache() {
-   MdType.resetCache();
+   await MdType.resetCache();
    BaseMeta.mdObjects = [];
 }
 async function loadMdObjects(mdTypeId:MdTypes, parentId:string){  

@@ -18,6 +18,10 @@ interface mdWebFormInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false,
         },
+        synonym:{
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
         
     }, {
         freezeTableName: true

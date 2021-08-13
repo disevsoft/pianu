@@ -14,5 +14,7 @@ const msgs: msgOptions ={
     4:'error on delete mdObject',
     5:'object deleted succesfully',
     6:'No token provided',
-    7:'Unauthorized'
+    7:'Unauthorized',
+    8:'domain not found',
+    9:'cant init domain'
 }

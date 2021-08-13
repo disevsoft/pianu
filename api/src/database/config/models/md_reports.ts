@@ -17,11 +17,11 @@ interface mdReportInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false,
         },
+        synonym:{
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
         // list_name:{
-        //     type: Sequelize.STRING,
-        //     allowNull: true,
-        // },
-        // synonym:{
         //     type: Sequelize.STRING,
         //     allowNull: true,
         // },

@@ -26,17 +26,17 @@ export default defineComponent({
         const presentation = ref('');
         const _showChooseButton = ref(false);
         onMounted(async () => {
-            elementId.value = uuid.v4();
-            if(props.modelValue && typeof props.modelValue === 'string'){
-                await setPresentationValue(props.modelValue.split(','));
-            }
+            elementId.value = uuid.v4();     
+            //if(props.modelValue && typeof props.modelValue === 'string'){
+                await setPresentationValue(props.modelValue);
+           // }
             EventBus.on('dataChoosed', dataChoosed);
         });
 
         const dataChoosed=async(eventArgs:any)=>{
             if (eventArgs.elementId === elementId.value){
                 if(eventArgs.resultData && eventArgs.resultData.length > 0){
-                    await setPresentationValue(eventArgs.resultData);
+                    await setPresentationValue(eventArgs.resultData.join(','));
                     updateValue(eventArgs.resultData.join(','))             
                 }
                 else{
@@ -46,12 +46,13 @@ export default defineComponent({
             }   
         }
 
-        const setPresentationValue= async(items:any)=>{
+        const setPresentationValue= async(value:any)=>{
             const fieldProp = (props.fieldProp as MdTypesField);
-             if(!fieldProp.mdType || fieldProp.mdType.isMdType){       
+             if(value && (!fieldProp.mdType || fieldProp.mdType.isMdType  && typeof value === 'string')){                    
+                 const items =value.split(',');   
                  presentation.value = await TreeService.TreeHelper.getMdObjectPresentation(items);
              }else{
-                presentation.value =  (props.modelValue as string);  
+                presentation.value =  (value as string);  
              }
         };
 
@@ -82,6 +83,7 @@ export default defineComponent({
         const chooseButtonClick=()=>{     
             let choosedData:any = undefined   
             if( typeof props.modelValue === 'string') {
+                if(props.modelValue && typeof props.modelValue === 'string')
                 choosedData = props.modelValue.split(',')    
             }
             CfgDialog.showDialog(document.getElementById('windowBox-'+elementId.value), elementId.value, choosedData);

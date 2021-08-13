@@ -23,4 +23,5 @@ const sequelize = new Sequelize(config.DB,
 
 const db = { Sequelize, sequelize, Model, DataTypes,};
 sequelize.authenticate();
+
 export default db;

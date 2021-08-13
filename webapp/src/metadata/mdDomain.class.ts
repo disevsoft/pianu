@@ -6,7 +6,6 @@ export default class MdDomain extends BaseMeta{
     constructor(id:string){
         
         super(id);
-
         this.typeId= MdTypes.Domains;
         this.typeName = 'Domain'
     }

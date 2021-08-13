@@ -8,6 +8,7 @@ import MdType from '../../metadata/mdType.class'
 import * as MdHelper from '../../metadata/mdHelper'
 import { MdTypes } from "@/metadata/MdTypes";
 import MdTypeField from './mdTypesField'
+import DomainService from '../../services/app/domain.service'
 class TreeHelper {
   public static getMdTreeRoot() {
     const confNodes = config;
@@ -32,6 +33,11 @@ class TreeHelper {
     const nodes = await TreeHelper.prepareNodeData(data, NodeType.MdObject);    
     return nodes;
   }
+
+  public static async initDomain(nodeData: NodeData){  
+    return await DomainService.initDomainById(nodeData.id);
+  }
+
 
   private static async getMdObjectSubfolder(nodeData: NodeData){
     const data =  await mdTreeSubfolders[nodeData.mdTypeId](nodeData.mdTypeId, nodeData.id);
@@ -110,6 +116,7 @@ class TreeHelper {
   public static async deleteMdObject(targetNode: any) {     
     const apiCommandArgs = new ApiCommandArgs("deleteMdObject", { mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id})
     const data = await ApiMain.execApiCommand(apiCommandArgs); 
+    await MdHelper.resetCache();
     return data;
   }
 

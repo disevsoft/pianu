@@ -8,14 +8,14 @@
           <el-main>
             <el-tree
               @current-change="onCurrentNodeChange"
+              @node-contextmenu="onNodeContextMenu"
               ref="metaDataTreeRef"
               :data="nodes"
               node-key="elementId"
               :load="loadNodes"
               :expand-on-click-node="false"
               lazy
-              :props="defaultTreeProps"
-
+              :props="defaultTreeProps"             
             >
               <template #default="{ node, data }">
                 <span class="custom-tree-node">
@@ -24,7 +24,15 @@
                     style="padding-right: 5px"
                   >
                   </i>
-                  <span>{{ node.label }}</span>
+                   <el-dropdown  v-if="getContextItems(node).length>0" trigger="contextmenu" size="small" @command="onNodeContextCommand">
+                    <span>{{ node.label }}</span>                    
+                    <template #dropdown>
+                      <el-dropdown-menu >
+                        <el-dropdown-item v-for="item in getContextItems(node)" :key="item" :command="item" :icon="item.icon">{{item.commandName}}</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+                 <span v-else>{{ node.label }}</span>   
                   <span v-if="isSelectedNode(data)">
                     <span style="padding: 20px">
                       <i
@@ -161,7 +169,7 @@ import { uuid } from "vue-uuid";
 import СfgPropertyEditor from "../components/configurator/СfgPropertyEditor.vue";
 import EventBus from '../components/configurator/CfgEventBus';
 import {NodeType} from '../configs/configurator/mdTree.config';
-import {getTypeIconName} from '../metadata/MdTypes'
+import {MdTypes, getTypeIconName} from '../metadata/MdTypes'
 import { useStore } from 'vuex'
 
 export default defineComponent({
@@ -203,19 +211,35 @@ export default defineComponent({
     const onLogOut=()=>{
       store.dispatch('authentication/logout');
     };
-    const getTabProps = (tabItem: any) => {
-      
+    const getTabProps = (tabItem: any) => {      
       const mdObjectDescr = {
         mdTypeId: tabItem.data.mdTypeId,
         id: tabItem.data.id,
         parentId: tabItem.data.parentId,
       };
-
       return { mdObjectDescr: mdObjectDescr, elementId: tabItem.elementId };
     };
 
     const onCurrentNodeChange = (n: any) => {
       selectedNodeId.value = n.elementId;
+    };
+
+    const onNodeContextMenu = (event:any, nodeData:any, treeNode:any) => {
+      const i = 0;     
+    };
+
+     const getContextItems = (node:any) => {
+      const array = [];
+      if(node.data.id && node.data.mdTypeId===MdTypes.Domains){
+       array.push({commandName:'init', icon:'el-icon-sunrise', nodeData:node.data, commandTag:'initDomain'})
+      }
+      return array;
+    }
+
+    const onNodeContextCommand = async(command:any) => { 
+        if(command.commandTag==='initDomain'){
+          await TreeService.TreeHelper.initDomain(command.nodeData);
+        }
     };
 
     const removeTab=(targetName:any)=>{
@@ -262,7 +286,7 @@ export default defineComponent({
       if(parentNode){   
         const data = await TreeService.TreeHelper.getTreeNodes(parentNode.data);
         metaDataTreeRef.value.updateKeyChildren(parentNode.data.elementId, data);
-        updateNodes(parentNode);
+        console.log(parentNode);     
       }
     };
     const findeAndActivateTab = (node: any) => {
@@ -365,7 +389,10 @@ export default defineComponent({
       apiLog,
       logData,
       user,
-      onLogOut
+      onLogOut,
+      onNodeContextMenu,
+      getContextItems,
+      onNodeContextCommand
     };
   },
   

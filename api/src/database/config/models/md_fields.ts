@@ -17,6 +17,10 @@ interface mdFieldInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false,
         },
+        synonym:{
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
         type:{
             type: Sequelize.STRING,
             allowNull: true,
@@ -40,7 +44,17 @@ interface mdFieldInstance extends Model {
             type: Sequelize.BOOLEAN,
             allowNull: true,
             defaultValue:false 
-        }       
+        },
+        database_name:{
+            type: Sequelize.STRING,
+            allowNull: true,
+            defaultValue:''            
+        },
+        unique:{ 
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue:false 
+        }           
     }, {
         freezeTableName: true
 });   

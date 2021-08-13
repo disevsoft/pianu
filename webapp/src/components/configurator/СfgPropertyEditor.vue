@@ -65,7 +65,6 @@ export default defineComponent({
       const data:any = await TreeService.TreeHelper.getMdObjectFields(
         props.mdObjectDescr
       );
-      
       if(!data) {return}
       mdObjectData.value = data;
       dataLoadingComplete.value = true;

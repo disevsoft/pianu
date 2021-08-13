@@ -16,7 +16,7 @@ export default class BaseMeta{
     name:string = '';
     synonym:string = '';
     parentId:string = '';
-    constructor(id:string){
+    constructor(id:string){ 
         this.id = id;
     }
     public static mdObjects: Array<BaseMeta> =[];
@@ -48,61 +48,60 @@ export default class BaseMeta{
 
     };
 
+
+    async afterSave(){
+
+    };
     async save() {  
         const model = await require('../database/config/models/'+this.modelName)[this.modelName];
         if(!model){return;}
        
-        try{
-           await db.sequelize.transaction(async(t)=>{
-                const saveMdObjectArgs = new SaveMdObjectArgs();
-                await this.beforeSave(saveMdObjectArgs);
-                if(saveMdObjectArgs.cancel){
-                    return;
-                }
-                if(!this.id){  
-                    this.id = await uuidv4(); 
-                    let updatedFields = await this.getModelFields();
+        await db.sequelize.transaction(async(t)=>{
+            const saveMdObjectArgs = new SaveMdObjectArgs();
+            await this.beforeSave(saveMdObjectArgs);
+            if(saveMdObjectArgs.cancel){
+                return;
+            }
+            if(!this.id){  
+                this.id = await uuidv4(); 
+                let updatedFields = await this.getModelFields();
 
-                    await model.create(updatedFields,
-                    ); 
-                    await md_objects_types.create({
+                await model.create(updatedFields,
+                ); 
+                await md_objects_types.create({
+                    md_object_id: this.id, 
+                    md_type_id: this.typeId}, {returning: false })
+                if(this.parentId){
+                    await md_map.create({
                         md_object_id: this.id, 
-                        md_type_id: this.typeId}, {returning: false })
-                    if(this.parentId){
-                        await md_map.create({
-                            md_object_id: this.id, 
-                            md_owner_id: this.parentId},)    
-                    } 
-                }else{
-                    let updatedFields = await this.getModelFields();
-                    await model.update(updatedFields,  
-                    {where:{id: this.id},  
-                    //returning: true, 
-                    },);
-                }
-            });
-        }catch(e){
-            throw new Error(e);
-        }
+                        md_owner_id: this.parentId},)    
+                } 
+            }else{
+                let updatedFields = await this.getModelFields();
+                await model.update(updatedFields,  
+                {where:{id: this.id},  
+                //returning: true, 
+                },);
+            }
+            await this.afterSave();
+        });
     }
 
     async delete(){
-        try{
-            await db.sequelize.transaction(async(t)=>{  
-            const childObjects:any = await md_map.findAll({where:{md_owner_id: this.id}})
-            for (let childObject of childObjects){
-                const mdObject:BaseMeta = await mdHelper.getInstanceById(childObject.md_object_id);  
+        await db.sequelize.transaction(async(t)=>{  
+        const childObjects:any = await md_map.findAll({where:{md_owner_id: this.id}})
+        for (let childObject of childObjects){
+            const mdObject:BaseMeta = await mdHelper.getInstanceById(childObject.md_object_id);  
+            if(mdObject){
                 await mdObject.delete();
-                await md_map.destroy({where:{md_owner_id: this.id, md_object_id:childObject.md_object_id}})
-            } 
-            await md_objects_types.destroy({where:{md_object_id: this.id}})
-            const model = await require('../database/config/models/'+this.modelName)[this.modelName];
-            await model.destroy({where:{id: this.id}})
-            BaseMeta.mdObjects = [];
-            });
-        }catch(e){
-            throw new Error(e);
-        }
+            }
+            await md_map.destroy({where:{md_owner_id: this.id, md_object_id:childObject.md_object_id}})
+        } 
+        await md_objects_types.destroy({where:{md_object_id: this.id}})
+        const model = await require('../database/config/models/'+this.modelName)[this.modelName];
+        await model.destroy({where:{id: this.id}})
+        BaseMeta.mdObjects = []; 
+        });
     }
 
     async getModelFields(){

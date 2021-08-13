@@ -2,6 +2,7 @@ import BaseMeta from '../metadata/basemeta.class';
 import {Metadata} from '../metadata/metadata.class'
 import ResponseArgs from '../helpers/responseArgs'
 import * as mdHelper from '../helpers/mdObjectHelper'
+import { MdTypes } from '../metadata/mdTypes';
 
 export async function processCommand(req:any, res:any)
  {
@@ -90,6 +91,27 @@ export async function saveMdObject(options: any, resArgs:ResponseArgs){
     return true;
 } 
 
+export async function initDomain(options:any, resArgs:ResponseArgs) {
+    const mdObjectId = options.mdObjectId;
+    const domain:any = await Metadata.getMdObject(MdTypes.Domains, mdObjectId, '');
+    if(!domain){
+        resArgs.status = 500;
+        resArgs.messageId = 8;
+        resArgs.cancel = true;   
+    }
+    else{
+        try{
+            await domain.init(); 
+        }catch(e){
+            resArgs.status = 500;
+            resArgs.messageId = 9;
+            resArgs.cancel = true; 
+            resArgs.errorDescription = String(e);
+        }
+    }
+    return true;       
+}
+
 export async function initConfigModel(options:any, resArgs:ResponseArgs) {
     let force = options.force;
     if(!force){force = false}
@@ -112,7 +134,8 @@ const processors: { [K: string]: Function } = {
     initConfigModel:initConfigModel,
     deleteMdObject:deleteMdObject,
     getMdTypesList:getMdTypesList,
-    getMdObjectById:getMdObjectById
+    getMdObjectById:getMdObjectById,
+    initDomain:initDomain
 };
 
 

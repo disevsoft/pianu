@@ -18,6 +18,10 @@ interface mdCatalogInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false, 
         },
+        synonym:{
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
         is_hierarchical:{
             type: Sequelize.BOOLEAN ,
             allowNull: true,

@@ -8,7 +8,7 @@ import BaseMeta from './basemeta.class';
 
 export class Metadata{
 
-    public static async getMdObject(mdTypeId:string, mdObjectId:string, mdParentId:string, resArgs:ResponseArgs){
+    public static async getMdObject(mdTypeId:string, mdObjectId:string, mdParentId:string){
 
          
         const objectType = await MdType.getMdType(mdTypeId);
@@ -18,16 +18,14 @@ export class Metadata{
                 if(data){await data.setParentId(mdParentId)};
                 return data; 
         }
-        resArgs.messageId = 1;
-        resArgs.cancel = true;
     } 
 
     public static async deleteMdObject(mdTypeId:string, mdObjectId:string,  resArgs:ResponseArgs)
     {
-        const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, '', resArgs);
+        const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, '');
         if(mdObject){
             try{
-                mdObject.delete();
+                await mdObject.delete();
                 resArgs.messageId = 5;
             }
             catch(e){
@@ -36,13 +34,12 @@ export class Metadata{
                 resArgs.errorDescription = String(e);
                 resArgs.status = 500;
             }
-        }
-       
+        }    
     } 
 
     public static async getMdObjectFields(mdTypeId:string, mdObjectId:string, mdParentId:string, resArgs:ResponseArgs)
     {
-        const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, mdParentId, resArgs);
+        const mdObject = await Metadata.getMdObject(mdTypeId, mdObjectId, mdParentId);
         resArgs.resData = await mdObject?.getFields();
     }
 
@@ -61,7 +58,7 @@ export class Metadata{
         if(!typeId){throw 'error'}; 
         const id = await Metadata.getIdFromFields(fieldsArray);
         const parentId = await Metadata.getParentIdFromFields(fieldsArray);
-        const mdObject:any = await Metadata.getMdObject(typeId, id, parentId, resArgs);
+        const mdObject:any = await Metadata.getMdObject(typeId, id, parentId);
         for (let mdField of mdObject?.mdFields) {
             if(mdField.fieldMap){
                 const field = fieldsArray.find(elem=>(elem.name===mdField.name));
@@ -89,4 +86,5 @@ export class Metadata{
         const id = fieldsArray.find(elem=>(elem.name ==='parentId'));                                    
         return id.value; 
     }
+
 }

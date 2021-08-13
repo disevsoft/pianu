@@ -7,7 +7,8 @@ export default class MdField extends BaseMeta{
     fraction:number = 0;
     mask:string='';
     isDBField = false;
-
+    unique = false;
+    databaseName= '';
     constructor(id:string){ 
         super(id);
 
@@ -23,7 +24,8 @@ export default class MdField extends BaseMeta{
         mdFields.push(new MdTypeField('fraction', MdTypes.Number, 10, 0, 0, false, "fraction"));
         mdFields.push(new MdTypeField('mask', MdTypes.String, 150, "", "", false, "mask"));
         mdFields.push(new MdTypeField('isDBField', MdTypes.Boolean, 0,false, false, false, "is_db_field"));
-        
+        mdFields.push(new MdTypeField('databaseName', MdTypes.String, 150, this.databaseName, "", false, "database_name")); 
+        mdFields.push(new MdTypeField('unique', MdTypes.Boolean, 0,false, false, false, "unique"));      
         return mdFields;
     }
 }

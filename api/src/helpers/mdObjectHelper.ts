@@ -5,23 +5,22 @@ import {md_types} from '../database/config/models/md_types'
 import {md_map} from '../database/config/models/md_map'
 import {createDefaultUser} from '../services/user.service'
 import db from '../database/config/sequilize.metadata'
+import {createDataBaseIfNotExist} from '../database/dataBaseUtils'
 
-export class DynamicClass {  
+export class DynamicClass {   
 
     constructor(className: string, opts: any) {
         const Store = require('../metadata/mdStore').Store;
         if (Store[className] === undefined || Store[className] === null) {
             throw new Error(`Class type of \'${className}\' is not in the store`);
         } 
-        return new Store[className](opts); 
+        return new Store[className](opts);  
     } 
 }
 
 export async function loadFromModelData(mdObject:any, modelData:any){
     for (let mdField of mdObject.mdFields) {
         if(mdField.fieldMap){
-            // mdField.value = modelData[mdField.fieldMap];
-            // (<any>mdObject)[mdField.name] =  mdField.value;  
             (<any>mdObject)[mdField.name] = modelData[mdField.fieldMap];
             }
         }
@@ -103,8 +102,10 @@ export async function fetchChildrenData(mdType:MdType, parentId:string) {
     }
     const childrenData:any = await md_map.findAll({where:{md_owner_id:parentId}});
     for (let element of childrenData){
-        const instance = await getInstanceById(element.md_object_id);    
-        await instance.setParentId(parentId);
+        const instance = await getInstanceById(element.md_object_id);   
+        if(instance){ 
+            await instance.setParentId(parentId);
+        }
     } 
 }
 export async function fetchAllData(mdType:MdType) {

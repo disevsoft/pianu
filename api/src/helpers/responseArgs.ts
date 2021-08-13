@@ -9,7 +9,7 @@ export default class ResponseArgs{
     sendJson = true;
     errorDescription = '';
     constructor(res:Response){
-        this.res = res;
+        this.res = res; 
     }
     public get message(){
         return Messages.getMessage(this.messageId) + (this.errorDescription===''? '':' ') 

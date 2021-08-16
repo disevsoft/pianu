@@ -23,7 +23,5 @@ interface mdMapInstance extends Model {
         },
         
        
-    }, {
-        freezeTableName: true
-}); 
+    }, db.sequilizeOptions); 
       

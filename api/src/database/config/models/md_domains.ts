@@ -21,6 +21,4 @@ interface mdDomainInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false,
         },
-    }, {
-        freezeTableName: true
-});   
+    }, db.sequilizeOptions);   

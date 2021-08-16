@@ -10,7 +10,7 @@ export default class DomainService{
         return data; 
     }
 
-    static async initDomainById(domainId:string) {
+    static async initDomainById(domainId:string) {       
         const domain = await MdHelper.getMdObject(MdTypes.Domains, domainId, '');
         return await DomainService.initDomain(domain as MdDomain);
     }

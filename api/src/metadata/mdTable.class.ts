@@ -40,11 +40,11 @@ export default class MdTable extends BaseMeta{
         await super.afterSave();
         this.createStandartFields();
     }
-    async createStandartFields(){
+    async createStandartFields(){ 
         const fields = await mdHelper.getObjectsList(MdTypes.Field, this.id); 
         const idFieldIndex = fields?.findIndex(field=>field.name==='id');
         if(!idFieldIndex || idFieldIndex<0){
-            await this.createIdField();    
+            await this.createIdField(this.tableNumber===0);    
         }
         if(this.tableNumber>0){
             const rowIdFieldIndex = fields?.findIndex(field=>field.name==='row_number');
@@ -53,12 +53,13 @@ export default class MdTable extends BaseMeta{
             }
         }
     }
-    async createIdField(){
+    async createIdField(unique:boolean){
         const idField = new MdField('');
         idField.name = 'id';
         idField.type=MdTypes.UUID;
         idField.synonym = 'Object identificator';
-        idField.unique = true;
+        idField.unique = unique;
+        idField.databaseName = 'id';
         idField.setParentId(this.id);
         await idField.save();
     }
@@ -69,6 +70,7 @@ export default class MdTable extends BaseMeta{
         rowNumberField.type=MdTypes.Number;
         rowNumberField.synonym = 'row number';
         rowNumberField.unique = false;
+        rowNumberField.databaseName = 'row_number';
         rowNumberField.setParentId(this.id);
         await rowNumberField.save();
     }

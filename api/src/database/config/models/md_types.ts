@@ -67,7 +67,5 @@ export const md_types = sequelize.define<mdTypeInstance>('md_types', {
             allowNull: true,
             defaultValue: false
         },
-    }, {
-        freezeTableName: true 
-}); 
+    }, db.sequilizeOptions); 
 

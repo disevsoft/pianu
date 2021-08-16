@@ -29,6 +29,4 @@ interface mdSubsystemInstance extends Model {
         //     type: Sequelize.STRING,
         //     allowNull: true,
         // },
-    }, {
-        freezeTableName: true
-});   
+    }, db.sequilizeOptions);   

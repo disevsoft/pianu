@@ -2,7 +2,8 @@ module.exports = {
     HOST: "localhost",
     USER: "postgres",
     PASSWORD: "postgres",
-    DB: "config",
+    DB: "pianu",
+    SCHEMA:"config",
     dialect: "postgres",
     PORT: 5432,
     pool: {

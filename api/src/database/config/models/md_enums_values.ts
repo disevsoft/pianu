@@ -3,15 +3,19 @@ import  {Model} from "sequelize";
 import * as Sequelize from 'sequelize'
 const sequelize = db.sequelize;
 
-interface mdCatalogInstance extends Model { 
+interface mdEnumValueInstance extends Model { 
     id: string;
     name: string;
   }
 
-  export const md_catalogs = sequelize.define<mdCatalogInstance>('md_catalogs', {
+  export const md_enums_values = sequelize.define<mdEnumValueInstance>('md_enums_values', {
         id:{
             type: Sequelize.UUID,
             primaryKey: true,
+            allowNull: false,
+        },
+        enum_id:{
+            type: Sequelize.UUID,
             allowNull: false,
         },
         name:{
@@ -22,22 +26,6 @@ interface mdCatalogInstance extends Model {
             type: Sequelize.STRING,
             allowNull: true,
         },
-        is_hierarchical:{
-            type: Sequelize.BOOLEAN ,
-            allowNull: true,
-            defaultValue: false
-        },
-        hierarchical_levels:{
-            type: Sequelize.INTEGER,
-            allowNull: true,
-            defaultValue: 0
-        },
-        owners:{
-            type: Sequelize.STRING,
-            allowNull: true,
-            defaultValue: ''    
-        },
-        
     }, 
       db.sequilizeOptions
 );   

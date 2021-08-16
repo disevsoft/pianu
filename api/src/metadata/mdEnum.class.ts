@@ -2,19 +2,17 @@ import BaseMeta from './basemeta.class'
 import MdTypeField from './mdTypeField.class'
 import {MdTypes} from './mdTypes'
 export default class MdDocument extends BaseMeta{
-    listName = '';
     constructor(id:string){
         
         super(id);
 
-        this.typeId= 'cc94220b-20f8-4a63-9f29-d02fe64ba918';
-        this.modelName= 'md_documents';
-        this.typeName = 'Document'
+        this.typeId= '414d13cc-913b-424d-81b5-e57f46e9d4f1';
+        this.modelName= 'md_enums';
+        this.typeName = 'Enumeration';
     }
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, "", "", false, "list_name"));
         return mdFields;
     }
 }

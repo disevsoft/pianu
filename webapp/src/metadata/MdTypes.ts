@@ -12,7 +12,9 @@ export enum MdTypes{
   Number = 'a6135646-7a2a-40a0-bce2-40da3f76f078',
   String ='38a7b85c-acd0-4a3a-aa2b-02f685007f49',
   Boolean= '19034973-d6a4-4dbf-b900-4eb9a78e405b', 
-  UUID= 'bb5fa9d9-17f0-4246-8470-a76977058cc2'
+  UUID= 'bb5fa9d9-17f0-4246-8470-a76977058cc2',
+  Date= 'f41b5064-97a6-4ff3-b878-73747f0a8733',
+  Enumeration= '414d13cc-913b-424d-81b5-e57f46e9d4f1'
 }
 
 export function getTypeIconName(mdType:MdTypes) {

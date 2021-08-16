@@ -27,7 +27,5 @@ interface mdDomainUsersInstance extends Model {
             defaultValue:false            
         },
        
-    }, {
-        freezeTableName: true
-}); 
+    }, db.sequilizeOptions); 
       

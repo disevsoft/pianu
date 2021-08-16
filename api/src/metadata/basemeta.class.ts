@@ -42,7 +42,10 @@ export default class BaseMeta{
     }
 
     async setParentId(parentId:string){ 
-        this.parentId = parentId;   
+        if(!parentId){this.parentId = ''}
+        else{
+            this.parentId = parentId;  
+        } 
     }
     async beforeSave(saveMdObjectArgs: SaveMdObjectArgs){
 

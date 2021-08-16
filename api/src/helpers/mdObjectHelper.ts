@@ -5,7 +5,6 @@ import {md_types} from '../database/config/models/md_types'
 import {md_map} from '../database/config/models/md_map'
 import {createDefaultUser} from '../services/user.service'
 import db from '../database/config/sequilize.metadata'
-import {createDataBaseIfNotExist} from '../database/dataBaseUtils'
 
 export class DynamicClass {   
 

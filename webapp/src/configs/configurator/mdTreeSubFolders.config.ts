@@ -96,3 +96,6 @@ mdTreeSubfolders[MdTypes.Field] = function(parentMdType:MdTypes, parentId:string
 mdTreeSubfolders[MdTypes.User] = function(parentMdType:MdTypes, parentId:string){
     return undefined;
 }
+mdTreeSubfolders[MdTypes.Enumeration] = function(parentMdType:MdTypes, parentId:string){
+    return undefined;
+}

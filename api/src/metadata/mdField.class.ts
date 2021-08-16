@@ -1,4 +1,5 @@
 import BaseMeta from './basemeta.class'
+import MdType from './mdType.class';
 import MdTypeField from './mdTypeField.class'
 import {MdTypes} from './mdTypes'
 export default class MdField extends BaseMeta{
@@ -15,6 +16,35 @@ export default class MdField extends BaseMeta{
         this.typeId= '8c474f75-b63a-4f3a-b624-f9a58cb7eeae';
         this.modelName= 'md_fields';
         this.typeName = 'Field'
+    }
+
+    public async haveMdType(){
+        let haveMdType = false;
+        const typesArray = this.type.split(',');
+        for await (const mdTypeId of typesArray) {
+            const mdType = await MdType.getMdType(mdTypeId);
+            if(mdType){
+                haveMdType = (haveMdType || mdType.isMdType)
+            }
+        }
+        return haveMdType;
+    }
+
+    public haveMultyType(){
+        const typesArray = this.type.split(',');
+        return (typesArray.length>1);       
+    }
+
+    public async getTypes(){
+        const mdTypesArray:Array<MdType> = [];
+        const typesArray = this.type.split(',');
+        for await (const mdTypeId of typesArray) {
+            const mdType = await MdType.getMdType(mdTypeId);
+            if(mdType){
+                mdTypesArray.push(mdType);
+            }
+        }   
+        return  mdTypesArray;
     }
 
     public get mdFields(){

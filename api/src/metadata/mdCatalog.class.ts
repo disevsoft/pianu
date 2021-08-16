@@ -4,6 +4,7 @@ import {MdTypes} from './mdTypes'
 export default class MdCatalog extends BaseMeta{
     isHierarchical = false;
     hierarchicalLevels = 0;
+    listName = '';
     constructor(id:string){
         
         super(id);

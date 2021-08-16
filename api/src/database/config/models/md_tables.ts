@@ -38,8 +38,6 @@ interface mdTableInstance extends Model {
             defaultValue:0            
         },
         
-    }, {
-        freezeTableName: true
-});   
+    }, db.sequilizeOptions);   
     
     

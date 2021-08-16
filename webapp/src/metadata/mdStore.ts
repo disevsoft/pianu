@@ -6,6 +6,7 @@ import MdDomain from './mdDomain.class';
 import MdReport from './mdReport.class';
 import MdSubsystem from './mdSubsystem.class';
 import MdUser from './mdUser.class';
+import MdEnum from './mdEnum.class';
 
 export const Store: any = {
     MdCatalog,
@@ -15,5 +16,6 @@ export const Store: any = {
     MdField,
     MdReport,
     MdSubsystem,
-    MdUser
+    MdUser,
+    MdEnum
 }

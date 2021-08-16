@@ -1,3 +1,4 @@
+import { decodeBase64 } from "bcryptjs";
 import { Sequelize, Model, DataTypes } from "sequelize";
 const config = require("./db.config");
 
@@ -21,7 +22,8 @@ const sequelize = new Sequelize(config.DB,
   }
 );
 
-const db = { Sequelize, sequelize, Model, DataTypes,};
+const sequilizeOptions = {freezeTableName: true,schema: config.SCHEMA };
+const db = { Sequelize, sequelize, Model, DataTypes, sequilizeOptions};
 sequelize.authenticate();
 
 export default db;

@@ -55,8 +55,6 @@ interface mdFieldInstance extends Model {
             allowNull: true,
             defaultValue:false 
         }           
-    }, {
-        freezeTableName: true
-});   
+    }, db.sequilizeOptions);   
 
     

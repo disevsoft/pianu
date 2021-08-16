@@ -23,8 +23,6 @@ interface mdWebFormInstance extends Model {
             allowNull: true,
         },
         
-    }, {
-        freezeTableName: true
-});   
+    }, db.sequilizeOptions);   
 
     

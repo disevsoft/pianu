@@ -1,9 +1,7 @@
 import BaseMeta from './basemeta.class'
 import MdTypeField from './mdTypeField.class'
 import {MdTypes} from './mdTypes'
-import {createDataBaseIfNotExist} from '../database/dataBaseUtils'
-import MdType from './mdType.class';
-import {getObjectsList} from '../helpers/mdObjectHelper'
+import {initDomain} from '../database/dataBaseUtils'
 export default class MdDomain extends BaseMeta{
     databaseName = '';
     constructor(id:string){
@@ -27,14 +25,6 @@ export default class MdDomain extends BaseMeta{
         if(!this.databaseName){
             throw Error('Domain database name is empty');
         }
-       await createDataBaseIfNotExist(this.databaseName);
-       
-    //    const mdTables = await getObjectsList(MdTypes.Table, '');
-    //    if(!mdTables){return}
-    //    for await (const mdTable of mdTables) {
-    //         if((mdTable as any).isDBTable) {
-    //             await createDataBaseIfNotExist((mdTable as any).databaseName);
-    //         }         
-    //    }      
+        await initDomain(this);  
     }
 }

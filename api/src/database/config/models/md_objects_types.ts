@@ -21,7 +21,5 @@ interface mdObjectTypesInstance extends Model {
             unique: false
         },
        
-    }, {
-        freezeTableName: true
-}); 
+    }, db.sequilizeOptions); 
      

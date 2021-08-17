@@ -181,6 +181,12 @@ class TreeHelper {
     return false;
   }
   
+  public static getNewNodeData(nodeData:NodeData){
+    const newNodeData = new NodeData(nodeData.nodeType, nodeData.mdTypeId, nodeData.id,nodeData.name, nodeData.parentId,
+      nodeData.canAdd,
+      nodeData.canEdit);
+      return newNodeData;
+  }
 }
 class NodeData {
   name = "";

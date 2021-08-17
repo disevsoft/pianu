@@ -301,10 +301,11 @@ export default defineComponent({
 
     const onAddNode = (node: any) => {
       const elementId = uuid.v4();
+       const nodeData = TreeService.TreeHelper.getNewNodeData(node.data);
       const tabData = {
         title: node.data.name,
         name: elementId,
-        data: node.data,
+        data: nodeData,
         elementId:elementId, 
         node:node
       };

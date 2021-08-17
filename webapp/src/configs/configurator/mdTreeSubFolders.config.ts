@@ -54,6 +54,18 @@ const usersSubFolder = {
     synonym: "Пользователи",
 }
 
+const enumItemsSubFolder =  {
+    canAdd: true,
+    canEdit: false,
+    children: undefined,
+    typeId: MdTypes.EnumerationItem,
+    name: "Values",
+    nodeType: NodeType.MdObjectFolder,
+    parentId: undefined,
+    synonym: "Значения",
+   
+};
+
 function setParentId(subFolders:any, parentId:string){
     subFolders.forEach((subFolder:any)=>{
         subFolder.parentId = parentId
@@ -97,5 +109,7 @@ mdTreeSubfolders[MdTypes.User] = function(parentMdType:MdTypes, parentId:string)
     return undefined;
 }
 mdTreeSubfolders[MdTypes.Enumeration] = function(parentMdType:MdTypes, parentId:string){
-    return undefined;
+    const subFolders = [enumItemsSubFolder];
+    setParentId(subFolders, parentId);
+    return subFolders;
 }

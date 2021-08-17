@@ -7,6 +7,7 @@ import MdReport from './mdReport.class';
 import MdSubsystem from './mdSubsystem.class';
 import MdUser from './mdUser.class';
 import MdEnum from './mdEnum.class';
+import MdEnumItem from './mdEnumItem.class';
 
 export const Store: any = {
     MdCatalog,
@@ -17,5 +18,6 @@ export const Store: any = {
     MdReport,
     MdSubsystem,
     MdUser,
-    MdEnum
+    MdEnum,
+    MdEnumItem
 }

@@ -91,6 +91,21 @@ module.exports =  [
         field_type:true,
     },
     {
+        id: "13274bca-5ab0-4c88-be70-9589763fc07f",
+        name: "EnumerationItem",
+        list_name: "EnumerationItemss",
+        synonym: "Значение перечисления",
+        list_synonym: "Значения перечиления",
+        table_name: "md_enums_values",
+        class_name: "MdEnumItem",
+        database_type: "",
+        is_md_type: true,
+        has_length:false,
+        has_fraction:false,
+        order:10,
+        field_type:true,
+    },
+    {
         id: "834cd9ad-9720-4fc5-aa09-cef6f7a895a0",
         name: "Catalogs",
         list_name: "Catalogs",
@@ -102,7 +117,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:10,
+        order:11,
         field_type:true,
     },
     {
@@ -117,7 +132,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:11,
+        order:12,
         field_type:true,
     },
     {
@@ -132,7 +147,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:12,
+        order:13,
         field_type:false,
     },
     {
@@ -147,7 +162,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:13,
+        order:14,
         field_type:false,
     },
     {
@@ -162,7 +177,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:14,
+        order:15,
         field_type:false,
     },
     {
@@ -177,7 +192,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:15,
+        order:16,
         field_type:false,
     },
     {
@@ -192,7 +207,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:16,
+        order:17,
         field_type:false,
     },
     {
@@ -207,7 +222,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:17,
+        order:18,
         field_type:false,
     },
     {
@@ -222,7 +237,7 @@ module.exports =  [
         is_md_type: true,
         has_length:false,
         has_fraction:false,
-        order:18,
+        order:19,
         field_type:false,
     },
 ];

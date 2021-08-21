@@ -8,6 +8,5 @@ import "@/global/styles.css";
 const app = createApp(App);
 app.use(store);
 app.use(router);
-//app.use(ElementPlus);
-installElementPlus(app)
-app.mount("#app");
+installElementPlus(app);
+app.mount("#app"); 

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "element-plus": "^1.0.2-beta.54",
+    "element-plus": "^1.0.2-beta.71",
     "register-service-worker": "^1.7.1",
     "splitpanes": "^3.0.4",
     "vue": "^3.0.0",
@@ -20,6 +20,7 @@
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/events": "^3.0.0",
     "@types/splitpanes": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",

@@ -15,7 +15,8 @@ export enum MdTypes{
   UUID= 'bb5fa9d9-17f0-4246-8470-a76977058cc2',
   Date= 'f41b5064-97a6-4ff3-b878-73747f0a8733',
   Enumeration= '414d13cc-913b-424d-81b5-e57f46e9d4f1',
-  EnumerationItem= '13274bca-5ab0-4c88-be70-9589763fc07f'
+  EnumerationItem= '13274bca-5ab0-4c88-be70-9589763fc07f',
+  MenuItem= '6929b322-5a6a-4cc7-b002-d80460776ec2'
 }
 
 export function getTypeIconName(mdType:MdTypes) {

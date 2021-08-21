@@ -7,7 +7,7 @@ import {Store} from './mdStore'
 export class DynamicClass {  
     constructor(className: string, opts: any) {
         if (Store[className] === undefined || Store[className] === null) {
-            throw new Error('Class type of ${className} is not in the store');
+            throw new Error(`Class type of ${className} is not in the store`);
         } 
         return new Store[className](opts); 
     } 
@@ -39,7 +39,7 @@ async function loadMdObject(mdObjectId:string, parentId:string){
     const data = await ApiMain.execApiCommand(apiCommandArgs);
     
     if(!data){
-        throw Error('object id = {mdObjectId} not found');
+        throw Error(`object id = ${mdObjectId} not found`);
     }
    
     for await (const iterator of (data as any)) {
@@ -56,10 +56,11 @@ async function loadMdObject(mdObjectId:string, parentId:string){
 }
 
 export async function getMdObjects(mdTypeId:MdTypes, parentId:string) {      
+    
     let mdObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId === mdTypeId && elem.parentId === parentId);   
     if(mdObjects.length ===0){
         await loadMdObjects(mdTypeId, parentId);
-        mdObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId === mdTypeId);  
+        mdObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId === mdTypeId && elem.parentId === parentId);  
     }  
     return mdObjects;
 }
@@ -68,6 +69,7 @@ export async function resetCache() {
    await MdType.resetCache();
    BaseMeta.mdObjects = [];
 }
+
 async function loadMdObjects(mdTypeId:MdTypes, parentId:string){  
     
     const mdType = await MdType.getType(mdTypeId);      

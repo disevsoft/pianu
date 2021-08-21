@@ -68,4 +68,14 @@ export default [
     parentId: undefined,
     synonym: "Пользователь",
   },
+  {
+    canAdd: true,
+    canEdit: false,
+    children: undefined,
+    mdTypeId: MdTypes.MenuItem,
+    name: "MenuItems",
+    nodeType: NodeType.MdRootType,
+    parentId: undefined,
+    synonym: "Меню",
+  },
 ];

@@ -8,7 +8,7 @@ import MdSubsystem from './mdSubsystem.class';
 import MdUser from './mdUser.class';
 import MdEnum from './mdEnum.class';
 import MdEnumItem from './mdEnumItem.class';
-
+import MdMenuItem from './mdMenuItem.class';
 export const Store: any = {
     MdCatalog,
     MdDocument, 
@@ -19,5 +19,6 @@ export const Store: any = {
     MdSubsystem,
     MdUser,
     MdEnum,
-    MdEnumItem
+    MdEnumItem,
+    MdMenuItem
 }

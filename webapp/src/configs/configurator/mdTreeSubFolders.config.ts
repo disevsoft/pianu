@@ -1,7 +1,7 @@
 import {MdTypes} from '../../metadata/MdTypes'
 import {NodeType} from '../configurator/mdTree.config';
-
-
+import {TreeHelper} from '../../services/configurator/metaDataTree.service'
+import * as MdHelper from '../../metadata/mdHelper'
 const tablesSubFolder =  {
     canAdd: true,
     canEdit: false,
@@ -65,6 +65,17 @@ const enumItemsSubFolder =  {
     synonym: "Значения",
    
 };
+const menuItemsSubFolder =  {
+    canAdd: true,
+    canEdit: true,
+    children: undefined,
+    typeId: MdTypes.MenuItem,
+    name: "items",
+    nodeType: NodeType.MdObjectFolder,
+    parentId: undefined,
+    synonym: "Элементы меню",
+   
+};
 
 function setParentId(subFolders:any, parentId:string){
     subFolders.forEach((subFolder:any)=>{
@@ -95,20 +106,28 @@ mdTreeSubfolders[MdTypes.Table] = function(parentMdType:MdTypes, parentId:string
     return subFolders;
 }
 
-mdTreeSubfolders[MdTypes.Domains] = function(parentMdType:MdTypes, parentId:string){
+mdTreeSubfolders[MdTypes.Domains] = async function(parentMdType:MdTypes, parentId:string){
     const subFolders = [usersSubFolder];
     setParentId(subFolders, parentId);
     return subFolders;
 }
 
-mdTreeSubfolders[MdTypes.Field] = function(parentMdType:MdTypes, parentId:string){
+mdTreeSubfolders[MdTypes.Field] = async function(parentMdType:MdTypes, parentId:string){
     return undefined;
 }
 
-mdTreeSubfolders[MdTypes.User] = function(parentMdType:MdTypes, parentId:string){
+mdTreeSubfolders[MdTypes.User] = async function(parentMdType:MdTypes, parentId:string){
     return undefined;
 }
-mdTreeSubfolders[MdTypes.Enumeration] = function(parentMdType:MdTypes, parentId:string){
+mdTreeSubfolders[MdTypes.Enumeration] = async function(parentMdType:MdTypes, parentId:string){
+    const subFolders = [enumItemsSubFolder];
+    setParentId(subFolders, parentId);
+    return subFolders;
+}
+mdTreeSubfolders[MdTypes.MenuItem] = async function(parentMdType:MdTypes, parentId:string){
+    // const data = await MdHelper.getMdObjects(parentMdType, parentId);         
+    // return data;
+    
     const subFolders = [enumItemsSubFolder];
     setParentId(subFolders, parentId);
     return subFolders;

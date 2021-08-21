@@ -8,6 +8,7 @@ import MdSubsystem from '../metadata/mdSubsystem.class';
 import MdUser from '../metadata/mdUser.class';
 import MdEnum from '../metadata/mdEnum.class';
 import MdEnumItem from '../metadata/mdEnumItem.class';
+import MdMenuItem from '../metadata/mdMenuItem.class';
 export const Store: any = {
     MdCatalog,
     MdDocument, 
@@ -18,5 +19,6 @@ export const Store: any = {
     MdSubsystem,
     MdUser,
     MdEnum,
-    MdEnumItem
+    MdEnumItem,
+    MdMenuItem
 }

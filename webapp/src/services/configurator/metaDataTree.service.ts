@@ -9,7 +9,7 @@ import * as MdHelper from '../../metadata/mdHelper'
 import { MdTypes } from "@/metadata/MdTypes";
 import MdTypeField from './mdTypesField'
 import DomainService from '../../services/app/domain.service'
-class TreeHelper {
+export class TreeHelper {
   public static getMdTreeRoot() {
     const confNodes = config;
     const nodes: Array<NodeData> = [];
@@ -28,7 +28,7 @@ class TreeHelper {
     return nodes;
   }
 
-  private static async getMdObjectsList(nodeData: NodeData){ 
+  public static async getMdObjectsList(nodeData: NodeData){ 
     const data = await MdHelper.getMdObjects(nodeData.mdTypeId, nodeData.parentId);    
     const nodes = await TreeHelper.prepareNodeData(data, NodeType.MdObject);    
     return nodes;
@@ -52,7 +52,14 @@ class TreeHelper {
     }
 
     if(nodeData.nodeType===NodeType.MdObject){
-      return await TreeHelper.getMdObjectSubfolder(nodeData);
+      if (nodeData.mdTypeId===MdTypes.MenuItem){
+          const itemNodeData = TreeHelper.getNewNodeData(nodeData);
+          itemNodeData.parentId= nodeData.id;    
+          return await TreeHelper.getMdObjectsList(itemNodeData) ;      
+      }
+      else{
+        return await TreeHelper.getMdObjectSubfolder(nodeData);
+      }
     }
 
     if(nodeData.nodeType===NodeType.MdObjectFolder){
@@ -127,7 +134,7 @@ class TreeHelper {
     return data;
   }
 
-  static async prepareNodeData(nodeData: any, nodeType: NodeType) {
+  public static async prepareNodeData(nodeData: any, nodeType: NodeType) {
     if(!nodeData){
       return[];
     }
@@ -154,7 +161,7 @@ class TreeHelper {
       return false;
     }
     if (nodeType === NodeType.MdObject) {
-      return false;
+      return true;
     }
     if (nodeType === NodeType.MdObjectFolder) {
       return true;
@@ -185,6 +192,7 @@ class TreeHelper {
     const newNodeData = new NodeData(nodeData.nodeType, nodeData.mdTypeId, nodeData.id,nodeData.name, nodeData.parentId,
       nodeData.canAdd,
       nodeData.canEdit);
+      newNodeData.id='';
       return newNodeData;
   }
 }
@@ -210,7 +218,7 @@ class NodeData {
     this.nodeType = nodeType;
     this.name = name;
     this.id = id;
-    this.parentId = parentId;
+    this.parentId = !parentId?'':parentId;
     this.elementId = uuid.v4();
     this.canAdd = canAdd;
     this.canEdit = canEdit;

@@ -3,11 +3,11 @@ import  {Model} from "sequelize";
 import * as Sequelize from 'sequelize'
 const sequelize = db.sequelize;
 
-interface mdSubsystemInstance extends Model { 
+interface mdMenuItemInstance extends Model { 
     id: string;
     name: string;
   }
-  export const md_subsystems = sequelize.define<mdSubsystemInstance>('md_subsystems', {
+  export const md_menu_items = sequelize.define<mdMenuItemInstance>('md_menu_items', {
         id:{
             type: Sequelize.UUID,
             primaryKey: true,
@@ -16,5 +16,13 @@ interface mdSubsystemInstance extends Model {
         name:{
             type: Sequelize.STRING,
             allowNull: false,
+        },
+        synonym:{
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        object_id:{
+            type: Sequelize.UUID,
+            allowNull: true,
         },
     }, db.sequilizeOptions);   

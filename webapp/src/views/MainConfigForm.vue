@@ -301,7 +301,10 @@ export default defineComponent({
 
     const onAddNode = (node: any) => {
       const elementId = uuid.v4();
-       const nodeData = TreeService.TreeHelper.getNewNodeData(node.data);
+      const nodeData = TreeService.TreeHelper.getNewNodeData(node.data);
+      if(node.data.mdTypeId===MdTypes.MenuItem && node.data.id){
+        nodeData.parentId = node.data.id;
+      }
       const tabData = {
         title: node.data.name,
         name: elementId,

@@ -1,34 +1,35 @@
 <template>
-  <Splitpanes class="default-theme" vertical>
-    <Pane :size="30">
-      <el-container>
-        <el-header> </el-header>
-        <el-main> </el-main>
-      </el-container>
-    </Pane>
-    <Pane>
-      <el-container>
-        <el-header> </el-header>
-        <el-main> </el-main>
-      </el-container>
-    </Pane>
-  </Splitpanes>
+ <div id="mainSurface" class="fullSize">
+   <el-container>
+          <MainMenu ref="mainMenu" :collapse="isCollapseMainMenu"/>  
+    <el-container>
+     <el-header>
+     </el-header>
+     <el-main/>
+    </el-container>
+    </el-container>
+</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import MainMenu from "../components/webapp/MainMenu.vue";
 import { Splitpanes, Pane } from "splitpanes";
 export default defineComponent({
   components: {
-    Splitpanes,
-    Pane,
+    MainMenu
   },
   setup() {
-    return {};
+    const mainMenu = ref(MainMenu);
+    const isCollapseMainMenu = ref(true);
+    const expandMainMenu = ()=>{
+      isCollapseMainMenu.value= !isCollapseMainMenu.value; 
+    }
+    return {expandMainMenu, isCollapseMainMenu};
   },
 });
 </script>
 
 <style scoped>
-/* @import '../global/styles.css' */
+
 </style>

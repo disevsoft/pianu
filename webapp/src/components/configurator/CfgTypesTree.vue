@@ -18,7 +18,7 @@ import {
 
 export default defineComponent({
    components: {
-    CfgInput,
+
   },
   props: {
       

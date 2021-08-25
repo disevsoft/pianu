@@ -4,7 +4,7 @@
     <Expand v-if="isCollapse" @click="collapseButtonClick"/>
     <Fold v-else @click="collapseButtonClick"/> 
   </el-icon>
-<el-menu default-active="2" class="el-menu-vertical-demo" @select="menuItemClick" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+<el-menu default-active="2" class="el-menu-vertical" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
   <!-- <el-submenu index="1">
     <template #title>
       <i class="el-icon-location"></i>
@@ -23,7 +23,7 @@
       <el-menu-item index="1-4-1">item one</el-menu-item>
     </el-submenu>
   </el-submenu> -->
-  <el-menu-item v-for="item in menuItems" :key="item.id">
+  <el-menu-item v-for="item in menuItems" :key="item.id" :index="item.id" @click="menuItemClick(item)">
     <i class="el-icon-menu"></i>
     <template #title>{{item.synonym}}</template>
   </el-menu-item>
@@ -37,6 +37,14 @@
   </el-menu-item> -->
 </el-menu>
 </div>
+<el-drawer
+  :title="drawerTitle"
+  v-model="drawer"
+  :with-header="true"
+  direction="ltr"
+  size="80%">
+  <span>Hi there!</span>
+</el-drawer>
 </template>
 
 <script>
@@ -53,7 +61,8 @@
     },
     setup(props) {
       const isCollapse = ref(true);
-      
+      const drawer = ref(false);
+      const drawerTitle = ref('');
       onMounted(async () => {
         await getData();
       });
@@ -68,8 +77,10 @@
       const handleClose = (key, keyPath) => {
         console.log(key, keyPath);
       };
-      const menuItemClick=(index, indexPath, menuItem)=>{
+      const menuItemClick=(menuItem)=>{
           console.log(menuItem);
+          drawerTitle.value = menuItem.synonym;
+          drawer.value = true;
       };
       const collapseButtonClick =()=>{
           isCollapse.value = !isCollapse.value;
@@ -83,18 +94,25 @@
         isCollapse,
         collapseButtonClick,
         menuItemClick,
-        menuItems
+        menuItems,
+        drawer,
+        drawerTitle
       };
     },
   });
 </script>
 
 <style lang="scss">
-.el-menu-vertical-demo:not(.el-menu--collapse) {
+.el-menu-vertical:not(.el-menu--collapse) {
     width: 200px;
     min-height: 400px;
   }
-  .el-menu-vertical-demo {
+.el-menu-vertical {
     height: 100vh;
 }
+.el-overlay{
+    left:48px !important;
+}
+
+
 </style>

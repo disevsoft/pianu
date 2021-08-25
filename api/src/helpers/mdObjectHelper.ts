@@ -162,6 +162,8 @@ export async function initModel(force:boolean){
     await db.sequelize.sync(updateOpts).then(() => {
       console.log('Alter database');
     });
+    await createDefaultUser(); 
+    await createDefaultMenu(); 
   };
   
   async function initMdModel(modelName:string){
@@ -183,8 +185,6 @@ export async function initModel(force:boolean){
           await md_types.create(item); 
       }  
     };
-    await createDefaultUser(); 
-    await createDefaultMenu(); 
   }; 
 
   async function createDefaultMenu(){

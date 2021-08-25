@@ -18,6 +18,10 @@ interface mdTableInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false,
         },
+        list_name:{
+            type: Sequelize.STRING,
+            allowNull: true, 
+        },
         synonym:{
             type: Sequelize.STRING,
             allowNull: true,
@@ -28,7 +32,7 @@ interface mdTableInstance extends Model {
             defaultValue:''            
         },
         is_db_table:{ 
-            type: Sequelize.BOOLEAN,
+            type: Sequelize.BOOLEAN, 
             allowNull: true,
             defaultValue:false 
         },   

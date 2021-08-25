@@ -8,6 +8,7 @@ export default class MdTable extends BaseMeta{
     isDBTable = false;
     databaseName= '';
     tableNumber = 0;
+    listName = '';
     constructor(id:string){
         
         super(id);
@@ -19,7 +20,7 @@ export default class MdTable extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, "", "", false, "list_name"));
+        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, this.listName, "", false, "list_name"));
         mdFields.push(new MdTypeField('tableNumber', MdTypes.Number, 2, this.tableNumber, 0, false, "table_number")); 
         mdFields.push(new MdTypeField('isDBTable', MdTypes.Boolean, 0,this.isDBTable, false, false, "is_db_table"));
         mdFields.push(new MdTypeField('databaseName', MdTypes.String, 150, this.databaseName, "", false, "database_name")); 

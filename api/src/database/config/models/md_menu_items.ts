@@ -3,7 +3,7 @@ import  {Model} from "sequelize";
 import * as Sequelize from 'sequelize'
 const sequelize = db.sequelize;
 
-interface mdMenuItemInstance extends Model { 
+interface mdMenuItemInstance extends Model {  
     id: string;
     name: string;
   }
@@ -23,6 +23,18 @@ interface mdMenuItemInstance extends Model {
         },
         object_id:{
             type: Sequelize.UUID,
+            allowNull: true,
+        },
+        order_index:{
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        },
+        description:{
+            type: Sequelize.TEXT,
+            allowNull: true,
+        },
+        is_folder:{
+            type: Sequelize.BOOLEAN,
             allowNull: true,
         },
     }, db.sequilizeOptions);   

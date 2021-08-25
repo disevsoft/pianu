@@ -16,9 +16,9 @@ export default class MdCatalog extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, "", "", false, "list_name"));
-        mdFields.push(new MdTypeField('isHierarchical',MdTypes.Boolean, 0, false, false, false, "is_hierarchical"));      
-        mdFields.push(new MdTypeField('hierarchicalLevels',MdTypes.Number, 2, 0, 0, false, "hierarchical_levels"));
+        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, this.listName, "", false, "list_name"));
+        mdFields.push(new MdTypeField('isHierarchical',MdTypes.Boolean, 0, this.isHierarchical, false, false, "is_hierarchical"));      
+        mdFields.push(new MdTypeField('hierarchicalLevels',MdTypes.Number, 2, this.hierarchicalLevels, 0, false, "hierarchical_levels"));
         return mdFields;
     }
 }

@@ -18,6 +18,10 @@ interface mdCatalogInstance extends Model {
             type: Sequelize.STRING,
             allowNull: false, 
         },
+        list_name:{
+            type: Sequelize.STRING,
+            allowNull: true, 
+        },
         synonym:{
             type: Sequelize.STRING,
             allowNull: true,

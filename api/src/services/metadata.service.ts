@@ -12,7 +12,7 @@ export async function processCommand(req:any, res:any)
     if (!commandName){
         res.status(500).send('there is no command to process');
     }
-    const resArgs = new ResponseArgs(res);
+    const resArgs = new ResponseArgs(res, req.userId);
     await processRequest(commandName, options, resArgs);
     await resArgs.send();
  }
@@ -40,6 +40,12 @@ async function getMdTypesList(options: any, resArgs:ResponseArgs){
     return true;
 }; 
  
+async function getUserMenu(options: any, resArgs:ResponseArgs){
+    const userId = '';
+    const t = await mdHelper.getUserMenu(userId);  
+    resArgs.resData = t;  
+    return true;
+}; 
 
 export async function getMdObjectData(options: any, resArgs:ResponseArgs){
     const mdTypeId = options.mdTypeId;
@@ -135,6 +141,7 @@ const processors: { [K: string]: Function } = {
     deleteMdObject:deleteMdObject,
     getMdTypesList:getMdTypesList,
     getMdObjectById:getMdObjectById,
+    getUserMenu:getUserMenu,
     initDomain:initDomain
 };
 

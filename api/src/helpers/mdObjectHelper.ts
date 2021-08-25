@@ -3,8 +3,13 @@ import MdType from '../metadata/mdType.class'
 import {md_objects_types} from '../database/config/models/md_objects_types'
 import {md_types} from '../database/config/models/md_types'
 import {md_map} from '../database/config/models/md_map'
-import {createDefaultUser} from '../services/user.service'
+import {createDefaultUser, getUserMenuId} from '../services/user.service'
 import db from '../database/config/sequilize.metadata'
+import { MdTypes } from '../metadata/mdTypes'
+import { getMdObjectById, getMdObjectData } from '../services/metadata.service'
+import { Metadata } from '../metadata/metadata.class'
+import UserRights from '../classes/userRights.class'
+import MdMenuItem from '../metadata/mdMenuItem.class'
 
 export class DynamicClass {   
 
@@ -86,10 +91,29 @@ export async function getObjectsList(mdTypeId:string, parentId:string){
     return filteredObjects;  
 }
 
-export async function getMdTypesList(){
-   
-    return MdType.getAllTypes();
+export async function getUserMenu(userId:string){
+    const menuid = await getUserMenuId(userId);
+    const itemArray:BaseMeta[] = [];
+    const menuRoot =  await Metadata.getMdObject(MdTypes.MenuItem, menuid, '');
+    itemArray.push(menuRoot);
+    await getChildrenMenuItems(userId, menuid, itemArray);
 
+    return itemArray;  
+}
+
+export async function getChildrenMenuItems(userId:string, menuItemId:string, itemArray:BaseMeta[]) {
+    const childItems = await getObjectsList(MdTypes.MenuItem, menuItemId);  
+    if(!childItems){return}
+   for await (const iterator of childItems) {
+    if (UserRights.canReadObject(userId, (iterator as MdMenuItem).objectId)){
+        itemArray.push(iterator);    
+    }
+    await getChildrenMenuItems(userId, iterator.id, itemArray)
+   }
+}
+
+export async function getMdTypesList(){ 
+    return MdType.getAllTypes();
 }
 
 export async function fetchChildrenData(mdType:MdType, parentId:string) {
@@ -160,4 +184,31 @@ export async function initModel(force:boolean){
       }  
     };
     await createDefaultUser(); 
+    await createDefaultMenu(); 
   }; 
+
+  async function createDefaultMenu(){
+    const fullInterface = {id:'e5691804-20cf-4b13-a0a3-7338cdadccec', name:'FulInterface', synonym:'Полное меню'};
+    const md_menu_item = await require('../database/config/models/' + 'md_menu_items')['md_menu_items']; 
+    const obj = await md_menu_item.findOne({ where: { id: fullInterface.id } });
+    
+    if(obj){
+        await md_menu_item.update(md_menu_item, 
+         { 
+           where: { id: fullInterface.id }
+         })
+     } else{ 
+        await md_menu_item.create(fullInterface); 
+     }  
+
+     const md_objects_types = await require('../database/config/models/' + 'md_objects_types')['md_objects_types']; 
+     const objectType = await md_objects_types.findOne({ where: { md_object_id: fullInterface.id } });
+     if(objectType){
+        await md_objects_types.update({md_object_id:fullInterface.id, md_type_id:MdTypes.MenuItem}, 
+         { 
+           where: { md_object_id:fullInterface.id}
+         })
+     } else{ 
+         await md_objects_types.create({md_object_id:fullInterface.id, md_type_id:MdTypes.MenuItem}); 
+     }  
+  }

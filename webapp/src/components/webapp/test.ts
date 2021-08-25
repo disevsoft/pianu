@@ -1,0 +1,1 @@
+import MenuService from '../../services/app/menu.service'

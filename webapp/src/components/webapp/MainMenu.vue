@@ -5,7 +5,7 @@
     <Fold v-else @click="collapseButtonClick"/> 
   </el-icon>
 <el-menu default-active="2" class="el-menu-vertical-demo" @select="menuItemClick" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-  <el-submenu index="1">
+  <!-- <el-submenu index="1">
     <template #title>
       <i class="el-icon-location"></i>
       <span>Navigator One two</span>
@@ -22,26 +22,27 @@
       <template #title><span>item four</span></template>
       <el-menu-item index="1-4-1">item one</el-menu-item>
     </el-submenu>
-  </el-submenu>
-  <el-menu-item index="2">
+  </el-submenu> -->
+  <el-menu-item v-for="item in menuItems" :key="item.id">
     <i class="el-icon-menu"></i>
-    <template #title>Navigator Two</template>
+    <template #title>{{item.synonym}}</template>
   </el-menu-item>
-  <el-menu-item index="3" disabled>
+  <!-- <el-menu-item index="3" disabled>
     <i class="el-icon-document"></i>
     <template #title>Navigator Three</template>
   </el-menu-item>
   <el-menu-item index="4">
     <i class="el-icon-setting"></i>
     <template #title>Navigator Four</template>
-  </el-menu-item>
+  </el-menu-item> -->
 </el-menu>
 </div>
 </template>
 
 <script>
-  import { defineComponent, ref, watch } from 'vue';
-    import { Expand, Fold } from '@element-plus/icons'
+  import { defineComponent, ref, watch, onMounted } from 'vue';
+  import { Expand, Fold } from '@element-plus/icons'
+ import MenuService from '../../services/app/menu.service'
   export default defineComponent({
     components: {
         Expand,
@@ -52,6 +53,15 @@
     },
     setup(props) {
       const isCollapse = ref(true);
+      
+      onMounted(async () => {
+        await getData();
+      });
+      const menuItems = ref([]);
+      const getData = async () => {
+        menuItems.value = await MenuService.getUserMenu();
+        
+      };
       const handleOpen = (key, keyPath) => {
         console.log(key, keyPath);
       };
@@ -72,7 +82,8 @@
         handleClose,
         isCollapse,
         collapseButtonClick,
-        menuItemClick
+        menuItemClick,
+        menuItems
       };
     },
   });

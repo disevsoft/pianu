@@ -81,3 +81,7 @@ export async function createDefaultUser(){
   export async function getPasswordHash(password:string){
     return bcrypt.hashSync(password, 8)
   }
+
+  export async function getUserMenuId(userId:string){
+    return 'e5691804-20cf-4b13-a0a3-7338cdadccec';
+  }

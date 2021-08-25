@@ -8,8 +8,10 @@ export default class ResponseArgs{
     resData:any = null;
     sendJson = true;
     errorDescription = '';
-    constructor(res:Response){
+    userId:string|undefined = '';
+    constructor(res:Response, userId?:string){
         this.res = res; 
+        this.userId = userId;
     }
     public get message(){
         return Messages.getMessage(this.messageId) + (this.errorDescription===''? '':' ') 

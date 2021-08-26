@@ -34,14 +34,17 @@ export async function getMdObjectById(mdObjectId:string, parentId:string) {
 }
 
 async function loadMdObject(mdObjectId:string, parentId:string){
-   
     const apiCommandArgs = new ApiCommandArgs("getMdObjectById", {mdObjectId: mdObjectId, parentId: parentId})
     const data = await ApiMain.execApiCommand(apiCommandArgs);
     
     if(!data){
         throw Error(`object id = ${mdObjectId} not found`);
     }
-   
+    await loadMdObjectFromData(data);
+}
+
+
+export async function loadMdObjectFromData(data:any){
     for await (const iterator of (data as any)) {
         if(!iterator){continue;}
         const mdType = await MdType.getType(iterator.typeId)

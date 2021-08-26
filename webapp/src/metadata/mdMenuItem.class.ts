@@ -2,8 +2,11 @@ import BaseMeta from './basemeta.class'
 import { MdTypes } from './MdTypes';
 
 export default class mdMenuItem extends BaseMeta{
-    enumId = '';
     objectId = '';
+    isFolder = false;
+    orderIndex = 0;
+    description = '';
+    children:mdMenuItem[] = [];
     constructor(id:string){       
         super(id);
         this.typeName = 'MenuItem';

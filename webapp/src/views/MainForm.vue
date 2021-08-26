@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import MainMenu from "../components/webapp/MainMenu.vue";
+import MainMenu from "../components/webapp/mainmenu/MainMenu.vue";
 import { Splitpanes, Pane } from "splitpanes";
 export default defineComponent({
   components: {

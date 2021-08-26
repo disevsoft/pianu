@@ -2,7 +2,6 @@ import BaseMeta from './basemeta.class'
 import MdTypeField from './mdTypeField.class'
 import {MdTypes} from './mdTypes'
 export default class MdMenuItem extends BaseMeta{
-    enumId = '';
     objectId = '';
     orderIndex = 0;
     description = '';

@@ -1,1 +1,1 @@
-import MenuService from '../../services/app/menu.service'
+import MenuService from '../../metadata/mdMenuItem.class'

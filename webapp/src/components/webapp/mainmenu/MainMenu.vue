@@ -1,60 +1,43 @@
 <template>
-<div>
+<div class="pn-main-menu">
     <el-icon color="#409EFC" :size="30" style="padding-left: 20px;" >
     <Expand v-if="isCollapse" @click="collapseButtonClick"/>
     <Fold v-else @click="collapseButtonClick"/> 
   </el-icon>
-<el-menu default-active="2" class="el-menu-vertical" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-  <!-- <el-submenu index="1">
-    <template #title>
-      <i class="el-icon-location"></i>
-      <span>Navigator One two</span>
-    </template>
-    <el-menu-item-group>
-      <template #title><span>Group One</span></template>
-      <el-menu-item index="1-1">item one</el-menu-item>
-      <el-menu-item index="1-2">item two</el-menu-item>
-    </el-menu-item-group>
-    <el-menu-item-group title="Group Two">
-      <el-menu-item index="1-3">item three</el-menu-item>
-    </el-menu-item-group>
-    <el-submenu index="1-4">
-      <template #title><span>item four</span></template>
-      <el-menu-item index="1-4-1">item one</el-menu-item>
-    </el-submenu>
-  </el-submenu> -->
+<el-menu class="el-menu-vertical" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
   <el-menu-item v-for="item in menuItems" :key="item.id" :index="item.id" @click="menuItemClick(item)">
     <i class="el-icon-menu"></i>
     <template #title>{{item.synonym}}</template>
   </el-menu-item>
-  <!-- <el-menu-item index="3" disabled>
-    <i class="el-icon-document"></i>
-    <template #title>Navigator Three</template>
-  </el-menu-item>
-  <el-menu-item index="4">
-    <i class="el-icon-setting"></i>
-    <template #title>Navigator Four</template>
-  </el-menu-item> -->
 </el-menu>
-</div>
 <el-drawer
   :title="drawerTitle"
   v-model="drawer"
   :with-header="true"
   direction="ltr"
   size="80%">
-  <span>Hi there!</span>
+    
+  <el-row :gutter="20">
+  <el-col :span="7" v-for="menuItem in currentMenuItem.children" :key="menuItem.id">
+      <MainMenuSubItem :menuItem="menuItem" @onItemClick="subMenuItemClick"/>
+    </el-col>
+  </el-row>
 </el-drawer>
+</div>
+
 </template>
 
 <script>
   import { defineComponent, ref, watch, onMounted } from 'vue';
   import { Expand, Fold } from '@element-plus/icons'
- import MenuService from '../../services/app/menu.service'
+ import MenuService from '../../../services/app/mainMenu.service'
+ import MainMenuSubItem from './MainMenuSubItem.vue'
+ import mdMenuItem from '../../../metadata/mdMenuItem.class'
   export default defineComponent({
     components: {
         Expand,
-        Fold
+        Fold,
+        MainMenuSubItem
     },
     props: {
          'collapse': [Boolean], 
@@ -63,13 +46,13 @@
       const isCollapse = ref(true);
       const drawer = ref(false);
       const drawerTitle = ref('');
+      const currentMenuItem = ref(mdMenuItem);
       onMounted(async () => {
         await getData();
       });
       const menuItems = ref([]);
       const getData = async () => {
-        menuItems.value = await MenuService.getUserMenu();
-        
+        menuItems.value = await MenuService.getRootMainMenu();       
       };
       const handleOpen = (key, keyPath) => {
         console.log(key, keyPath);
@@ -78,9 +61,13 @@
         console.log(key, keyPath);
       };
       const menuItemClick=(menuItem)=>{
-          console.log(menuItem);
+          currentMenuItem.value = menuItem;
           drawerTitle.value = menuItem.synonym;
           drawer.value = true;
+      };
+
+       const subMenuItemClick=(menuItem)=>{
+         console.log(menuItem);
       };
       const collapseButtonClick =()=>{
           isCollapse.value = !isCollapse.value;
@@ -96,7 +83,9 @@
         menuItemClick,
         menuItems,
         drawer,
-        drawerTitle
+        drawerTitle,
+        currentMenuItem,
+        subMenuItemClick
       };
     },
   });
@@ -110,9 +99,8 @@
 .el-menu-vertical {
     height: 100vh;
 }
-.el-overlay{
+.pn-main-menu>.el-overlay{
     left:48px !important;
 }
-
 
 </style>

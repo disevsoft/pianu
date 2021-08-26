@@ -68,6 +68,7 @@
 
        const subMenuItemClick=(menuItem)=>{
          console.log(menuItem);
+         drawer.value = false;
       };
       const collapseButtonClick =()=>{
           isCollapse.value = !isCollapse.value;

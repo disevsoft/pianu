@@ -65,6 +65,7 @@ export async function getMdObjects(mdTypeId:MdTypes, parentId:string) {
         await loadMdObjects(mdTypeId, parentId);
         mdObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId === mdTypeId && elem.parentId === parentId);  
     }  
+    
     return mdObjects;
 }
 
@@ -91,7 +92,9 @@ async function loadMdObjects(mdTypeId:MdTypes, parentId:string){
         await loadObjectFromData(newObject, iterator);    
         BaseMeta.mdObjects.push(newObject);
     }   
-    mdType.cached = true;
+    if(!parentId){
+        mdType.cached = true;
+    }
 }
 
 async function loadObjectFromData(mdObject:any, data:any){ 

@@ -85,6 +85,8 @@ export default defineComponent({
       
       dataLoadingComplete.value = false;
       let response:any = await TreeService.TreeHelper.saveMdObjectData(mdObjectData.value);
+      console.log(response);
+      
       mdObjectData.value = response;  
       let elementData:any = mdObjectData.value.find((el:any) => el.name === "id");      
       var dataId = elementData.value; 

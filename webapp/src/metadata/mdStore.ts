@@ -9,6 +9,7 @@ import MdUser from './mdUser.class';
 import MdEnum from './mdEnum.class';
 import MdEnumItem from './mdEnumItem.class';
 import MdMenuItem from './mdMenuItem.class';
+import MdWebForm from './mdWebForm.class';
 export const Store: any = {
     MdCatalog,
     MdDocument, 
@@ -20,5 +21,6 @@ export const Store: any = {
     MdUser,
     MdEnum,
     MdEnumItem,
-    MdMenuItem
+    MdMenuItem,
+    MdWebForm
 }

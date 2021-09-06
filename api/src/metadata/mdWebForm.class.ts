@@ -3,7 +3,7 @@ import MdTypeField from './mdTypeField.class'
 import {MdTypes} from './mdTypes'
 export default class MdWebForm extends BaseMeta{
     isListForm = false;
-    isElementForm = false;
+    isItemForm = false;
     isChooseForm = false;
     constructor(id:string){
         super(id);
@@ -14,7 +14,9 @@ export default class MdWebForm extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, "", "", false, "list_name"));
+        mdFields.push(new MdTypeField('isListForm', MdTypes.Boolean, 0, this.isListForm, false, false, "is_list_form"));
+        mdFields.push(new MdTypeField('isItemForm', MdTypes.Boolean, 0, this.isItemForm, false, false, "is_item_form"));
+        mdFields.push(new MdTypeField('isChooseForm', MdTypes.Boolean, 0, this.isChooseForm, false, false, "is_choose_form"));
         return mdFields;
     }
 }

@@ -98,12 +98,21 @@ export class TreeHelper {
     return fieldsArray;
   }
 
-  public static async getMdTypes() {   
+  public static async getMdTypes(filter:any) {   
   
     const data = await MdType.getTypes(); 
     const typesArray:Array<any> = [];
     if(!data) return;
     for await (const elem of data) { 
+      if(filter){
+        let cancelFilter = false;
+        filter.forEach((value:any, key:string)=>{
+          //if(elem[key]!=value.value){
+            cancelFilter = true;
+          //}
+        })
+        if(cancelFilter){continue;}
+      }
       const node = new NodeData(NodeType.MdRootType, elem.id, elem.id, elem.name, '', false, false);
       const children = await TreeHelper.getMdObjectsList(node);
       node.children = children;

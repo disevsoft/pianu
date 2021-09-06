@@ -15,8 +15,7 @@ export default class MdDomain extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, "", "", false, "list_name"));
-        mdFields.push(new MdTypeField('databaseName', MdTypes.String, 150, '', "", false,'database_name'));
+        mdFields.push(new MdTypeField('databaseName', MdTypes.String, 150, this.databaseName, "", false,'database_name'));
         
         return mdFields;
     }

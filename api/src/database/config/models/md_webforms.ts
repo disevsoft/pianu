@@ -22,6 +22,18 @@ interface mdWebFormInstance extends Model {
             type: Sequelize.STRING,
             allowNull: true,
         },
+        is_list_form:{
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+        },
+        is_item_form:{
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+        },
+        is_choose_form:{
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+        },
         
     }, db.sequilizeOptions);   
 

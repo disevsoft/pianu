@@ -23,19 +23,15 @@
           @click="showFullScreen"
           aria-label="Expand"
         ></i>
-          
         <i
           type="button"
           class="btn-close el-icon-close"
           @click="closeDialog"
           aria-label="Close"
-        >
-        </i>
+        ></i>
         </span>      
     </el-header>
-    <!-- <div class="fullHeight"> -->
       <component :is="currentComponent" :formEvents="currentformEvents()" :data="currentData()"/> 
-    <!-- </div> -->
     </el-container>
     <i v-for="sizer in sizers()" :key="sizer" :class= "'resize ' + sizer"></i>
   </div>

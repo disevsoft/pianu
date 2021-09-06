@@ -30,8 +30,30 @@ export default class CfgDialog
         appComponent.mount(owner);
     }
 
+    public static showChooseDialog(owner:any, unique:string, data?:any, filter?:any){
+      if(unique){
+        const formElement = CfgDialog.openedForms.get(unique);
+        if(formElement){
+          setMaxZIndex(formElement.el.children[0]);
+          return;
+        }
+      }
+        const formEvents = new FormEvents(unique);
+        formEvents.on('afterClose', CfgDialog.afterFormClose);
+        const appComponent = createApp({
+             components: { CfgDialogForm },
+             render() {     
+              const formElement:any = h(CfgDialogForm,{dialogVisible:true, elementId:unique, formEvents:formEvents, data:data, filter:filter});            
+               CfgDialog.openedForms.set(unique, formElement);
+               return formElement;
+             }
+          });
+        appComponent.use(ElementPlus) 
+        appComponent.mount(owner);
+    }
+
     private static afterFormClose(eventArgs:any){
-      EventBus.emit('dataChoosed', eventArgs);
+      //EventBus.emit('dataChoosed', eventArgs);
       if(eventArgs.elementId){
         CfgDialog.openedForms.delete(eventArgs.elementId);
       }

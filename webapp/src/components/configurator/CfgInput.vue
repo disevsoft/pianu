@@ -15,6 +15,8 @@ import EventBus from './CfgEventBus';
 import MdTypesField from '../../services/configurator/mdTypesField'
 import {MdTypes} from '../../metadata/MdTypes'
 import MdType from '../../metadata/mdType.class'
+import FilterItem from '../../classes/filterItem'
+import ComparisonTypes from '../../classes/filterItem'
 import TreeService from "../../services/configurator/metaDataTree.service";
 export default defineComponent({
     props: { 
@@ -86,7 +88,12 @@ export default defineComponent({
                 if(props.modelValue && typeof props.modelValue === 'string')
                 choosedData = props.modelValue.split(',')    
             }
-            CfgDialog.showDialog(document.getElementById('windowBox-'+elementId.value), elementId.value, choosedData);
+            let filter = new Map();
+            const fieldProp = (props.fieldProp as MdTypesField);
+            if(!fieldProp.mdType){
+                 filter.set('fieldType',new FilterItem('fieldType', ComparisonTypes.Equal, true));            
+            }
+            CfgDialog.showChooseDialog(document.getElementById('windowBox-'+elementId.value), elementId.value, choosedData, filter);
         };
 
         return {displayValue, chooseButtonClick, elementId, editType, showChooseButton}

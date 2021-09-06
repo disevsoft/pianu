@@ -21,8 +21,8 @@ export default class mdUser extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('domainAdmin', MdTypes.Boolean, 0, false, false, false, "domain_admin"));
-        mdFields.push(new MdTypeField('configAdmin', MdTypes.Boolean, 0, false, false, false, "config_admin"));
+        mdFields.push(new MdTypeField('domainAdmin', MdTypes.Boolean, 0, this.domainAdmin, false, false, "domain_admin"));
+        mdFields.push(new MdTypeField('configAdmin', MdTypes.Boolean, 0, this.configAdmin, false, false, "config_admin"));
         mdFields.push(new MdTypeField('password',  MdTypes.String, 150, "", "false", false, "password"));
         
         return mdFields;

@@ -14,7 +14,7 @@ export default class MdDocument extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, "", "", false, "list_name"));
+        mdFields.push(new MdTypeField('listName', MdTypes.String, 150, this.listName, "", false, "list_name"));
         return mdFields;
     }
 }

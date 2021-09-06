@@ -24,7 +24,8 @@ export default defineComponent({
     props: { 
         'elementId': String,
         'formEvents':[FormEvents, Object],
-        'data':[Object]
+        'data':[Object],
+        'filter':[Object]
     },
     setup (props, {emit}) {
         let formEvents:FormEvents;
@@ -49,32 +50,19 @@ export default defineComponent({
         }
 
         const checkChange = (node:any)=>{
-            console.log(node);
-            
-            //   let checkedNodes = chooseTypeTree.value.getCheckedNodes();
-            //  const choosedData = [];
-            //  for(let item of checkedNodes) {
-            //      console.log(item);
-                  
-            //  }
-            
-            //console.log('checkChange');
+            const k = 1;
             
         };
         // const beforeClose=(eventArgs:any)=>{
 
         // }
         onMounted(async() => {
-        formEvents = (props.formEvents as FormEvents);
-        console.log(await TreeService.TreeHelper.getMdTypes());
-        
-        (nodes.value as any) = await TreeService.TreeHelper.getMdTypes();
-        if(props.data){
-            chooseTypeTree.value.setCheckedKeys(props.data, true);
-            // for await (const iterator of (props.data as any)) {
-            //     const node = chooseTypeTree.value.getNode(iterator);                
-            // }
-        }
+            formEvents = (props.formEvents as FormEvents);          
+            (nodes.value as any) = await TreeService.TreeHelper.getMdTypes(props.filter);
+            if(props.data){
+                chooseTypeTree.value.setCheckedKeys(props.data, true);
+                
+            }
       });  
         return {onOkButtonClick, onCancelButtonClick, nodes, defaultTreeProps, checkChange, chooseTypeTree}
     }

@@ -16,7 +16,7 @@ import MdTypesField from '../../services/configurator/mdTypesField'
 import {MdTypes} from '../../metadata/MdTypes'
 import MdType from '../../metadata/mdType.class'
 import FilterItem from '../../classes/filterItem'
-import ComparisonTypes from '../../classes/filterItem'
+import {ComparisonTypes} from '../../classes/filterItem'
 import TreeService from "../../services/configurator/metaDataTree.service";
 export default defineComponent({
     props: { 
@@ -93,7 +93,7 @@ export default defineComponent({
             if(!fieldProp.mdType){
                  filter.set('fieldType',new FilterItem('fieldType', ComparisonTypes.Equal, true));            
             }
-            CfgDialog.showChooseDialog(document.getElementById('windowBox-'+elementId.value), elementId.value, choosedData, filter);
+            CfgDialog.showChooseDialog(document.getElementById('windowBox-'+elementId.value), elementId.value, choosedData);
         };
 
         return {displayValue, chooseButtonClick, elementId, editType, showChooseButton}

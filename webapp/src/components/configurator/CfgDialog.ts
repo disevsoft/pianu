@@ -30,7 +30,7 @@ export default class CfgDialog
         appComponent.mount(owner);
     }
 
-    public static showChooseDialog(owner:any, unique:string, data?:any, filter?:any){
+    public static showChooseDialog(owner:any, unique:string, data?:any, filter?:any){  
       if(unique){
         const formElement = CfgDialog.openedForms.get(unique);
         if(formElement){

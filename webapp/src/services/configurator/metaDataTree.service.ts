@@ -9,6 +9,7 @@ import * as MdHelper from '../../metadata/mdHelper'
 import { MdTypes } from "@/metadata/MdTypes";
 import MdTypeField from './mdTypesField'
 import DomainService from '../../services/app/domain.service'
+import FilterItem from "@/classes/filterItem";
 export class TreeHelper {
   public static getMdTreeRoot() {
     const confNodes = config;
@@ -105,13 +106,11 @@ export class TreeHelper {
     if(!data) return;
     for await (const elem of data) { 
       if(filter){
-        let cancelFilter = false;
-        filter.forEach((value:any, key:string)=>{
-          //if(elem[key]!=value.value){
-            cancelFilter = true;
-          //}
-        })
-        if(cancelFilter){continue;}
+        let applylFilter = false;
+        filter.forEach((value:FilterItem, key:string)=>{
+          applylFilter = value.filterApply(elem, key);
+        })      
+        if(!applylFilter){continue;}
       }
       const node = new NodeData(NodeType.MdRootType, elem.id, elem.id, elem.name, '', false, false);
       const children = await TreeHelper.getMdObjectsList(node);

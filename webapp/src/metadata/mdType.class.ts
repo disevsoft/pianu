@@ -28,7 +28,9 @@ export default class MdType{
         const mdType = MdType._mdTypes.find((elem)=> elem.id === mdTypeId);
         return mdType;
     }
-
+    public get typeId(){
+        return this.id;       
+    }
     private static async loadTypes() 
     {
         if(MdType._mdTypes.length===0){

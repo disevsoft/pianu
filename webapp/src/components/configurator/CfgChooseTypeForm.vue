@@ -57,7 +57,7 @@ export default defineComponent({
 
         // }
         onMounted(async() => {
-            formEvents = (props.formEvents as FormEvents);          
+            formEvents = (props.formEvents as FormEvents);                      
             (nodes.value as any) = await TreeService.TreeHelper.getMdTypes(props.filter);
             if(props.data){
                 chooseTypeTree.value.setCheckedKeys(props.data, true);

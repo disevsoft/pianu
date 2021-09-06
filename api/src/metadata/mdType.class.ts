@@ -22,13 +22,13 @@ export default class MdType{
     private static fieldMap = new Map([
         ['id','id'],
         ['name', 'name'],
-        ['list_name', 'listName'],
+        ['listName', 'list_name'],
         ['synonym', 'synonym'],
-        ['list_synonym', 'listSynonym'],
-        ['table_name', 'tableName'],
-        ['class_name', 'className'],
-        ['is_md_type', 'isMdType'],
-        ['database_type','dataBaseType'],
+        ['listSynonym', 'list_synonym'],
+        ['tableName', 'table_name'],
+        ['className', 'class_name'],
+        ['isMdType', 'is_md_type'],
+        ['dataBaseType', 'database_type'],
         ['hasLength','has_length'],
         ['hasFraction','has_fraction'],
         ['order','order'],
@@ -58,7 +58,7 @@ export default class MdType{
 
         let mdType = new MdType(mdTypeId);
         MdType.fieldMap.forEach((value, key, map) =>{
-            (<any>mdType)[value] = (<any>mdTypeModel)[key];        
+            (<any>mdType)[key] = (<any>mdTypeModel)[value];        
         });
         MdType._mdTypes.set(mdTypeId, mdType);
     }   

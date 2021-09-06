@@ -31,7 +31,7 @@
         ></i>
         </span>      
     </el-header>
-      <component :is="currentComponent" :formEvents="currentformEvents()" :data="currentData()"/> 
+      <component :is="currentComponent" :formEvents="currentformEvents()" :data="currentData()" :filter ="currentFilter()"/> 
     </el-container>
     <i v-for="sizer in sizers()" :key="sizer" :class= "'resize ' + sizer"></i>
   </div>
@@ -54,7 +54,8 @@ export default defineComponent({
         'elementId': String,
         'dialogVisible': Boolean, 
         'formEvents':FormEvents, 
-        'data':[Object]
+        'data':[Object],
+        'filter':[Object]
     },
     setup (props, { emit }) {
       const show = ref(false);
@@ -85,6 +86,9 @@ export default defineComponent({
     const currentData=()=>{
       return props.data;
     }
+    const currentFilter =()=>{
+      return props.filter;
+    }
      const showFullScreen=(e:any)=> { 
       e.stopPropagation();
       expanded.value = !expanded.value;   
@@ -108,7 +112,7 @@ export default defineComponent({
         setMaxZIndex(dv);
       });  
          
-        return {sizers, closeDialog, show, showFullScreen, expanded,currentformEvents, currentData}
+        return {sizers, closeDialog, show, showFullScreen, expanded,currentformEvents, currentData, currentFilter}
     }
 })
 </script>

@@ -46,7 +46,7 @@ export default defineComponent({
         }
 
         const onCancelButtonClick=()=>{
-            formEvents.close();     
+            formEvents.close(undefined,undefined,true);     
         }
 
         const checkChange = (node:any)=>{

@@ -8,11 +8,14 @@ export default class FormEvents extends EventEmitter{
         this.elementId = elementId;       
     }
 
-    close(resultData?:any, senderName?:string){
+    close(resultData?:any, senderName?:string, cancel?:boolean){
         const eventArgs = new FormEventArgs();
         eventArgs.elementId = this.elementId;
         eventArgs.resultData = resultData;
         eventArgs.senderName = senderName;
+        if(cancel != undefined){
+            eventArgs.cancel = cancel;
+        }
         this.emit('beforeClose', eventArgs)
         if(!eventArgs.cancel){
             this.emit('onClose', eventArgs)

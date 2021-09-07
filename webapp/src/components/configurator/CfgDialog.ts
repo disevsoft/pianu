@@ -53,7 +53,10 @@ export default class CfgDialog
     }
 
     private static afterFormClose(eventArgs:any){
-      //EventBus.emit('dataChoosed', eventArgs);
+      if(!eventArgs.cancel){
+        EventBus.emit('dataChoosed', eventArgs);
+      }
+      
       if(eventArgs.elementId){
         CfgDialog.openedForms.delete(eventArgs.elementId);
       }

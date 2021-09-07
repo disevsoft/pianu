@@ -128,7 +128,6 @@
                 <component
                   :is="currentTabComponent"
                   v-bind="getTabProps(item)"
-                  @afterSave="onAfterSave(item)"
                   :ref="item.elementId"
                 ></component>
               </el-tab-pane>
@@ -199,7 +198,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-       EventBus.on('dataChanged', dataChanged); // 1
+      EventBus.on('dataChanged', dataChanged); // 1
       EventBus.on('apiEvent', apiLog);
     });
     const currentTabComponent = computed(() => {

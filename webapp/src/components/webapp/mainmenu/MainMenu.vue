@@ -33,6 +33,7 @@
  import MenuService from '../../../services/app/mainMenu.service'
  import MainMenuSubItem from './MainMenuSubItem.vue'
  import mdMenuItem from '../../../metadata/mdMenuItem.class'
+ import {FormFactory} from '../../../classes/formFactory'
   export default defineComponent({
     components: {
         Expand,
@@ -67,7 +68,9 @@
       };
 
        const subMenuItemClick=(menuItem)=>{
-         console.log(menuItem);
+         if(menuItem.objectId){
+          FormFactory.openFormById(menuItem.objectId);
+         }
          drawer.value = false;
       };
       const collapseButtonClick =()=>{

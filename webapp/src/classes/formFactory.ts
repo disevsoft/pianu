@@ -1,9 +1,19 @@
+import EventBus from '../components/webapp/appEventBus'
+//import NomenclatureListForm from '../catalogs/nomenclature/NomenclatureListForm.vue'
 export class FormFactory{
 
-    private _openForms:Form[] = [];
+    private static _openForms:Form[] = [];
+    private static _forms = new Map();
     public static openFormById(formId:string){
-       console.log(formId);
-       
+        EventBus.emit('openForm', formId);    
+    }
+
+    public static async initForms(){
+        FormFactory._forms.set('NomenclatureListForm', await import('../catalogs/nomenclature/NomenclatureListForm.vue'))
+    }
+
+    public static getForm(formName:string){
+        return FormFactory._forms.get(formName)['default'];
     }
 }
 

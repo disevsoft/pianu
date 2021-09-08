@@ -16,7 +16,7 @@
         :ref="'pane-' + item.elementId"
       >
         <component
-          :is="currentTabComponent"
+          :is="currentTabComponent(item)"
           v-bind="getTabProps(item)"
           :ref="item.elementId"
         ></component>
@@ -67,7 +67,7 @@ export default defineComponent({
         return '';
       };
 
-      const currentTabComponent = computed(() => {
+      const currentTabComponent = computed((item:any) => {
         const form = FormFactory.getForm('NomenclatureListForm');
         return form;
       });

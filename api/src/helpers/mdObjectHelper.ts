@@ -105,7 +105,7 @@ export async function getChildrenMenuItems(userId:string, menuItemId:string, ite
     const childItems = await getObjectsList(MdTypes.MenuItem, menuItemId);  
     if(!childItems){return}
    for await (const iterator of childItems) {
-    if (UserRights.canReadObject(userId, (iterator as MdMenuItem).objectId)){
+    if (await UserRights.canReadObject(userId, (iterator as MdMenuItem).objectId)){
         itemArray.push(iterator);    
     }
     await getChildrenMenuItems(userId, iterator.id, itemArray)

@@ -9,17 +9,17 @@ const config = require("../database/config/db.config");
 
 export async function createProjectDataBase(){
     await createDataBaseIfNotExist(config.DB);
-    await createSchemaIfNotExist(config.SCHEMA);
+    await createSchemaIfNotExist(config.DB, config.SCHEMA);
 }
 
-async function createSchemaIfNotExist(schemaName:string){
+async function createSchemaIfNotExist(dataBaseName:string, schemaName:string){
 
     const client =  new Client({
         host: config.HOST,
         port: config.PORT,
         user: config.USER,
         password: config.PASSWORD,
-        database: config.DB
+        database: dataBaseName
       });
 
       const conn = await client.connect();
@@ -43,16 +43,17 @@ async function createDataBaseIfNotExist(dataBaseName:string) {
     await client.end();
 }
 
-async function createTableIfNotExist(schemaName:string, mdTable:MdTable) {
+async function createTableIfNotExist(databaseName:string, schemaName:string, mdTable:MdTable) {
     const client =  new Client({
         host: config.HOST,
         port: config.PORT,
         user: config.USER,
         password: config.PASSWORD,
-        database: config.DB
+        database: databaseName
       });
    
     const conn = await client.connect();
+    if(!schemaName){schemaName='public'} 
     const createTableQuery =`CREATE TABLE IF NOT EXISTS ${schemaName}.${mdTable.databaseName}()`;
     await client.query(createTableQuery);
     await alterTable(client, schemaName, mdTable); 
@@ -60,6 +61,7 @@ async function createTableIfNotExist(schemaName:string, mdTable:MdTable) {
 }
 
 async function alterTable(client:any, schemaName:string, mdTable:MdTable) {
+    if(!schemaName){schemaName='public'} //default schema
     const columnsQuery = `SELECT * FROM information_schema.columns  WHERE table_schema = '${schemaName}'
          AND table_name   = '${mdTable.databaseName}'`;
     const dbQuery = await client.query(columnsQuery);
@@ -114,12 +116,14 @@ export async function initDomain(mdDomain:MdDomain){
     if(!mdDomain.databaseName){
         throw Error('Domain database name is empty');
     }
-    await createSchemaIfNotExist(mdDomain.databaseName);       
+    //await createSchemaIfNotExist(mdDomain.databaseName);       
+    await createDataBaseIfNotExist(mdDomain.databaseName);
+    //await createSchemaIfNotExist(mdDomain.databaseName, "");
     const mdTables = await getObjectsList(MdTypes.Table, '');
     if(!mdTables){return}
     for await (const mdTable of mdTables) {
          if((mdTable as any).isDBTable) {
-             await createTableIfNotExist(mdDomain.databaseName, (mdTable as MdTable));
+             await createTableIfNotExist(mdDomain.databaseName, "",(mdTable as MdTable));
          }         
     }    
 }

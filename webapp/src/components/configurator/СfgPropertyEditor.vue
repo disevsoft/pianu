@@ -99,7 +99,7 @@ export default defineComponent({
       if (cell.columnIndex === 0) {
         return "prop_name-cell-class"; 
       } else{
-        return 'cell';
+        return 'prop-cell';
       }
     };
 

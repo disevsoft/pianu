@@ -16,7 +16,7 @@
         :ref="'pane-' + item.elementId"
       >
         <component
-          :is="currentTabComponent(item)"
+          :is="currentTabComponent"
           v-bind="getTabProps(item)"
           :ref="item.elementId"
         ></component>
@@ -43,7 +43,7 @@ export default defineComponent({
       const editableTabsValue = ref("");
       const tabs = ref([{}]);
       tabs.value = [];
-       const _forms = new Map();
+      const _forms = new Map();
       onMounted(async () => {   
         FormFactory.initForms();
         EventBus.on('openForm', openForm);  
@@ -67,10 +67,11 @@ export default defineComponent({
         return '';
       };
 
-      const currentTabComponent = computed((item:any) => {
+      const currentTabComponent = computed(() => { 
         const form = FormFactory.getForm('NomenclatureListForm');
-        return form;
+        return form;      
       });
+
        return {removeTab, currentTabComponent, getTabProps, editableTabsValue, tabs};
     } 
   });

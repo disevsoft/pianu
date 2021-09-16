@@ -1,5 +1,5 @@
 import EventBus from '../components/webapp/appEventBus'
-//import NomenclatureListForm from '../catalogs/nomenclature/NomenclatureListForm.vue'
+//import NomenclatureListForm from '../catalogs/nomenclature/'
 export class FormFactory{
 
     private static _openForms:Form[] = [];

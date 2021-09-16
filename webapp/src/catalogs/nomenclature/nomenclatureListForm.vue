@@ -20,13 +20,13 @@ export default defineComponent({
         
     },
     setup(props, { emit }) {
-        const tableData = [
+        const tableData = [ 
           {
             date: '2016-05-03',
             name: 'Tom',
             address: 'No. 189, Grove St, Los Angeles',
           },
-          {
+          { 
             date: '2016-05-02',
             name: 'Tom',
             address: 'No. 189, Grove St, Los Angeles',
@@ -42,7 +42,10 @@ export default defineComponent({
             address: 'No. 189, Grove St, Los Angeles',
           },
         ];
-       return { tableData};
+        const getData = ()=>{
+          const query = "select * from db";
+        };
+       return { tableData, getData};
     } 
   });
 </script>

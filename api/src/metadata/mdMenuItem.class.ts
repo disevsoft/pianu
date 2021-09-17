@@ -16,10 +16,10 @@ export default class MdMenuItem extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('objectId', MdTypes.None, 0, this.objectId, "", false, "type"));
+        mdFields.push(new MdTypeField('objectId', MdTypes.None, 0, this.objectId, "", false, "object_id"));
         mdFields.push(new MdTypeField('orderIndex', MdTypes.Number, 3, this.orderIndex, 0, false, "order_index"));
         mdFields.push(new MdTypeField('description', MdTypes.String, 1000, this.description, "", false, "description"));
         mdFields.push(new MdTypeField('isFolder', MdTypes.Boolean, 0, this.isFolder, false, false, "is_folder"));
-        return mdFields;
+        return mdFields; 
     }
 }

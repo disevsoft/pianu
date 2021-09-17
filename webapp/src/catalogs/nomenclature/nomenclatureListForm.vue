@@ -11,7 +11,8 @@
 
 <script> 
 import { defineComponent, ref, watch, onMounted } from 'vue';
-
+import BaseCatalog from '../../classes/baseCatalog';
+import { MdTypes } from '@/metadata/MdTypes'
 export default defineComponent({  
     components: {    
     },
@@ -42,8 +43,12 @@ export default defineComponent({
             address: 'No. 189, Grove St, Los Angeles',
           },
         ];
-        const getData = ()=>{
-          const query = "select * from db";
+         onMounted(async() => {
+            getData();
+        });
+        const getData = async ()=>{
+          const catalog = await new BaseCatalog(MdTypes.Catalog, 'e42ab001-d707-49b1-9a7a-f429161d9ed0');
+          const data = await catalog.getListDataForView();
         };
        return { tableData, getData};
     } 

@@ -85,8 +85,9 @@ export async function getObjectsList(mdTypeId:string, parentId:string){
         await fetchChildrenData(mdType, parentId); 
         filteredObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId ===mdTypeId && elem.parentId===parentId);
     }else{
-        await fetchAllData(mdType);  
-        filteredObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId ===mdTypeId);
+        //await fetchAllData(mdType);  
+        await fetchAllDataWithoutParent(mdType);
+        filteredObjects = BaseMeta.mdObjects.filter(elem=>elem.typeId ===mdTypeId );
     }
     return filteredObjects;  
 }
@@ -143,6 +144,26 @@ export async function fetchAllData(mdType:MdType) {
         await getInstance(mdType.className, element.id);    
     } 
 };
+
+export async function fetchAllDataWithoutParent(mdType:MdType) {
+    if(!mdType.tableName){return}
+    const mdModel =  await require('../database/config/models/'+mdType.tableName)[mdType.tableName];
+    if (!mdModel){
+        console.log('model not found ' + mdType.tableName);
+        return; 
+    }
+
+    const modelData = await mdModel.findAll({ order: [['name', 'ASC'], ],});
+    const childrenData:any = await md_map.findAll();
+    for (let element of modelData){
+        const instance = await getInstance(mdType.className, element.id);    
+        const parent = await childrenData.find((elem:any)=>elem.md_object_id ===element.id)
+        if(parent){
+            await instance.setParentId(parent.md_owner_id)
+        }
+    } 
+};
+
 
 export async function initModel(force:boolean){
     let updateOpts:any={};

@@ -128,7 +128,7 @@ mdTreeSubfolders[MdTypes.MenuItem] = async function(parentMdType:MdTypes, parent
     // const data = await MdHelper.getMdObjects(parentMdType, parentId);         
     // return data;
     
-    const subFolders = [enumItemsSubFolder];
+    const subFolders = [menuItemsSubFolder];
     setParentId(subFolders, parentId);
     return subFolders;
 }

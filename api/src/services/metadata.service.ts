@@ -4,6 +4,18 @@ import ResponseArgs from '../helpers/responseArgs'
 import * as mdHelper from '../helpers/mdObjectHelper'
 import { MdTypes } from '../metadata/mdTypes';
 
+const processors: { [K: string]: Function } = {
+    getMdObjectsList: getMdObjectsList,
+    getMdObject:getMdObjectData,
+    saveMdObject:saveMdObject,
+    initConfigModel:initConfigModel,
+    deleteMdObject:deleteMdObject,
+    getMdTypesList:getMdTypesList,
+    getMdObjectById:getMdObjectById,
+    getUserMenu:getUserMenu,
+    initDomain:initDomain
+};
+
 export async function processCommand(req:any, res:any)
  {
     let body = req.body;
@@ -131,18 +143,5 @@ export async function initConfigModel(options:any, resArgs:ResponseArgs) {
         resArgs.cancel = true;
     }
 }
-
-
-const processors: { [K: string]: Function } = {
-    getMdObjectsList: getMdObjectsList,
-    getMdObject:getMdObjectData,
-    saveMdObject:saveMdObject,
-    initConfigModel:initConfigModel,
-    deleteMdObject:deleteMdObject,
-    getMdTypesList:getMdTypesList,
-    getMdObjectById:getMdObjectById,
-    getUserMenu:getUserMenu,
-    initDomain:initDomain
-};
 
 

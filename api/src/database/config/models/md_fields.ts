@@ -54,7 +54,7 @@ interface mdFieldInstance extends Model {
             type: Sequelize.BOOLEAN,
             allowNull: true,
             defaultValue:false 
-        }           
+        },           
     }, db.sequilizeOptions);   
 
     

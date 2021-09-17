@@ -3,7 +3,7 @@ import {mdTreeSubfolders} from "@/configs/configurator/mdTreeSubFolders.config";
 import { uuid } from "vue-uuid";
 import { NodeType } from "@/configs/configurator/mdTree.config";
 export { NodeType as NodeType };
-import {ApiCommandArgs, ApiMain} from '../app/api.service'
+import {MdApiCommandArgs, MdApi} from '../app/api.service'
 import MdType from '../../metadata/mdType.class'
 import * as MdHelper from '../../metadata/mdHelper'
 import { MdTypes } from "@/metadata/MdTypes";
@@ -69,8 +69,8 @@ export class TreeHelper {
   }
 
   public static async getMdObjectData(targetNode: any) {     
-    const apiCommandArgs = new ApiCommandArgs("getMdObject", {mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id, parentId:targetNode.parentId})
-    const data = await ApiMain.execApiCommand(apiCommandArgs); 
+    const apiCommandArgs = new MdApiCommandArgs("getMdObject", {mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id, parentId:targetNode.parentId})
+    const data = await MdApi.execApiCommand(apiCommandArgs); 
     return data;
   }
 
@@ -122,23 +122,23 @@ export class TreeHelper {
 
   public static async saveMdObjectData(mdObjectData: any) {   
     await MdHelper.resetCache();
-    const apiCommandArgs = new ApiCommandArgs("saveMdObject", { mdObject: mdObjectData})
-    const data = await ApiMain.execApiCommand(apiCommandArgs);   
+    const apiCommandArgs = new MdApiCommandArgs("saveMdObject", { mdObject: mdObjectData})
+    const data = await MdApi.execApiCommand(apiCommandArgs);   
     const fieldsArray = await TreeHelper.getFieldsFromResponse(data);
     return fieldsArray;
   }
 
   public static async deleteMdObject(targetNode: any) {     
-    const apiCommandArgs = new ApiCommandArgs("deleteMdObject", { mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id})
-    const data = await ApiMain.execApiCommand(apiCommandArgs); 
+    const apiCommandArgs = new MdApiCommandArgs("deleteMdObject", { mdTypeId: targetNode.mdTypeId, mdObjectId: targetNode.id})
+    const data = await MdApi.execApiCommand(apiCommandArgs); 
     await MdHelper.resetCache();
     return data;
   }
 
   static async initModel(){
    
-    const apiCommandArgs = new ApiCommandArgs("initConfigModel", { force: false})
-    const data = await ApiMain.execApiCommand(apiCommandArgs); 
+    const apiCommandArgs = new MdApiCommandArgs("initConfigModel", { force: false})
+    const data = await MdApi.execApiCommand(apiCommandArgs); 
     return data;
   }
 

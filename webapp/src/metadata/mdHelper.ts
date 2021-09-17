@@ -1,5 +1,5 @@
 import {MdTypes} from './MdTypes'
-import {ApiCommandArgs, ApiMain} from '../services/app/api.service'
+import {MdApiCommandArgs, MdApi} from '../services/app/api.service'
 import MdType from './mdType.class'
 import BaseMeta from './basemeta.class'
 import {Store} from './mdStore'
@@ -34,8 +34,8 @@ export async function getMdObjectById(mdObjectId:string, parentId:string) {
 }
 
 async function loadMdObject(mdObjectId:string, parentId:string){
-    const apiCommandArgs = new ApiCommandArgs("getMdObjectById", {mdObjectId: mdObjectId, parentId: parentId})
-    const data = await ApiMain.execApiCommand(apiCommandArgs);
+    const apiCommandArgs = new MdApiCommandArgs("getMdObjectById", {mdObjectId: mdObjectId, parentId: parentId})
+    const data = await MdApi.execApiCommand(apiCommandArgs);
     
     if(!data){
         throw Error(`object id = ${mdObjectId} not found`);
@@ -84,8 +84,8 @@ async function loadMdObjects(mdTypeId:MdTypes, parentId:string){
     if (mdType.cached){return}
     if(!mdType.isMdType){return}
 
-    const apiCommandArgs = new ApiCommandArgs("getMdObjectsList", {mdTypeId: mdTypeId, parentId: parentId})
-    const data = await ApiMain.execApiCommand(apiCommandArgs);
+    const apiCommandArgs = new MdApiCommandArgs("getMdObjectsList", {mdTypeId: mdTypeId, parentId: parentId})
+    const data = await MdApi.execApiCommand(apiCommandArgs);
     
     for await (const iterator of (data as any)) {
         const newObject:any =  new DynamicClass(mdType.className, iterator.mdId);           

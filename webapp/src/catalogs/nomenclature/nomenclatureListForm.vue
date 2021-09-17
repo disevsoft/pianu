@@ -9,11 +9,11 @@
   </el-table>
 </template>
 
-<script>
+<script> 
 import { defineComponent, ref, watch, onMounted } from 'vue';
 
-export default defineComponent({
-    components: {     
+export default defineComponent({  
+    components: {    
     },
     
     props: {

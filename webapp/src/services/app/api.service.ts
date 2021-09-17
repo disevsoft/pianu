@@ -1,7 +1,7 @@
 import {authHeader} from '../../helpers/authHeader';
 import EventBus from '../../components/configurator/CfgEventBus';
 
-export class ApiCommandArgs{
+export class MdApiCommandArgs{
 
     commandName='';
     options:any={};
@@ -11,7 +11,7 @@ export class ApiCommandArgs{
     }
 }
 
-export class ApiMain{
+export class MdApi{
 
     private static async getHeaders(){
         const headers:Headers = authHeader();
@@ -19,9 +19,8 @@ export class ApiMain{
         return headers;
     } 
   
-    private static async post(commandArgs:ApiCommandArgs) {
-
-        const headers = await ApiMain.getHeaders();
+    private static async post(commandArgs:MdApiCommandArgs) {
+        const headers = await MdApi.getHeaders();
         const response = await fetch("/api/md", {
           method: "POST",
           headers: headers,
@@ -38,7 +37,7 @@ export class ApiMain{
         return result;
       }
    
-    public static async execApiCommand(commandArgs:ApiCommandArgs) {
-        return await ApiMain.post(commandArgs);
+    public static async execApiCommand(commandArgs:MdApiCommandArgs) {
+        return await MdApi.post(commandArgs);
     }
 }

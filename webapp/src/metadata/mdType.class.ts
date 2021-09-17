@@ -1,4 +1,4 @@
-import {ApiCommandArgs, ApiMain} from '../services/app/api.service'
+import {MdApiCommandArgs, MdApi} from '../services/app/api.service'
 import { MdTypes } from './MdTypes';
 
 export default class MdType{
@@ -34,8 +34,8 @@ export default class MdType{
     private static async loadTypes() 
     {
         if(MdType._mdTypes.length===0){
-            const apiCommandArgs = new ApiCommandArgs("getMdTypesList", {})
-            const data:any = await ApiMain.execApiCommand(apiCommandArgs);
+            const apiCommandArgs = new MdApiCommandArgs("getMdTypesList", {})
+            const data:any = await MdApi.execApiCommand(apiCommandArgs);
             if(!data) {return;}
             for (const element of (data as any)) {
                 const mdType = new MdType(element.id);

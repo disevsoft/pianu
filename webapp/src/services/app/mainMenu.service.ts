@@ -1,4 +1,4 @@
-import { ApiCommandArgs, ApiMain } from './api.service';
+import { MdApiCommandArgs, MdApi } from './api.service';
 import * as MdHelper from '../../metadata/mdHelper'
 import { MdTypes } from '@/metadata/MdTypes';
 import mdMenuItem from '@/metadata/mdMenuItem.class';
@@ -7,8 +7,8 @@ export default class MenuService{
     static _mainMenu: mdMenuItem;
 
     public static async getRootMainMenu() {
-        const apiCommandArgs = new ApiCommandArgs("getUserMenu", {})
-        const data = await ApiMain.execApiCommand(apiCommandArgs); 
+        const apiCommandArgs = new MdApiCommandArgs("getUserMenu", {})
+        const data = await MdApi.execApiCommand(apiCommandArgs); 
         await MenuService.createMenuTree(data);
         return MenuService._mainMenu.children; 
     }

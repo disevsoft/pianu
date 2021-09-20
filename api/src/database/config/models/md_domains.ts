@@ -12,6 +12,7 @@ interface mdDomainInstance extends Model {
             type: Sequelize.UUID,
             primaryKey: true,
             allowNull: false,
+            unique: true,
         },
         name:{
             type: Sequelize.STRING,

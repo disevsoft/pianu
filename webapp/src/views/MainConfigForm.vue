@@ -3,7 +3,7 @@
     <Splitpanes class="default-theme" vertical>
       <Pane :size="30">
         <el-container class="full-height">
-          <el-header class="form-header"> 
+          <el-header class="caption-header"> 
           </el-header>
           <el-main>
             <el-tree
@@ -83,7 +83,7 @@
       </Pane>
       <Pane>
         <el-container class="full-height">
-            <el-header  class="form-header" style="text-align: right; font-size: 12px; display: inline !important">
+            <el-header  class="caption-header" style="text-align: right; font-size: 12px; display: inline !important">
             <el-dropdown trigger="click" style= "cursor:pointer">
               <i class="el-icon-setting" style="margin-right: 15px"></i>
               <template #dropdown>
@@ -126,7 +126,7 @@
                 :ref="'pane-' + item.elementId"
               >
                 <component
-                  :is="currentTabComponent"
+                  :is="currentTabComponent(item)"
                   v-bind="getTabProps(item)"
                   :ref="item.elementId"
                 ></component>
@@ -158,6 +158,7 @@ import {
   watch,
   defineComponent,
   computed,
+  markRaw
 } from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css';
@@ -166,6 +167,8 @@ import NodeData from "../services/configurator/metaDataTree.service";
 import { ElTree } from "element-plus";
 import { uuid } from "vue-uuid";
 import СfgPropertyEditor from "../components/configurator/СfgPropertyEditor.vue";
+import CfgDomainUsers from "../components/configurator/CfgDomainUsers.vue";
+import UserEditForm from "../components/UserEditForm.vue";
 import EventBus from '../components/configurator/CfgEventBus';
 import {NodeType} from '../configs/configurator/mdTree.config';
 import {MdTypes, getTypeIconName} from '../metadata/MdTypes'
@@ -201,15 +204,19 @@ export default defineComponent({
       EventBus.on('dataChanged', dataChanged); // 1
       EventBus.on('apiEvent', apiLog);
     });
-    const currentTabComponent = computed(() => {
-      return СfgPropertyEditor;
-    });
+    
+    const currentTabComponent = (item:any) => {
+      return item.editComponent;
+    };
+
     const onInitModel=()=>{
       TreeService.TreeHelper.initModel();  
     };
+
     const onLogOut=()=>{
       store.dispatch('authentication/logout');
     };
+
     const getTabProps = (tabItem: any) => {      
       const mdObjectDescr = {
         mdTypeId: tabItem.data.mdTypeId,
@@ -230,7 +237,8 @@ export default defineComponent({
      const getContextItems = (node:any) => {
       const array = [];
       if(node.data.id && node.data.mdTypeId===MdTypes.Domains){
-       array.push({commandName:'init', icon:'el-icon-sunrise', nodeData:node.data, commandTag:'initDomain'})
+       array.push({commandName:'init', icon:'el-icon-sunrise', node:node, nodeData:node.data, commandTag:'initDomain'})
+       array.push({commandName:'domainUsers', icon:'el-icon-user', node:node, nodeData:node.data, commandTag:'domainUsers'})
       }
       return array;
     }
@@ -238,6 +246,19 @@ export default defineComponent({
     const onNodeContextCommand = async(command:any) => { 
         if(command.commandTag==='initDomain'){
           await TreeService.TreeHelper.initDomain(command.nodeData);
+        }
+         if(command.commandTag==='domainUsers'){
+          const elementId = uuid.v4();
+          const tabData = {
+            title: command.nodeData.name + ' users',
+            name: elementId,
+            data: command.nodeData,
+            elementId:elementId,
+            node:command.node,
+            editComponent:markRaw(CfgDomainUsers)
+          };
+          tabs.value.push(tabData);
+          editableTabsValue.value = tabData.name;
         }
     };
 
@@ -268,7 +289,33 @@ export default defineComponent({
         name: elementId,
         data: node.data,
         elementId:elementId,
-        node:node
+        node:node,
+        editComponent:getEditComponent(node.data.mdTypeId),
+      };
+      tabs.value.push(tabData);
+      editableTabsValue.value = tabData.name;
+    };
+
+    const getEditComponent=(mdType:MdTypes)=>{
+      if(mdType===MdTypes.User){
+        return markRaw(UserEditForm);
+      }
+      return markRaw(СfgPropertyEditor);
+    };
+
+    const onAddNode = (node: any) => {
+      const elementId = uuid.v4();
+      const nodeData = TreeService.TreeHelper.getNewNodeData(node.data);
+      if(node.data.mdTypeId===MdTypes.MenuItem && node.data.id){
+        nodeData.parentId = node.data.id;
+      }
+      const tabData = {
+        title: node.data.name,
+        name: elementId,
+        data: nodeData,
+        elementId:elementId, 
+        node:node,
+        editComponent:markRaw(СfgPropertyEditor)
       };
       tabs.value.push(tabData);
       editableTabsValue.value = tabData.name;
@@ -298,22 +345,6 @@ export default defineComponent({
       return result;
     };
 
-    const onAddNode = (node: any) => {
-      const elementId = uuid.v4();
-      const nodeData = TreeService.TreeHelper.getNewNodeData(node.data);
-      if(node.data.mdTypeId===MdTypes.MenuItem && node.data.id){
-        nodeData.parentId = node.data.id;
-      }
-      const tabData = {
-        title: node.data.name,
-        name: elementId,
-        data: nodeData,
-        elementId:elementId, 
-        node:node
-      };
-      tabs.value.push(tabData);
-      editableTabsValue.value = tabData.name;
-    };
 
     const loadNodes = async (node: any, resolve: any) => {
       if (node.level === 0) {

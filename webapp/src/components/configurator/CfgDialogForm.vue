@@ -3,7 +3,7 @@
 <div class="fullSize dialog-form" :id="'VM-'+elementId">
   <el-container class="shadow-borders">
     <el-header
-        class="form-header dialog-form-header"
+        class="caption-header dialog-form-header"
         id="modalTitle">
         <div class="drag-header display-inline form-header-caption">
         <slot name="header" >

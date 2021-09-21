@@ -50,7 +50,7 @@ export default defineComponent({
           const catalog = await new BaseCatalog(MdTypes.Catalog, 'e42ab001-d707-49b1-9a7a-f429161d9ed0');
           const data = await catalog.getListDataForView();
         };
-       return { tableData, getData};
+       return { tableData, getData}; 
     } 
   });
 </script>

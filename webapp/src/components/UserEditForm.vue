@@ -49,6 +49,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted, computed } from 'vue';
+import * as MdHelper from '../metadata/mdHelper'
 export default defineComponent({
     components: {  
      
@@ -66,8 +67,9 @@ export default defineComponent({
         onMounted(async () => {
         await getData();
             });
-       const getData = async () => {        
-            console.log(props.mdObjectDescr);
+       const getData = async () => {    
+         const data = await MdHelper.getMdObject(props.mdObjectDescr?.mdTypeId, props.mdObjectDescr?.id, '');    
+            console.log(data);
         };
        return {userName, email, phonenumber, databaseName};
     } 

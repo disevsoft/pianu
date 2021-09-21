@@ -197,7 +197,7 @@ export default defineComponent({
     const user = ref(store.state.authentication.user)
     const defaultTreeProps = {
       children: "children",
-      label: "name",
+      label: "name", 
     };
 
     onMounted(() => {

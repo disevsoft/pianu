@@ -1,6 +1,7 @@
 <template>
   <el-container>
     <el-main>
+      <el-form label-width="auto" >
       <el-table
         :data="mdObjectData"
         :border="true"
@@ -22,17 +23,12 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-form-item>
+    <el-button type="primary" @click="onSave">Save</el-button>
+  </el-form-item>
+      </el-form> 
     </el-main>
-    <el-footer class="footer">
-      <el-button
-        el-button
-        type="info"
-        icon="el-icon-check"
-        style="float: right"
-        @click="onSave"
-        >Save</el-button
-      >
-    </el-footer>
+   
   </el-container>
 </template>
 

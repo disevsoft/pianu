@@ -39,6 +39,9 @@
 >
 </el-input>  
 </el-form-item>
+<el-form-item>
+    <el-button type="primary">Save</el-button>
+  </el-form-item>
 </el-form> 
 </el-main>
 </el-container>
@@ -60,6 +63,12 @@ export default defineComponent({
        const email = ref('');
        const phonenumber = ref('');
        const databaseName = ref('');
+        onMounted(async () => {
+        await getData();
+            });
+       const getData = async () => {        
+            console.log(props.mdObjectDescr);
+        };
        return {userName, email, phonenumber, databaseName};
     } 
   });

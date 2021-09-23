@@ -2,6 +2,7 @@ import MdDomain from '../../metadata/mdDomain.class'
 import { MdApiCommandArgs, MdApi } from './api.service';
 import * as MdHelper from '../../metadata/mdHelper'
 import { MdTypes } from '@/metadata/MdTypes';
+import * as DataHelper from '../../helpers/dataApiHelper'
 export default class DomainService{
    
     static async initDomain(domain:MdDomain) {
@@ -13,5 +14,8 @@ export default class DomainService{
     static async initDomainById(domainId:string) {       
         const domain = await MdHelper.getMdObject(MdTypes.Domains, domainId, '');
         return await DomainService.initDomain(domain as MdDomain);
+    }
+    static async getDomainUsers(domainId:string){
+        return DataHelper.getDomainUsers(domainId);
     }
 }

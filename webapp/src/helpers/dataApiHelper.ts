@@ -6,3 +6,9 @@ export async function getListDataForView(mdType:MdTypes, objectId:string) {
     const data = await DataApi.run(apiCommandArgs); 
     return data;    
 }
+
+export async function getDomainUsers(domainId:string) {
+    const apiCommandArgs = new DataApiCommandArgs("getDomainUsers", {domainId: domainId})
+    const data = await DataApi.run(apiCommandArgs); 
+    return data;    
+}

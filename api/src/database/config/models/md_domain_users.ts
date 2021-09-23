@@ -26,16 +26,6 @@ interface mdDomainUsersInstance extends Model {
             allowNull: true,
             defaultValue:false            
         },
-        in_use:{
-            type: Sequelize.BOOLEAN,
-            allowNull: false,
-            defaultValue:false            
-        },
-        main_domain:{
-            type: Sequelize.BOOLEAN,
-            allowNull: false,
-            defaultValue:false            
-        }
        
        
     }, db.sequilizeOptions); 

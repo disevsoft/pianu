@@ -13,7 +13,7 @@ const processors: { [K: string]: Function } = {
     getMdTypesList:getMdTypesList,
     getMdObjectById:getMdObjectById,
     getUserMenu:getUserMenu,
-    initDomain:initDomain
+    initDomain:initDomain,
 };
 
 export async function processCommand(req:any, res:any)
@@ -73,6 +73,7 @@ export async function getMdObjectData(options: any, resArgs:ResponseArgs){
     }
     return true;
 } 
+
 
 export async function getMdObjectById(options: any, resArgs:ResponseArgs){
     const mdObjectId = options.mdObjectId;

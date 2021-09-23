@@ -1,7 +1,10 @@
+
+import { md_domain_users } from "../database/config/models/md_domain_users";
 import ResponseArgs from "../helpers/responseArgs";
 
 const processors: { [K: string]: Function } = {
     getListDataForView: getListDataForView,
+    getDomainUsers:getDomainUsers
 };
 
 export async function processCommand(req:any, res:any)
@@ -28,3 +31,11 @@ async function getListDataForView(options: any, resArgs:ResponseArgs){
     resArgs.resData = [];  
     return true;
 }; 
+async function getDomainUsers(options: any, resArgs:ResponseArgs){
+    const domainId = options.domainId;
+    const data  = await md_domain_users.findAll({where: {md_domain_id:domainId}}); 
+    resArgs.resData = data;
+    return true;
+}; 
+
+

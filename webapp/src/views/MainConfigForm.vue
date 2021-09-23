@@ -297,9 +297,9 @@ export default defineComponent({
     };
 
     const getEditComponent=(mdType:MdTypes)=>{
-      if(mdType===MdTypes.User){
-        return markRaw(UserEditForm);
-      }
+      // if(mdType===MdTypes.User){
+      //   return markRaw(UserEditForm);
+      // }
       return markRaw(СfgPropertyEditor);
     };
 

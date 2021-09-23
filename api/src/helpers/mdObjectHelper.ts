@@ -77,6 +77,7 @@ export async function getInstance(className:string, id:string){
     return mdObject; 
 } 
 
+
 export async function getObjectsList(mdTypeId:string, parentId:string){
     if(!mdTypeId) {return undefined};
     const mdType:any = await MdType.getMdType(mdTypeId);  

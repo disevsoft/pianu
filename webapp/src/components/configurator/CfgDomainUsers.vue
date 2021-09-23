@@ -1,28 +1,59 @@
+
 <template>
-    <div/>
+    <div>
+        номенклатура
+    </div>
+    <el-table :data="tableData" height="250" style="width: 100%" :border="true" highlight-current-row>
+    <el-table-column prop="date" label="Date" width="180"> </el-table-column>
+    <el-table-column prop="name" label="Name" width="180"> </el-table-column>
+    <el-table-column prop="address" label="Address"> </el-table-column>
+  </el-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch, onMounted, computed } from 'vue';
-
-export default defineComponent({
-    components: {  
-     
+<script> 
+import { defineComponent, ref, watch, onMounted } from 'vue';
+import BaseCatalog from '../../classes/baseCatalog';
+import { MdTypes } from '@/metadata/MdTypes'
+import DomainService from '@/services/app/domain.service'
+export default defineComponent({  
+    components: {    
     },
+    
     props: {
-      mdObjectDescr: Object,
+      mdObjectDescr: Object,   
       elementId: String,
     },
-
     setup(props, { emit }) {
-       onMounted(async () => {
-        await getData();
-            });
-
-    const getData = async () => {
-     const k = 1;
-    };
-       return {};
+        const tableData = [ 
+          {
+            date: '2016-05-03',
+            name: 'Tom',
+            address: 'No. 189, Grove St, Los Angeles',
+          },
+          { 
+            date: '2016-05-02',
+            name: 'Tom',
+            address: 'No. 189, Grove St, Los Angeles',
+          },
+          {
+            date: '2016-05-04',
+            name: 'Tom',
+            address: 'No. 189, Grove St, Los Angeles',
+          },
+          {
+            date: '2016-05-01',
+            name: 'Tom',
+            address: 'No. 189, Grove St, Los Angeles',
+          },
+        ];
+         onMounted(async() => {
+            getData();
+        });
+        const getData = async ()=>{
+          const data = await DomainService.getDomainUsers(props.mdObjectDescr.id);
+          console.log(data);
+        };
+       return { tableData, getData}; 
     } 
   });
 </script>

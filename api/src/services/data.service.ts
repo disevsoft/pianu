@@ -1,10 +1,13 @@
 
+import { Domain } from "domain";
 import { md_domain_users } from "../database/config/models/md_domain_users";
 import ResponseArgs from "../helpers/responseArgs";
+import MdDomain from "../metadata/mdDomain.class";
 
 const processors: { [K: string]: Function } = {
     getListDataForView: getListDataForView,
-    getDomainUsers:getDomainUsers
+    getDomainUsers:getDomainUsers,
+    saveDomainUsers:saveDomainUsers
 };
 
 export async function processCommand(req:any, res:any)
@@ -31,10 +34,19 @@ async function getListDataForView(options: any, resArgs:ResponseArgs){
     resArgs.resData = [];  
     return true;
 }; 
+
 async function getDomainUsers(options: any, resArgs:ResponseArgs){
     const domainId = options.domainId;
     const data  = await md_domain_users.findAll({where: {md_domain_id:domainId}}); 
     resArgs.resData = data;
+    return true;
+}; 
+
+async function saveDomainUsers(options: any, resArgs:ResponseArgs){
+    const domainId = options.domainId;
+    const domainUsers = options.domainUsers;
+    const domain = new MdDomain(domainId);
+    domain.saveUsers(domainUsers);
     return true;
 }; 
 

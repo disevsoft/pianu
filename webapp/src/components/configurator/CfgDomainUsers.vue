@@ -1,13 +1,23 @@
 
 <template>
-    <div>
-        номенклатура
-    </div>
-    <el-table :data="tableData" height="250" style="width: 100%" :border="true" highlight-current-row>
-    <el-table-column prop="date" label="Date" width="180"> </el-table-column>
-    <el-table-column prop="name" label="Name" width="180"> </el-table-column>
-    <el-table-column prop="address" label="Address"> </el-table-column>
-  </el-table>
+    <el-container>
+    <el-button-group>
+      <el-button icon="el-icon-circle-plus" @click="newDomainUser"> </el-button>
+      <el-button icon="el-icon-remove"></el-button>
+    </el-button-group>
+    
+      <el-main>
+        <el-table :data="domainUsers" style="width: 100%" height="100%" :border="true" highlight-current-row>
+        <el-table-column prop="md_user_id" label="Пользователь" width="180"> </el-table-column>
+        <el-table-column prop="domain_admin" label="Админ" width="180"> </el-table-column>
+      </el-table>
+      </el-main>
+      <el-footer>
+        <el-button-group>
+        <el-button type="primary" @click="onSave">Save</el-button>
+        </el-button-group>
+      </el-footer>
+  </el-container>
 </template>
 
 <script> 
@@ -24,36 +34,21 @@ export default defineComponent({
       elementId: String,
     },
     setup(props, { emit }) {
-        const tableData = [ 
-          {
-            date: '2016-05-03',
-            name: 'Tom',
-            address: 'No. 189, Grove St, Los Angeles',
-          },
-          { 
-            date: '2016-05-02',
-            name: 'Tom',
-            address: 'No. 189, Grove St, Los Angeles',
-          },
-          {
-            date: '2016-05-04',
-            name: 'Tom',
-            address: 'No. 189, Grove St, Los Angeles',
-          },
-          {
-            date: '2016-05-01',
-            name: 'Tom',
-            address: 'No. 189, Grove St, Los Angeles',
-          },
-        ];
+      const domainUsers = ref([{md_user_id:'', domain_admin:false}]);
          onMounted(async() => {
-            getData();
+            await getData();
         });
         const getData = async ()=>{
           const data = await DomainService.getDomainUsers(props.mdObjectDescr.id);
-          console.log(data);
+          domainUsers.value = data;
         };
-       return { tableData, getData}; 
+        const newDomainUser = async() => {
+          domainUsers.value.push({md_user_id:'', domain_admin:false});
+        }
+        const onSave = async() => {
+          domainUsers.value.push({md_user_id:'', domain_admin:false});
+        }
+       return { domainUsers, getData, newDomainUser, onSave}; 
     } 
   });
 </script>

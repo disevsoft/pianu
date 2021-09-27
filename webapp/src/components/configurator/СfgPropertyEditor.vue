@@ -10,8 +10,7 @@
         :cell-class-name="cellClassName"
         v-loading="!dataLoadingComplete"
         :cell-style="{padding: '0'}">
-        height="250"
-      >
+        
         <el-table-column prop="name" label="Property" width="140" fixed="left">
           <template #default="scope">
             <span>{{ scope.row.name }}</span>
@@ -24,8 +23,8 @@
         </el-table-column>
       </el-table>
       <el-form-item>
-    <el-button type="primary" @click="onSave">Save</el-button>
-  </el-form-item>
+        <el-button type="primary" @click="onSave">Save</el-button>
+      </el-form-item>
       </el-form> 
     </el-main>
    

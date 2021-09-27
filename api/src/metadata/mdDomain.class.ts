@@ -2,6 +2,8 @@ import BaseMeta from './basemeta.class'
 import MdTypeField from './mdTypeField.class'
 import {MdTypes} from './mdTypes'
 import {initDomain} from '../database/dataBaseUtils'
+import db from '../database/config/sequilize.metadata'
+import { md_domain_users } from '../database/config/models/md_domain_users';
 export default class MdDomain extends BaseMeta{
     databaseName = '';
     constructor(id:string){
@@ -25,5 +27,14 @@ export default class MdDomain extends BaseMeta{
             throw Error('Domain database name is empty');
         }
         await initDomain(this);  
+    }
+
+    public async saveUsers(domainUsers:any){
+        await db.sequelize.transaction(async(t)=>{
+            await md_domain_users.destroy({where:{md_domain_id:this.id}});    
+            for await (const domainUser of domainUsers) {
+                await  md_domain_users.create({md_domain_id:this.id, md_user_id:domainUser.md_user_id, domain_admin:domainUser.domain_admin})             
+            }      
+        });
     }
 }

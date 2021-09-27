@@ -49,12 +49,7 @@
 .el-tab-pane{
   height: 100%;  
 }
-.el-table{
-  height: 100% !important;
-}
-.el-tab-pane {
-  height: 100%;
-}
+
 .el-table {
   max-height: 100%;
   overflow: auto !important;

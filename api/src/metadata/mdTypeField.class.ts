@@ -9,7 +9,7 @@ export default class MdTypeField
     fieldMap = '';
     objectField = '';
     size = 0;
-
+    sendValueToClient = true;
     constructor(name:string, type: MdTypes, size:number, value: any, defaultValue: any, readOnly: boolean, fieldMap:string){
         this.name = name;
         this.type = type;

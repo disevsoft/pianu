@@ -34,7 +34,7 @@ export default class BaseMeta{
     public async getFields(){
         const fields = this.mdFields;
         for await (let mdField of fields) {
-            if(mdField.fieldMap){
+            if(mdField.fieldMap && mdField.sendValueToClient){
                 mdField.value = (<any>this)[mdField.name];
                 }
             }

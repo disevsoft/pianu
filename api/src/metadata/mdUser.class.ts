@@ -13,7 +13,6 @@ export default class mdUser extends BaseMeta{
         this.typeId= '60a34539-5b85-4d96-b619-cefc7b6b894b';
         this.modelName= 'md_users';
         this.typeName = 'MdUser'
-        this.domainAdmin = false;
         this.configAdmin = false;
         this.password = '';
        
@@ -21,16 +20,16 @@ export default class mdUser extends BaseMeta{
 
     public get mdFields(){
         let mdFields = super.mdFields;
-        mdFields.push(new MdTypeField('domainAdmin', MdTypes.Boolean, 0, this.domainAdmin, false, false, "domain_admin"));
         mdFields.push(new MdTypeField('configAdmin', MdTypes.Boolean, 0, this.configAdmin, false, false, "config_admin"));
         const pwdField = new MdTypeField('password',  MdTypes.String, 150, "", "false", false, "password");
-        //mdFields.push(pwdField);
+        pwdField.sendValueToClient = false;
+        mdFields.push(pwdField);
         
         return mdFields;
     }
     async beforeSave(saveMdObjectArgs:SaveMdObjectArgs){
         await super.beforeSave(saveMdObjectArgs);
-        if(!this.id){
+        if(!this.id && this.password){
             this.password = await getPasswordHash(this.password)
         }
     }

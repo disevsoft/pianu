@@ -18,4 +18,7 @@ export default class DomainService{
     static async getDomainUsers(domainId:string){
         return DataHelper.getDomainUsers(domainId);
     }
+    static async saveDomainUsers(domainId:string, domainUsers:any){
+        return DataHelper.saveDomainUsers(domainId, domainUsers);
+    }
 }

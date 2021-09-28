@@ -29,8 +29,8 @@ export default class MdDomain extends BaseMeta{
         await initDomain(this);  
     }
 
-    public async saveUsers(domainUsers:any){
-        await db.sequelize.transaction(async(t)=>{
+    public async saveUsers(domainUsers:any){ 
+        await db.sequelize.transaction(async(t)=>{ 
             await md_domain_users.destroy({where:{md_domain_id:this.id}});    
             for await (const domainUser of domainUsers) {
                 await  md_domain_users.create({md_domain_id:this.id, md_user_id:domainUser.md_user_id, domain_admin:domainUser.domain_admin})             

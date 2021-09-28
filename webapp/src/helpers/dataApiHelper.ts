@@ -12,3 +12,9 @@ export async function getDomainUsers(domainId:string) {
     const data = await DataApi.run(apiCommandArgs); 
     return data;    
 }
+
+export async function saveDomainUsers(domainId:string, domainUsers:any) {
+    const apiCommandArgs = new DataApiCommandArgs("saveDomainUsers", {domainId: domainId, domainUsers:domainUsers})
+    const data = await DataApi.run(apiCommandArgs); 
+    return data;    
+}

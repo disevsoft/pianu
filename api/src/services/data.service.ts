@@ -45,8 +45,9 @@ async function getDomainUsers(options: any, resArgs:ResponseArgs){
 async function saveDomainUsers(options: any, resArgs:ResponseArgs){
     const domainId = options.domainId;
     const domainUsers = options.domainUsers;
-    const domain = new MdDomain(domainId);
-    domain.saveUsers(domainUsers);
+    const domain = new MdDomain(domainId) ;
+    await domain.saveUsers(domainUsers); 
+    await getDomainUsers(options, resArgs)
     return true;
 }; 
 
